@@ -1,7 +1,6 @@
 {
-  "name": "react-slingshot",
-  "version": "5.0.0",
-  "description": "Starter kit for creating apps with React and Redux",
+  "name": "drivr",
+  "version": "0.0.1",
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
@@ -9,7 +8,7 @@
     "setup": "node tools/setup/setupMessage.js && npm install && node tools/setup/setup.js",
     "start-message": "babel-node tools/startMessage.js",
     "prestart": "npm-run-all --parallel start-message remove-dist",
-    "start": "npm-run-all --parallel test:watch open:src lint:watch",
+    "start": "npm-run-all --parallel open:src lint:watch",
     "open:src": "babel-node tools/srcServer.js",
     "open:dist": "babel-node tools/distServer.js",
     "lint": "esw webpack.config.* src tools --color",
@@ -25,6 +24,10 @@
     "open:cover": "npm run test:cover && open coverage/index.html"
   },
   "dependencies": {
+    "firebase": "3.4.0",
+    "firedux": "0.6.6",
+    "immutable": "3.8.1",
+    "microee": "0.0.6",
     "object-assign": "4.1.0",
     "react": "15.3.1",
     "react-dom": "15.3.1",
@@ -32,7 +35,8 @@
     "react-router": "2.7.0",
     "react-router-redux": "4.0.5",
     "redux": "3.5.2",
-    "redux-thunk": "2.1.0"
+    "redux-thunk": "2.1.0",
+    "uuid": "2.0.3"
   },
   "devDependencies": {
     "autoprefixer": "6.4.0",

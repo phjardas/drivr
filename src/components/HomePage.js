@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
+import CarList from './CarList';
 
-const HomePage = () => (
-  <p>Home Page</p>
-);
+function HomePage() {
+  return (
+    <home>
+      <h2>Home</h2>
+      <CarList />
+    </home>
+  );
+}
 
 export default HomePage;
