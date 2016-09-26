@@ -24,12 +24,13 @@
     "open:cover": "npm run test:cover && open coverage/index.html"
   },
   "dependencies": {
+    "decimal.js": "6.0.0",
     "firebase": "3.4.0",
-    "firedux": "0.6.6",
     "immutable": "3.8.1",
     "microee": "0.0.6",
     "object-assign": "4.1.0",
     "react": "15.3.1",
+    "react-bootstrap": "0.30.3",
     "react-dom": "15.3.1",
     "react-redux": "4.4.5",
     "react-router": "2.7.0",

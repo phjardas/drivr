@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
+import { Button } from 'react-bootstrap';
 
 import connect from './connect';
+import { toList } from './utils';
 
 
 function randomLicensePlate() {
@@ -34,9 +36,9 @@ class CarList extends Component {
     const list = Object.keys(this.props.cars).length ? (
       <ul>
         {this.props.cars.map(car => (
-          <li key={car.$key}>
-            <Link to={'/cars/' + car.$key}>{car.licensePlate}</Link>
-            <button onClick={this.deleteCar.bind(this, car.$key)}>x</button>
+          <li key={car.id}>
+            <Link to={'/cars/' + car.id}>{car.licensePlate}</Link>
+            <Button bsStyle='danger' onClick={this.deleteCar.bind(this, car.id)}>x</Button>
           </li>
         ))}
       </ul>
@@ -48,7 +50,7 @@ class CarList extends Component {
       <car-list>
         <h3>Cars</h3>
         <p>
-          <button onClick={this.createCar.bind(this)}>create car</button>
+          <Button onClick={this.createCar.bind(this)}>create car</Button>
         </p>
         {list}
       </car-list>
@@ -56,17 +58,9 @@ class CarList extends Component {
   }
 }
 
-function toList(obj) {
-  const list = [];
-  for (let id in obj) {
-    list.push(Object.assign({ $key: id }, obj[id]));
-  }
-  return list;
-}
-
 function mapStateToProps(state) {
   return {
-    cars: toList(state.cars.cars  || {}),
+    cars: toList(state.cars  || {}),
   };
 }
 

@@ -10,7 +10,7 @@ const cars = db.ref('cars');
 registerFirebaseListeners(cars, Names.Car, store);
 
 export function createCar(car) {
-  return dispatch => {
+  return () => {
     const id = uuid();
     return cars.child(id).set({
       licensePlate: car.licensePlate,
@@ -18,9 +18,9 @@ export function createCar(car) {
       id: id,
       car,
     }));
-  }
+  };
 }
 
 export function deleteCar(id) {
-  return dispatch => cars.child(id).remove();
+  return () => cars.child(id).remove();
 }

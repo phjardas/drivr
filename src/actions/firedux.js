@@ -8,10 +8,7 @@ const events = {
 function dispatchFromSnapshot(type, store) {
   return snapshot => store.dispatch({
     type: type,
-    payload: {
-      id: snapshot.key,
-      car: snapshot.val(),
-    },
+    payload: Object.assign({ id: snapshot.key }, snapshot.val()),
   });
 }
 

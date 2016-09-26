@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import { IndexLink } from 'react-router';
+import { Link, IndexLink } from 'react-router';
 
 import connect from './connect';
+import RefuelList from './refuels/RefuelList';
 
 
 class CarDetails extends Component {
@@ -18,22 +19,26 @@ class CarDetails extends Component {
 
       return (
         <car-details>
-          <h3>Car</h3>
+          <h1>Car</h1>
           <p>
             <IndexLink to='/cars'>back to cars</IndexLink>
+            {' | '}
+            <Link to={'/refuels/_new?carId=' + car.id}>create refuel</Link>
           </p>
           <dl>
             <dt>ID</dt>
-            <dd>{carId}</dd>
+            <dd>{car.id}</dd>
             <dt>License plate</dt>
             <dd>{car.licensePlate}</dd>
           </dl>
+          <h2>Refuels</h2>
+          <RefuelList car={car} />
         </car-details>
       );
     } else {
       return (
         <car-details>
-          <h3>Car not found</h3>
+          <h1>Car not found</h1>
         </car-details>
       );
     }
@@ -43,7 +48,7 @@ class CarDetails extends Component {
 
 function mapStateToProps(state) {
   return {
-    cars: state.cars.cars  || {},
+    cars: state.cars  || {},
   };
 }
 

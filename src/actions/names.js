@@ -2,9 +2,14 @@ const prefix = 'drivr/';
 
 const Names = {
   Car: {
-    added: prefix + 'car/added',
-    changed: prefix + 'car/changed',
-    removed: prefix + 'car/removed',
+    added: prefix + 'cars/added',
+    changed: prefix + 'cars/changed',
+    removed: prefix + 'cars/removed',
+  },
+  Refuel: {
+    added: prefix + 'refuels/added',
+    changed: prefix + 'refuels/changed',
+    removed: prefix + 'refuels/removed',
   },
 };
 
