@@ -4,14 +4,7 @@ import { FormGroup, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap
 import connect from '../../connect';
 import { toList } from '../../utils';
 
-class CarIdField extends Component {
-  static propTypes = {
-    value: PropTypes.string.isRequired,
-    validation: PropTypes.object.isRequired,
-    cars: PropTypes.object.isRequired,
-    onChange: PropTypes.func.isRequired,
-  }
-
+class CarField extends Component {
   constructor(props) {
     super(props);
     this.setValue = this.setValue.bind(this);
@@ -27,7 +20,8 @@ class CarIdField extends Component {
 
   setValueInternal(value) {
     const validation = this.validate(value);
-    this.props.onChange({ value, validation });
+    const car = this.props.cars[value];
+    this.props.onChange({ value, validation, objectValue: car });
   }
 
   setValue(event) {
@@ -36,7 +30,7 @@ class CarIdField extends Component {
 
   render() {
     return (
-      <FormGroup controlId='carId' validationState={this.props.validation.state}>
+      <FormGroup controlId="car" validationState={this.props.validation.state}>
         <ControlLabel>Car</ControlLabel>
         <FormControl componentClass='select' required value={this.props.value} onChange={this.setValue}>
           <option value={''}>[ please select a car ]</option>
@@ -51,10 +45,18 @@ class CarIdField extends Component {
   }
 }
 
+CarField.propTypes = {
+  value: PropTypes.string.isRequired,
+  validation: PropTypes.object.isRequired,
+  cars: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
+
+
 function mapStateToProps(state) {
   return {
     cars: state.cars  || {},
   };
 }
 
-export default connect(mapStateToProps, CarIdField);
+export default connect(mapStateToProps, CarField);

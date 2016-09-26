@@ -3,12 +3,6 @@ import { FormGroup, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap
 
 
 class MileageField extends Component {
-  static propTypes = {
-    value: PropTypes.any.isRequired,
-    validation: PropTypes.object.isRequired,
-    onChange: PropTypes.func.isRequired,
-  }
-
   constructor(props) {
     super(props);
     this.setValue = this.setValue.bind(this);
@@ -33,14 +27,22 @@ class MileageField extends Component {
 
   render() {
     return (
-      <FormGroup controlId='mileage' validationState={this.props.validation.state}>
-        <ControlLabel>Mileage (km)</ControlLabel>
-        <FormControl type='number' min={0} required value={this.props.value} onChange={this.setValue} />
+      <FormGroup controlId={this.props.controlId} validationState={this.props.validation.state}>
+        <ControlLabel>{this.props.label}</ControlLabel>
+        <FormControl type="number" min={0} required value={this.props.value} onChange={this.setValue} />
         <FormControl.Feedback />
         {this.props.validation.message && <HelpBlock>{this.props.validation.message}</HelpBlock>}
       </FormGroup>
     );
   }
 }
+
+MileageField.propTypes = {
+  controlId: PropTypes.string.isRequired,
+  label: PropTypes.string,
+  value: PropTypes.any.isRequired,
+  validation: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 
 export default MileageField;

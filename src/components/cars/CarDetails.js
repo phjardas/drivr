@@ -1,16 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { Link, IndexLink } from 'react-router';
 
-import connect from './connect';
-import RefuelList from './refuels/RefuelList';
+import connect from '../connect';
+import RefuelList from '../refuels/RefuelList';
 
 
 class CarDetails extends Component {
-  static propTypes = {
-    cars: PropTypes.object.isRequired,
-    actions: PropTypes.object.isRequired,
-  }
-
   render() {
     const { carId } = this.props.params;
 
@@ -21,15 +16,21 @@ class CarDetails extends Component {
         <car-details>
           <h1>Car</h1>
           <p>
-            <IndexLink to='/cars'>back to cars</IndexLink>
+            <IndexLink to="/cars">back to cars</IndexLink>
             {' | '}
-            <Link to={'/refuels/_new?carId=' + car.id}>create refuel</Link>
+            <Link to={{ pathname: '/refuels/_new', query: { carId: car.id }}}>create refuel</Link>
           </p>
-          <dl>
+          <dl className="dl-horizontal">
             <dt>ID</dt>
             <dd>{car.id}</dd>
             <dt>License plate</dt>
             <dd>{car.licensePlate}</dd>
+            <dt>Initial mileage</dt>
+            <dd>{car.initialMileage}</dd>
+            {car.lastRefuel && <dt>Current mileage</dt>}
+            {car.lastRefuel && <dd>{car.lastRefuel.mileage}</dd>}
+            {car.lastRefuel && <dt>Last refuel</dt>}
+            {car.lastRefuel && <dd>{car.lastRefuel.date}</dd>}
           </dl>
           <h2>Refuels</h2>
           <RefuelList car={car} />
@@ -44,6 +45,12 @@ class CarDetails extends Component {
     }
   }
 }
+
+CarDetails.propTypes = {
+  params: PropTypes.object.isRequired,
+  cars: PropTypes.object.isRequired,
+  actions: PropTypes.object.isRequired,
+};
 
 
 function mapStateToProps(state) {

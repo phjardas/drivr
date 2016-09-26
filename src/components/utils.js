@@ -1,7 +1,7 @@
 export function toList(obj) {
   const list = [];
-  for (let o in obj) {
-    list.push(obj[o]);
+  for (let id in obj) {
+    list.push(Object.assign({ id }, obj[id]));
   }
   return list;
 }
