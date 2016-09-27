@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import decimal from 'decimal.js';
 
 import connect from '../connect';
 import { toList } from '../utils';
@@ -33,11 +34,11 @@ class RefuelList extends Component {
               <tr key={refuel.id}>
                 <td>{refuel.date}</td>
                 <td className="number">{refuel.mileage}</td>
-                <td className="number">{refuel.fuelAmount}</td>
-                <td className="number">{refuel.totalPrice}</td>
-                <td className="number">{refuel.pricePerLiter}</td>
+                <td className="number">{decimal(refuel.fuelAmount).toFixed(2)}</td>
+                <td className="number">{decimal(refuel.totalPrice).toFixed(2)}</td>
+                <td className="number">{decimal(refuel.pricePerLiter).toFixed(3)}</td>
                 <td className="number">{refuel.distance}</td>
-                <td className="number">{refuel.consumption * 100}</td>
+                <td className="number">{decimal(refuel.consumption).mul(decimal(100)).toFixed(3)}</td>
               </tr>
             ))}
           </tbody>

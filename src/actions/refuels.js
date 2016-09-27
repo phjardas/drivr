@@ -1,13 +1,14 @@
+import decimal from 'decimal.js';
+
 import Names from './names';
 import uuid from '../service/uuid';
 import firebase from '../service/firebase';
 import store from '../store';
-import { registerFirebaseListeners, unregisterFirebaseListeners } from './firedux';
+import { registerFirebaseListeners } from './firedux';
 import { Refuel } from '../model/refuel';
 
 const db = firebase.database();
 const refuels = db.ref('refuels');
-const cars = db.ref('cars');
 
 const subscribedCars = {};
 
@@ -20,11 +21,31 @@ export function loadRefuels(carId) {
   };
 }
 
-function unloadRefuels(carId) {
-  if (carId in subscribedCars) {
-    delete subscribedCars[carId];
-    unregisterFirebaseListeners(refuels.child(carId));
+function calculateStats(car, refuel) {
+  const oldStats = car.stats || {};
+  const stats = {
+    refuelCount: (oldStats.refuelCount || 0) + 1,
+    totalDistance: refuel.mileage - (car.initialMileage || 0),
+    totalFuel: decimal(oldStats.totalFuel || 0).add(refuel.fuelAmount),
+    totalPrice: decimal(oldStats.totalPrice || 0).add(refuel.totalPrice),
+  };
+
+  if (stats.totalDistance && stats.totalFuel) {
+    stats.averageConsumption = stats.totalFuel.div(stats.totalDistance).toString();
   }
+
+  if (stats.totalDistance && stats.totalPrice) {
+    stats.averagePricePerDistance = stats.totalPrice.div(stats.totalDistance).toString();
+  }
+
+  if (stats.totalPrice && stats.totalFuel) {
+    stats.averagePricePerVolume = stats.totalPrice.div(stats.totalFuel).toString();
+  }
+
+  if (stats.totalFuel) stats.totalFuel = stats.totalFuel.toString();
+  if (stats.totalPrice) stats.totalPrice = stats.totalPrice.toString();
+
+  return stats;
 }
 
 export function createRefuel(refuel) {
@@ -32,16 +53,14 @@ export function createRefuel(refuel) {
     const id = uuid();
     const car = getState().cars[refuel.carId];
     const ref = new Refuel(refuel, car).toJS();
+    const stats = calculateStats(car, ref);
 
-    return refuels.child(car.id).child(id).set(ref)
-      .then(() => cars.child(car.id).child('lastRefuel').set(Object.assign({id}, ref)))
-      .then(() => ref);
+    const updates = {
+      [`/refuels/${car.id}/${id}`]: ref,
+      [`/cars/${car.id}/lastRefuel`]: ref,
+      [`/cars/${car.id}/stats`]: stats,
+    };
+
+    return db.ref().update(updates).then(() => ref);
   };
-}
-
-export function deleteRefuels(carId) {
-  return () => {
-    unloadRefuels(carId);
-    refuels.child(carId).remove()
-  }
 }

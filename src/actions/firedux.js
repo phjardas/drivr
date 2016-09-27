@@ -19,7 +19,3 @@ export function registerFirebaseListeners(ref, actions, store) {
     }
   }
 }
-
-export function unregisterFirebaseListeners(ref) {
-  ref.off();
-}
