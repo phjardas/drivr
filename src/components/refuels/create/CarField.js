@@ -32,7 +32,7 @@ class CarField extends Component {
     return (
       <FormGroup controlId="car" validationState={this.props.validation.state}>
         <ControlLabel>Car</ControlLabel>
-        <FormControl componentClass='select' required value={this.props.value} onChange={this.setValue}>
+        <FormControl componentClass="select" required value={this.props.value} onChange={this.setValue}>
           <option value={''}>[ please select a car ]</option>
           {toList(this.props.cars).map(car => (
             <option key={car.id} value={car.id}>{car.licensePlate}</option>

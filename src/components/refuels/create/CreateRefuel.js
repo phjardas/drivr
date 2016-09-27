@@ -119,9 +119,8 @@ class CreateRefuel extends Component {
       totalPrice: fields.totalPrice. value,
     };
 
-    this.props.actions.createRefuel(ref).then(refuel => {
-      this.context.router.push('/cars/' + fields.car.value);
-    });
+    this.props.actions.createRefuel(ref)
+      .then(() => this.context.router.push('/cars/' + fields.car.value));
   }
 
   render() {

@@ -2,6 +2,8 @@ import React, { PropTypes } from 'react';
 import { Navbar } from 'react-bootstrap';
 import { IndexLink } from 'react-router';
 
+import MainMenu from './MainMenu';
+
 const App = (props) => {
   return (
     <drivr>
@@ -12,6 +14,9 @@ const App = (props) => {
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
+        <Navbar.Collapse>
+          <MainMenu />
+        </Navbar.Collapse>
       </Navbar>
       <div className="container">
         {props.children}

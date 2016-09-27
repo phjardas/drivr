@@ -13,9 +13,19 @@ function dispatchFromSnapshot(type, store) {
 }
 
 export function registerFirebaseListeners(ref, actions, store) {
+  const unsubscribers = [];
+
   for (let event in events) {
     if (events[event] in actions) {
-      ref.on(event, dispatchFromSnapshot(actions[events[event]], store));
+      const listener = dispatchFromSnapshot(actions[events[event]], store);
+      ref.on(event, listener);
+      unsubscribers.push(() => ref.off(event, listener));
     }
   }
+
+  return {
+    unsubscribe() {
+      unsubscribers.forEach(u => u());
+    }
+  };
 }

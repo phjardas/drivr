@@ -8,6 +8,8 @@ export default function (state = {}, action) {
       return fromJS(state).set(action.payload.id, action.payload).toJS();
     case Names.Car.removed:
       return fromJS(state).delete(action.payload.id).toJS();
+    case Names.User.logout:
+      return {};
     default:
       return state;
   }

@@ -6,20 +6,37 @@ import firebase from '../service/firebase';
 import store from '../store';
 import { registerFirebaseListeners } from './firedux';
 import { Refuel } from '../model/refuel';
+import { getCarPath } from './cars';
+import { on as addAuthListener } from './auth';
 
 const db = firebase.database();
-const refuels = db.ref('refuels');
-
+let userId = null;
 const subscribedCars = {};
+
+function unsubscribe() {
+  for(let carId of Object.keys(subscribedCars)) {
+    subscribedCars[carId].unsubscribe();
+    delete subscribedCars[carId];
+  }
+}
 
 export function loadRefuels(carId) {
   return () => {
     if (!(carId in subscribedCars)) {
-      subscribedCars[carId] = true;
-      registerFirebaseListeners(refuels.child(carId), Names.Refuel, store);
+      subscribedCars[carId] = registerFirebaseListeners(db.ref(getRefuelsPath(carId)), Names.Refuel, store);
     }
   };
 }
+
+addAuthListener('signin', user => {
+  unsubscribe();
+  userId = user.id;
+});
+
+addAuthListener('signout', () => {
+  unsubscribe();
+  userId = null;
+});
 
 function calculateStats(car, refuel) {
   const oldStats = car.stats || {};
@@ -48,6 +65,15 @@ function calculateStats(car, refuel) {
   return stats;
 }
 
+function getRefuelsPath(carId) {
+  if (!userId) throw new Error('Unauthenticated!');
+  return `/refuels/${userId}/${carId}`;
+}
+
+function getRefuelPath(carId, refuelId) {
+  return `${getRefuelsPath(carId)}/${refuelId}`;
+}
+
 export function createRefuel(refuel) {
   return (dispatch, getState) => {
     const id = uuid();
@@ -56,9 +82,9 @@ export function createRefuel(refuel) {
     const stats = calculateStats(car, ref);
 
     const updates = {
-      [`/refuels/${car.id}/${id}`]: ref,
-      [`/cars/${car.id}/lastRefuel`]: ref,
-      [`/cars/${car.id}/stats`]: stats,
+      [getRefuelPath(car.id, id)]: ref,
+      [`${getCarPath(car.id)}/lastRefuel`]: ref,
+      [`${getCarPath(car.id)}/stats`]: stats,
     };
 
     return db.ref().update(updates).then(() => ref);

@@ -8,6 +8,8 @@ export default function (state = {}, action) {
       return fromJS(state).setIn([action.payload.carId, action.payload.id], action.payload).toJS();
     case Names.Refuel.removed:
       return fromJS(state).deleteIn([action.payload.carId, action.payload.id]).toJS();
+    case Names.User.logout:
+      return {};
     default:
       return state;
   }

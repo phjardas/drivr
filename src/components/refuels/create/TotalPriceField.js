@@ -4,12 +4,6 @@ import decimal from 'decimal.js';
 
 
 class TotalPriceField extends Component {
-  static propTypes = {
-    value: PropTypes.string.isRequired,
-    validation: PropTypes.object.isRequired,
-    onChange: PropTypes.func.isRequired,
-  }
-
   constructor(props) {
     super(props);
     this.setValue = this.setValue.bind(this);
@@ -41,7 +35,7 @@ class TotalPriceField extends Component {
 
   render() {
     return (
-      <FormGroup controlId='fuelAmount' validationState={this.props.validation.state}>
+      <FormGroup controlId="fuelAmount" validationState={this.props.validation.state}>
         <ControlLabel>Total price (€)</ControlLabel>
         <FormControl required value={this.props.value} onChange={this.setValue} />
         <FormControl.Feedback />
@@ -50,5 +44,11 @@ class TotalPriceField extends Component {
     );
   }
 }
+
+TotalPriceField.propTypes = {
+  value: PropTypes.string.isRequired,
+  validation: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 
 export default TotalPriceField;

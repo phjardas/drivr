@@ -3,12 +3,6 @@ import { FormGroup, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap
 
 
 class TimeField extends Component {
-  static propTypes = {
-    value: PropTypes.string.isRequired,
-    validation: PropTypes.object.isRequired,
-    onChange: PropTypes.func.isRequired,
-  }
-
   constructor(props) {
     super(props);
     this.setValue = this.setValue.bind(this);
@@ -33,14 +27,20 @@ class TimeField extends Component {
 
   render() {
     return (
-      <FormGroup controlId='time' validationState={this.props.validation.state}>
+      <FormGroup controlId="time" validationState={this.props.validation.state}>
         <ControlLabel>Time</ControlLabel>
-        <FormControl type='time' required value={this.props.value} onChange={this.setValue} />
+        <FormControl type="time" required value={this.props.value} onChange={this.setValue} />
         <FormControl.Feedback />
         {this.props.validation.message && <HelpBlock>{this.props.validation.message}</HelpBlock>}
       </FormGroup>
     );
   }
 }
+
+TimeField.propTypes = {
+  value: PropTypes.string.isRequired,
+  validation: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 
 export default TimeField;
