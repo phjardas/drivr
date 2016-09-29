@@ -27,11 +27,15 @@ class SignInForm extends Component {
 }
 
 SignInForm.propTypes = {
-  actions: PropTypes.object.isRequired,
+  actions: PropTypes.shape({
+    signIn: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 SignInForm.contextTypes = {
-  router: React.PropTypes.object,
+  router: React.PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }),
 };
 
 export default connect(() => ({}), SignInForm);

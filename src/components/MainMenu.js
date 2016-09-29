@@ -50,12 +50,18 @@ class MainMenu extends Component {
 }
 
 MainMenu.propTypes = {
-  user: PropTypes.object,
-  actions: PropTypes.object.isRequired,
+  user: PropTypes.shape({
+    displayName: PropTypes.string.isRequired,
+  }),
+  actions: PropTypes.shape({
+    signOut: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 MainMenu.contextTypes = {
-  router: React.PropTypes.object,
+  router: React.PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }),
 };
 
 function mapStateToProps({ auth }) {
