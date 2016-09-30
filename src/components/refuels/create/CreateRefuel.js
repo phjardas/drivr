@@ -1,193 +1,125 @@
 import React, { Component, PropTypes } from 'react';
-import { Button, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
+import { FormControl } from 'react-bootstrap';
 import decimal from 'decimal.js';
+import { fromJS } from 'immutable';
 
 import connect from '../../connect';
-import { toList, toDateString, toTimeString } from '../../utils';
-
+import { toDateString, toTimeString } from '../../utils';
 import { Refuel } from '../../../model/refuel';
+import Form from '../../form/Form';
+import CarSelect from './CarSelect';
 
-import CarField from './CarField';
-import DateField from './DateField';
-import TimeField from './TimeField';
-import MileageField from './MileageField';
-import FuelAmountField from './FuelAmountField';
-import TotalPriceField from './TotalPriceField';
+function calculateDependants(values) {
+  const refuel =  new Refuel(values, values.car).toJS();
 
-
-function validationPriority(value) {
-  if (!value) return 0;
-  switch(value) {
-    case 'success': return 0;
-    case 'warning': return 1;
-    case 'error': return 2;
-  }
+  return {
+    distance: refuel.distance,
+    pricePerLiter: refuel.pricePerLiter && decimal(refuel.pricePerLiter),
+    consumption: refuel.consumption && decimal(refuel.consumption).mul(decimal(100)),
+  };
 }
-
-function isValid(field) {
-  return !field.validation.state || field.validation.state === 'success';
-}
-
 
 class CreateRefuel extends Component {
   constructor(props) {
     super(props);
-    const now = new Date();
-    const carId = props.location.query ? props.location.query.carId : '';
 
     this.state = {
-      fields: {
-        car: {
-          value: carId,
-          validation: {},
-        },
-        date: {
-          value: toDateString(now),
-          validation: {},
-        },
-        time: {
-          value: toTimeString(now, false),
-          validation: {},
-        },
-        mileage: {
-          value: '',
-          validation: {},
-        },
-        fuelAmount: {
-          value: '',
-          validation: {},
-        },
-        totalPrice: {
-          value: '',
-          validation: {},
+      model: {
+        fields: {
+          car: {
+            label: 'Car',
+            required: true,
+            control: <CarSelect />,
+          },
+          date: {
+            label: 'Date',
+            required: true,
+            control: <FormControl type="date" />,
+          },
+          time: {
+            label: 'Time',
+            required: true,
+            control: <FormControl type="time" />,
+          },
+          mileage: {
+            label: 'Mileage',
+            required: true,
+            control: <FormControl type="number" min={0} />,
+          },
+          fuelAmount: {
+            label: 'Fuel amount',
+            required: true,
+          },
+          totalPrice: {
+            label: 'Total price',
+            required: true,
+          },
         },
       },
-      validation: {},
-      dependents: {},
     };
 
+    this.update = this.update.bind(this);
     this.submit = this.submit.bind(this);
   }
 
-  setValue(key, { value, validation, objectValue }) {
-    const fields = Object.assign({}, this.state.fields, {
-      [key]: { value, validation, objectValue },
-    });
-
-    const update = {
-      fields: fields,
-      validation: {
-        state: this.getFormValidationState(key, validation.state),
-      },
-      dependents: this.calculateDependents(fields),
-    };
-
-    this.setState(update);
+  update(values) {
+    const deps = calculateDependants(values);
+    const model = fromJS(this.state.model)
+      .setIn(['fields', 'mileage', 'help'], deps.distance && 'Distance: ' + deps.distance + ' km')
+      .setIn(['fields', 'totalPrice', 'help'], deps.pricePerLiter && 'Price: ' + deps.pricePerLiter.toFixed(3) + ' €/l')
+      .setIn(['fields', 'fuelAmount', 'help'], deps.consumption && 'Consumption: ' + deps.consumption.toFixed(2) + ' l/100 km')
+      .toJS();
+    this.setState({ model });
   }
 
-  getFormValidationState(updatedField, updatedValidationState) {
-    const validations = toList(this.state.fields)
-      .filter(f => f.id !== updatedField)
-      .map(f => f.validation.state);
-    validations.push(updatedValidationState);
-    return validations.sort((a, b) => validationPriority(b) - validationPriority(a))[0];
-  }
-
-  getValidFieldValue(key, fields = this.state.fields) {
-    const field = fields[key];
-    return isValid(field) ? field.value : null;
-  }
-
-  calculateDependents(fields) {
-    const values = {};
-    ['date', 'mileage', 'fuelAmount', 'totalPrice'].forEach(field => {
-      values[field] = this.getValidFieldValue(field, fields);
-    });
-    const car = isValid(fields.car) ? fields.car.objectValue : null;
-    return new Refuel(values, car).toJS();
-  }
-
-  submit(event) {
-    event.preventDefault();
-
-    const fields = this.state.fields;
+  submit(values) {
     const ref = {
-      carId: fields.car.value,
-      date: fields.date.value + 'T' + fields.time.value,
-      mileage: fields.mileage.value,
-      fuelAmount: fields.fuelAmount.value,
-      totalPrice: fields.totalPrice. value,
+      carId: values.car.id,
+      date: values.date + 'T' + values.time,
+      mileage: values.mileage,
+      fuelAmount: values.fuelAmount,
+      totalPrice: values.totalPrice,
     };
 
     this.props.actions.createRefuel(ref)
-      .then(() => this.context.router.push('/cars/' + fields.car.value));
+      .then(() => this.context.router.push('/cars/' + values.car.id));
   }
 
   render() {
-    const fields = this.state.fields;
+    const now = new Date();
+    const carId = this.props.location.query ? this.props.location.query.carId : '';
+    const value = {
+      car: carId,
+      date: toDateString(now),
+      time: toTimeString(now, false),
+    };
 
     return (
-      <create-refuel>
+      <create-car>
         <h1>Create Refuel</h1>
-        <form onSubmit={this.submit}>
-          <CarField value={fields.car.value}
-            validation={fields.car.validation}
-            onChange={this.setValue.bind(this, 'car')} />
-
-          <DateField value={fields.date.value}
-            validation={fields.date.validation}
-            onChange={this.setValue.bind(this, 'date')} />
-
-          <TimeField value={fields.time.value}
-            validation={fields.time.validation}
-            onChange={this.setValue.bind(this, 'time')} />
-
-          <MileageField controlId="mileage"
-            label="Mileage (km)"
-            value={fields.mileage.value}
-            validation={fields.mileage.validation}
-            onChange={this.setValue.bind(this, 'mileage')} />
-
-          <FuelAmountField value={fields.fuelAmount.value}
-            validation={fields.fuelAmount.validation}
-            onChange={this.setValue.bind(this, 'fuelAmount')} />
-
-          <TotalPriceField value={fields.totalPrice.value}
-            validation={fields.totalPrice.validation}
-            onChange={this.setValue.bind(this, 'totalPrice')} />
-
-          {this.state.dependents.distance && (<FormGroup>
-            <ControlLabel>Distance</ControlLabel>
-            <FormControl.Static>{this.state.dependents.distance} km</FormControl.Static>
-          </FormGroup>)}
-
-          {this.state.dependents.pricePerLiter && (<FormGroup>
-            <ControlLabel>Price per volume</ControlLabel>
-            <FormControl.Static>{decimal(this.state.dependents.pricePerLiter).toFixed(3)} €/l</FormControl.Static>
-          </FormGroup>)}
-
-          {this.state.dependents.consumption && (<FormGroup>
-            <ControlLabel>Consumption</ControlLabel>
-            <FormControl.Static>{decimal(this.state.dependents.consumption).mul(decimal(100)).toFixed(3)} l/100 km</FormControl.Static>
-          </FormGroup>)}
-
-          <Button type="submit" disabled={this.state.validation.state === 'error'}>Create refuel</Button>
-
-          <pre>{JSON.stringify(this.state, null, 2)}</pre>
-
-        </form>
-      </create-refuel>
+        <Form
+          model={this.state.model}
+          value={value}
+          onSubmit={this.submit}
+          onChange={this.update}
+          submitButtonLabel="Create refuel"
+        />
+      </create-car>
     );
   }
 }
 
 CreateRefuel.propTypes = {
-  actions: PropTypes.object.isRequired,
+  actions: PropTypes.shape({
+    createRefuel: PropTypes.func.isRequired,
+  }).isRequired,
   location: PropTypes.object.isRequired,
 };
 
 CreateRefuel.contextTypes = {
-  router: React.PropTypes.object,
+  router: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 export default connect(() => ({}), CreateRefuel);
