@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { FormattedNumber } from 'react-intl';
 import decimal from 'decimal.js';
 
 import connect from '../connect';
@@ -33,12 +34,12 @@ class RefuelList extends Component {
             {carRefuels.map(refuel => (
               <tr key={refuel.id}>
                 <td>{refuel.date}</td>
-                <td className="number">{refuel.mileage}</td>
-                <td className="number">{decimal(refuel.fuelAmount).toFixed(2)}</td>
-                <td className="number">{decimal(refuel.totalPrice).toFixed(2)}</td>
-                <td className="number">{decimal(refuel.pricePerLiter).toFixed(3)}</td>
-                <td className="number">{refuel.distance}</td>
-                <td className="number">{decimal(refuel.consumption).mul(decimal(100)).toFixed(3)}</td>
+                <td className="number"><FormattedNumber value={refuel.mileage} /></td>
+                <td className="number"><FormattedNumber value={refuel.fuelAmount} minimumFractionDigits={2} maximumFractionDigits={2} /></td>
+                <td className="number"><FormattedNumber value={refuel.totalPrice} minimumFractionDigits={2} maximumFractionDigits={2} /></td>
+                <td className="number"><FormattedNumber value={decimal(refuel.pricePerLiter).toString()} minimumFractionDigits={3} maximumFractionDigits={3} /></td>
+                <td className="number"><FormattedNumber value={refuel.distance} /></td>
+                <td className="number"><FormattedNumber value={decimal(refuel.consumption).mul(decimal(100)).toString()} minimumFractionDigits={3} maximumFractionDigits={3} /></td>
               </tr>
             ))}
           </tbody>

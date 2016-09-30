@@ -1,10 +1,11 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { Provider } from 'react-redux';
 import { Router, browserHistory } from 'react-router';
+import { Provider } from 'react-intl-redux';
 import store from './store';
 import routes from './routes';
 import { syncHistoryWithStore } from 'react-router-redux';
+import './i18n.js';
 
 // require('./favicon.ico');
 import './styles/styles.scss';
