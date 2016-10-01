@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Link, IndexLink } from 'react-router';
+import { FormattedNumber } from 'react-intl';
 import decimal from 'decimal.js';
 
 import connect from '../connect';
@@ -27,19 +28,19 @@ class CarDetails extends Component {
               <h2>Statistics</h2>
               <dl className="dl-horizontal">
                 <dt>Total distance</dt>
-                <dd>{car.stats.totalDistance} km</dd>
+                <dd><FormattedNumber value={car.stats.totalDistance} /> km</dd>
                 <dt>Refuels</dt>
-                <dd>{car.stats.refuelCount}</dd>
+                <dd><FormattedNumber value={car.stats.refuelCount} /></dd>
                 <dt>Total fuel</dt>
-                <dd>{decimal(car.stats.totalFuel).toFixed(2)} l</dd>
+                <dd><FormattedNumber value={decimal(car.stats.totalFuel).toString()} minimumFractionDigits={2} maximumFractionDigits={2} /> l</dd>
                 <dt>Total money</dt>
-                <dd>{decimal(car.stats.totalPrice).toFixed(2)} €</dd>
+                <dd><FormattedNumber value={decimal(car.stats.totalPrice).toString()} minimumFractionDigits={2} maximumFractionDigits={2} /> €</dd>
                 <dt>Average consumption</dt>
-                <dd>{decimal(car.stats.averageConsumption).mul(decimal(100)).toFixed(2)} l/100 km</dd>
+                <dd><FormattedNumber value={decimal(car.stats.averageConsumption).mul(decimal(100)).toString()} minimumFractionDigits={2} maximumFractionDigits={2} /> l/100 km</dd>
                 <dt>Average money</dt>
-                <dd>{decimal(car.stats.averagePricePerDistance).mul(decimal(100)).toFixed(2)} €/100 km</dd>
+                <dd><FormattedNumber value={decimal(car.stats.averagePricePerDistance).mul(decimal(100)).toString()} minimumFractionDigits={2} maximumFractionDigits={2} /> €/100 km</dd>
                 <dt>Average price</dt>
-                <dd>{decimal(car.stats.averagePricePerVolume).toFixed(3)} €/l</dd>
+                <dd><FormattedNumber value={decimal(car.stats.averagePricePerVolume).toString()} minimumFractionDigits={3} maximumFractionDigits={3} /> €/l</dd>
               </dl>
             </div>
           )}

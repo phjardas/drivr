@@ -5,12 +5,13 @@ import { Provider } from 'react-intl-redux';
 import store from './store';
 import routes from './routes';
 import { syncHistoryWithStore } from 'react-router-redux';
-import './i18n.js';
+import { setLocale } from './i18n/actions';
 
 // require('./favicon.ico');
 import './styles/styles.scss';
 
 const history = syncHistoryWithStore(browserHistory, store);
+store.dispatch(setLocale('en'));
 
 render(
   <Provider store={store}>

@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
+import { FormattedNumber } from 'react-intl';
 import { Table } from 'react-bootstrap';
 
 import connect from '../connect';
@@ -30,7 +31,7 @@ class CarList extends Component {
                     <Link to={'/cars/' + car.id}>{car.licensePlate}</Link>
                   </td>
                   <td className="number">
-                    {car.stats ? car.stats.totalDistance : car.initialMileage} km
+                    <FormattedNumber value={car.stats ? car.stats.totalDistance : car.initialMileage} /> km
                   </td>
                   <td>
                     {car.lastRefuel ? car.lastRefuel.date : <em>never</em>}

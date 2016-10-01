@@ -15,13 +15,33 @@ class MainMenu extends Component {
       .then(() => this.context.router.push('/'));
   }
 
+  setLocale(locale) {
+    this.props.actions.setLocale(locale);
+  }
+
   renderAuthenticated(user) {
+    const languages = [
+      { locale: 'en', label: 'English' },
+      { locale: 'de', label: 'Deutsch' },
+    ];
+
     return (
       <main-menu>
         <Nav>
           <LinkContainer to="/cars">
             <NavItem>Cars</NavItem>
           </LinkContainer>
+        </Nav>
+        <Nav pullRight>
+          <NavDropdown title="Language" id="menu-lang">
+            {languages.map(lang => (
+              <MenuItem
+                  key={lang.locale}
+                  onClick={this.setLocale.bind(this, lang.locale)}>
+                {this.props.locale === lang.locale && '✓ '}{lang.label}
+              </MenuItem>
+            ))}
+          </NavDropdown>
         </Nav>
         <Nav pullRight>
           <NavDropdown title={<span><Glyphicon glyph="user" /> {user.displayName}</span>} id="menu-user">
@@ -64,9 +84,10 @@ MainMenu.contextTypes = {
   }),
 };
 
-function mapStateToProps({ auth }) {
+function mapStateToProps({ auth, intl }) {
   return {
     user: auth.user,
+    locale: intl.locale,
   };
 }
 
