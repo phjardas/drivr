@@ -2,7 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { Nav, NavItem, NavDropdown, MenuItem, Glyphicon } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
+import { locales } from '../i18n';
 import connect from './connect';
+import { toList } from './utils';
 
 class MainMenu extends Component {
   constructor(props) {
@@ -20,11 +22,6 @@ class MainMenu extends Component {
   }
 
   renderAuthenticated(user) {
-    const languages = [
-      { locale: 'en', label: 'English' },
-      { locale: 'de', label: 'Deutsch' },
-    ];
-
     return (
       <main-menu>
         <Nav>
@@ -33,12 +30,13 @@ class MainMenu extends Component {
           </LinkContainer>
         </Nav>
         <Nav pullRight>
-          <NavDropdown title="Language" id="menu-lang">
-            {languages.map(lang => (
+          <NavDropdown title={<Glyphicon glyph="globe" />} id="menu-lang">
+            {toList(locales).map(lang => (
               <MenuItem
-                  key={lang.locale}
-                  onClick={this.setLocale.bind(this, lang.locale)}>
-                {this.props.locale === lang.locale && '✓ '}{lang.label}
+                  key={lang.id}
+                  disabled={lang.id === this.props.locale}
+                  onClick={this.setLocale.bind(this, lang.id)}>
+                {lang.id === this.props.locale && '✓ '}{lang.label}
               </MenuItem>
             ))}
           </NavDropdown>
@@ -75,7 +73,9 @@ MainMenu.propTypes = {
   }),
   actions: PropTypes.shape({
     signOut: PropTypes.func.isRequired,
+    setLocale: PropTypes.func.isRequired,
   }).isRequired,
+  locale: PropTypes.string.isRequired,
 };
 
 MainMenu.contextTypes = {

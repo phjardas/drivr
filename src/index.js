@@ -5,7 +5,7 @@ import { Provider } from 'react-intl-redux';
 import store from './store';
 import routes from './routes';
 import { syncHistoryWithStore } from 'react-router-redux';
-import { setLocale } from './i18n/actions';
+import { setLocale } from './i18n';
 
 // require('./favicon.ico');
 import './styles/styles.scss';

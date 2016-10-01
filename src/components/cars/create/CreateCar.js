@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { FormattedMessage } from 'react-intl';
 import { FormControl } from 'react-bootstrap';
 
 import connect from '../../connect';
@@ -22,8 +23,8 @@ class CreateCar extends Component {
           label: 'License plate',
           required: true,
           validators: [
-            value => value && value.length < 5 && { state: 'warning', message: 'stringTooShort' },
-            value => value && value.length > 100 && { state: 'warning', message: 'stringTooLong' },
+            value => value && value.length < 5 && { state: 'warning', message: <FormattedMessage id="error.stringTooShort" values={{ min: 5 }} /> },
+            value => value && value.length > 100 && { state: 'warning', message: <FormattedMessage id="error.stringTooLong" values={{ max: 100 }} /> },
           ],
         },
         initialMileage: {

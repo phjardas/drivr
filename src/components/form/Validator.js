@@ -1,3 +1,6 @@
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
+
 const STATES = ['error', 'warning', 'success', null];
 
 function maxState(states) {
@@ -34,7 +37,7 @@ function all(validators) {
 }
 
 function required(value) {
-  return value ? null : { state: 'error', message: 'required' };
+  return value ? null : { state: 'error', message: <FormattedMessage id="error.required" /> };
 }
 
 export default {

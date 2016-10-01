@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { FormattedNumber } from 'react-intl';
+import { FormattedNumber, FormattedDate } from 'react-intl';
 import decimal from 'decimal.js';
 
 import connect from '../connect';
@@ -33,13 +33,27 @@ class RefuelList extends Component {
           <tbody>
             {carRefuels.map(refuel => (
               <tr key={refuel.id}>
-                <td>{refuel.date}</td>
-                <td className="number"><FormattedNumber value={refuel.mileage} /></td>
-                <td className="number"><FormattedNumber value={refuel.fuelAmount} minimumFractionDigits={2} maximumFractionDigits={2} /></td>
-                <td className="number"><FormattedNumber value={refuel.totalPrice} minimumFractionDigits={2} maximumFractionDigits={2} /></td>
-                <td className="number"><FormattedNumber value={decimal(refuel.pricePerLiter).toString()} minimumFractionDigits={3} maximumFractionDigits={3} /></td>
-                <td className="number"><FormattedNumber value={refuel.distance} /></td>
-                <td className="number"><FormattedNumber value={decimal(refuel.consumption).mul(decimal(100)).toString()} minimumFractionDigits={3} maximumFractionDigits={3} /></td>
+                <td>
+                  <FormattedDate value={refuel.date} year="numeric" month="short" day="numeric" />
+                </td>
+                <td className="number">
+                  <FormattedNumber value={refuel.mileage} />
+                </td>
+                <td className="number">
+                  <FormattedNumber value={refuel.fuelAmount} minimumFractionDigits={2} maximumFractionDigits={2} />
+                </td>
+                <td className="number">
+                  <FormattedNumber value={refuel.totalPrice} minimumFractionDigits={2} maximumFractionDigits={2} />
+                </td>
+                <td className="number">
+                  <FormattedNumber value={decimal(refuel.pricePerLiter).toString()} minimumFractionDigits={3} maximumFractionDigits={3} />
+                </td>
+                <td className="number">
+                  <FormattedNumber value={refuel.distance} />
+                </td>
+                <td className="number">
+                  <FormattedNumber value={decimal(refuel.consumption).mul(decimal(100)).toString()} minimumFractionDigits={3} maximumFractionDigits={3} />
+                </td>
               </tr>
             ))}
           </tbody>

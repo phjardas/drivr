@@ -1,19 +1,34 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
-import { FormattedNumber } from 'react-intl';
-import { Table } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
+import { defineMessages, FormattedMessage, FormattedNumber, FormattedDate } from 'react-intl';
+import { Table, Button, Glyphicon } from 'react-bootstrap';
 
 import connect from '../connect';
 import { toList } from '../utils';
 
+const messages = defineMessages({
+  title: {
+    id: 'carList.title',
+  },
+  createCarButton: {
+    id: 'carList.createCar.buttonLabel',
+  },
+});
 
 class CarList extends Component {
   render() {
     return (
       <car-list>
-        <h1>Cars</h1>
+        <h1><FormattedMessage {...messages.title} /></h1>
         <p>
-          <Link to="/cars/_new">create car</Link>
+          <LinkContainer to="/cars/_new">
+            <Button bsStyle="primary">
+              <Glyphicon glyph="plus" />
+              {' '}
+              <FormattedMessage {...messages.createCarButton} />
+            </Button>
+          </LinkContainer>
         </p>
         {this.props.cars.length ? (
           <Table>
@@ -34,7 +49,7 @@ class CarList extends Component {
                     <FormattedNumber value={car.stats ? car.stats.totalDistance : car.initialMileage} /> km
                   </td>
                   <td>
-                    {car.lastRefuel ? car.lastRefuel.date : <em>never</em>}
+                    {car.lastRefuel ? <FormattedDate value={car.lastRefuel.date} year="numeric" month="short" day="numeric" /> : <em>never</em>}
                   </td>
                 </tr>
               ))}
