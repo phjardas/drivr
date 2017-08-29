@@ -1,0 +1,34 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="/">drivr</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown" *ngIf="user != null">
+          <a class="nav-link dropdown-toggle" id="carsDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cars</a>
+          <div class="dropdown-menu" aria-labelledby="carsDropdownMenuLink">
+            <a class="dropdown-item" [routerLink]="['/cars', car.id]" *ngFor="let car of cars | async">{{car.licensePlate}}</a>
+          </div>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav" *ngIf="user != null">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="userDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-user"></i> {{user.displayName}}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="userDropdownMenuLink">
+            <a class="dropdown-item" href="#" (click)="signout()">Sign out</a>
+          </div>
+        </li>
+      </ul>
+      <form class="form-inline" *ngIf="user == null">
+        <button (click)="signin()" class="btn btn-primary">Sign in</button>
+      </form>
+    </div>
+  </div>
+</nav>
+
+<router-outlet></router-outlet>

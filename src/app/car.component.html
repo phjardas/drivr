@@ -1,0 +1,58 @@
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h2 class="display-3">{{(car|async)?.licensePlate}}</h2>
+
+    <div *ngIf="(car|async)?.stats != null" class="row">
+      <div class="col-md">
+        <dl class="row">
+          <dt class="col-lg-4">Refuels</dt><dd class="col-lg-8">{{(car|async)?.stats.refuelCount}}</dd>
+          <dt class="col-lg-4">Total distance</dt><dd class="col-lg-8">{{(car|async)?.stats.totalDistance | number}} km</dd>
+          <dt class="col-lg-4">Total fuel amount</dt><dd class="col-lg-8">{{(car|async)?.stats.totalFuel | number:'1.2-2'}} l</dd>
+          <dt class="col-lg-4">Total spendings</dt><dd class="col-lg-8">{{(car|async)?.stats.totalPrice | number:'1.2-2'}} €</dd>
+        </dl>
+      </div>
+      <div class="col-md">
+        <dl class="row">
+          <dt class="col-lg-8">Average consumption</dt><dd class="col-lg-4">{{(car|async)?.stats.averageConsumption * 100 | number:'1.2-2'}} cl/km</dd>
+          <dt class="col-lg-8">Average spending per distance</dt><dd class="col-lg-4">{{(car|async)?.stats.averagePricePerDistance * 100 | number:'1.2-2'}} ct/km</dd>
+          <dt class="col-lg-8">Average spending per liter</dt><dd class="col-lg-4">{{(car|async)?.stats.averagePricePerVolume | number:'1.2-2'}} €/l</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-6">
+      <h3>Mileage over time</h3>
+      <google-chart [data]="mileageChartData" *ngIf="mileageChartData?.dataTable"></google-chart>
+    </div>
+    <div class="col-lg-6">
+      <h3>Fuel price over time</h3>
+      <google-chart [data]="fuelPriceChartData" *ngIf="fuelPriceChartData?.dataTable"></google-chart>
+    </div>
+  </div>
+
+  <h3 class="mt-5">Refuels</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th class="number">Mileage <small>[km]</small></th>
+        <th class="number">Distance <small>[km]</small></th>
+        <th class="number">Fuel <small>[l]</small></th>
+        <th class="number">Price <small>[€]</small></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let refuel of refuels | async">
+        <td>{{refuel.date | date}}</td>
+        <td class="number">{{refuel.mileage | number}}</td>
+        <td class="number">{{refuel.distance | number}}</td>
+        <td class="number">{{refuel.fuelAmount | number:'1.2-2'}}</td>
+        <td class="number">{{refuel.totalPrice | number:'1.2-2'}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
