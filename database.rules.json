@@ -1,0 +1,16 @@
+{
+  "rules": {
+    "cars": {
+      "$userId": {
+        ".read": "auth !== null && auth.uid === $userId",
+        ".write": "auth !== null && auth.uid === $userId"
+      }
+    },
+    "refuels": {
+      "$userId": {
+        ".read": "auth !== null && auth.uid === $userId",
+        ".write": "auth !== null && auth.uid === $userId"
+      }
+    }
+  }
+}

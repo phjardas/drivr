@@ -7,7 +7,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "lint": "ng lint"
+    "dist": "ng build -prod",
+    "deploy": "npm run dist && firebase deploy"
   },
   "dependencies": {
     "@angular/animations": "^4.2.4",
