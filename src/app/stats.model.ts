@@ -7,7 +7,15 @@ export class Stats {
   public totalFuel: number;
   public totalPrice: number;
 
-  constructor(data) {
+  constructor(data: {
+    averageConsumption?: number,
+    averagePricePerDistance?: number,
+    averagePricePerVolume?: number,
+    refuelCount?: number,
+    totalDistance?: number,
+    totalFuel?: number,
+    totalPrice?: number
+  }) {
     this.averageConsumption = data.averageConsumption;
     this.averagePricePerDistance = data.averagePricePerDistance;
     this.averagePricePerVolume = data.averagePricePerVolume;

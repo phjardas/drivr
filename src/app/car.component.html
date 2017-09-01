@@ -1,6 +1,6 @@
 <div class="jumbotron jumbotron-fluid">
   <div class="container">
-    <h2 class="display-3">{{(car|async)?.licensePlate}}</h2>
+    <h2 class="display-3">{{(car|async)?.licensePlate || 'loading…'}}</h2>
 
     <div *ngIf="(car|async)?.stats != null" class="row">
       <div class="col-md">
@@ -17,13 +17,17 @@
           <dt class="col-lg-8">Average spending per distance</dt><dd class="col-lg-4">{{(car|async)?.stats.averagePricePerDistance * 100 | number:'1.2-2'}} ct/km</dd>
           <dt class="col-lg-8">Average spending per liter</dt><dd class="col-lg-4">{{(car|async)?.stats.averagePricePerVolume | number:'1.2-2'}} €/l</dd>
         </dl>
+        <a class="btn btn-primary" [routerLink]="['/cars', (car|async)?.id, 'refuels', '_new']">Enter new refuel</a>
       </div>
+    </div>
+    <div *ngIf="(car|async) != null && (car|async)?.stats == null" class="row">
+      <a class="btn btn-primary" [routerLink]="['/cars', (car|async)?.id, 'refuels', '_new']">Enter new refuel</a>
     </div>
   </div>
 </div>
 
 <div class="container">
-  <div class="row">
+  <div class="row" *ngIf="(refuels|async)?.length > 2">
     <div class="col-lg-6">
       <h3>Mileage over time</h3>
       <google-chart [data]="mileageChartData" *ngIf="mileageChartData?.dataTable"></google-chart>

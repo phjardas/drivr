@@ -8,7 +8,14 @@ export class Car {
   public lastRefuel: Refuel;
   public stats: Stats;
 
-  constructor(data: any) {
+  constructor(data: {
+    id?: String,
+    $key?: String,
+    licensePlate: String,
+    initialMileage: number,
+    lastRefuel?: Refuel,
+    stats?: Stats
+  }) {
     this.id = 'id' in data ? data.id : data.$key;
     this.licensePlate = data.licensePlate;
     this.initialMileage = data.initialMileage;
