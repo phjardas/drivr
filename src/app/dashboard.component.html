@@ -1,5 +1,20 @@
-<div class="jumbotron jumbotron-fluid">
+<div class="jumbotron jumbotron-fluid" *ngIf="(user | async) != null">
   <div class="container">
-    <h2 class="display-3">Dashboard</h2>
+    <h2 class="display-3">Welcome, {{ (user | async)?.displayName }}!</h2>
+
+    <div *ngIf="(cars | async)?.length">
+      <p>Here's your cars:</p>
+      <ul>
+        <li *ngFor="let car of cars | async">
+          <a [routerLink]="['/cars', car.id]">{{ car.licensePlate }}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="jumbotron jumbotron-fluid" *ngIf="(user | async) == null">
+  <div class="container">
+    <h2 class="display-3">Welcome!</h2>
   </div>
 </div>
