@@ -49,6 +49,14 @@ function calculateStats(car: Car, refuel: Refuel): Stats {
   return stats;
 }
 
+function getSigninProvider(type) {
+  switch (type) {
+    case 'google': return new firebase.auth.GoogleAuthProvider();
+    case 'github': return new firebase.auth.GithubAuthProvider();
+    default: throw new Error(`Invalid authentication provider: ${type}`);
+  }
+}
+
 
 @Injectable()
 export class CarService {
@@ -97,8 +105,9 @@ export class CarService {
     return Observable.fromPromise(this.db.object('/').update(updates));
   }
 
-  signin() {
-    this.auth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+  signin(type) {
+    const provider = getSigninProvider(type);
+    this.auth.auth.signInWithPopup(provider);
   }
 
   signout() {

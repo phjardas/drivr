@@ -1,27 +1,37 @@
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
   <div class="container">
-    <a class="navbar-brand" href="/"><i class="fa fa-car"></i> drivr</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <a class="navbar-brand" [routerLink]="['/']"><i class="fa fa-car"></i> drivr</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto" *ngIf="user != null">
-        <a class="nav-item nav-link" [routerLink]="['/cars', car.id]" *ngFor="let car of cars | async">{{car.licensePlate}}</a>
+        <a class="nav-item nav-link" [routerLink]="['/cars', car.id]" routerLinkActive="active" *ngFor="let car of cars | async">
+          {{car.licensePlate}}
+        </a>
       </ul>
 
       <ul class="navbar-nav" *ngIf="user != null">
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" id="userDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown">
             <i class="fa fa-user"></i> {{user.displayName}}
           </a>
-          <div class="dropdown-menu" aria-labelledby="userDropdownMenuLink">
-            <a class="dropdown-item" href="#" (click)="signout()">Sign out</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#" (click)="signout()"><i class="fa fa-sign-out"></i> Sign out</a>
           </div>
         </li>
       </ul>
-      <div class="form-inline" *ngIf="user == null">
-        <button (click)="signin()" class="btn btn-primary">Sign in</button>
-      </div>
+      <ul class="navbar-nav" *ngIf="user == null">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-user"></i> Sign in
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" (click)="signin('google')"><i class="fa fa-google"></i> with Google</a>
+            <a class="dropdown-item" (click)="signin('github')"><i class="fa fa-github"></i> with GitHub</a>
+          </div>
+        </li>
+      </ul>
     </div>
   </div>
 </nav>

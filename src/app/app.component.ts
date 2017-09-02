@@ -17,8 +17,8 @@ export class AppComponent {
     this.cars = carService.cars;
   }
 
-  signin() {
-    this.carService.signin();
+  signin(type) {
+    this.carService.signin(type);
   }
 
   signout() {
