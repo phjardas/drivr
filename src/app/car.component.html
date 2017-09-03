@@ -49,19 +49,15 @@
     </li>
   </ul>
 
-  <div class="row" *ngIf="activeTab == 'charts' && (refuels|async)?.length > 2" class="mt-3">
-    <div class="col-lg-4">
-      <h3>Mileage over time</h3>
-      <google-chart [data]="mileageChartData" *ngIf="mileageChartData?.dataTable"></google-chart>
-    </div>
-    <div class="col-lg-4">
-      <h3>Consumption over time</h3>
-      <google-chart [data]="consumptionChartData" *ngIf="consumptionChartData?.dataTable"></google-chart>
-    </div>
-    <div class="col-lg-4">
-      <h3>Fuel price over time</h3>
-      <google-chart [data]="fuelPriceChartData" *ngIf="fuelPriceChartData?.dataTable"></google-chart>
-    </div>
+  <div *ngIf="activeTab == 'charts' && (refuels|async)?.length > 2" class="mt-3">
+    <h3>Mileage over time</h3>
+    <google-chart [data]="mileageChartData" *ngIf="mileageChartData?.dataTable"></google-chart>
+
+    <h3>Consumption over time</h3>
+    <google-chart [data]="consumptionChartData" *ngIf="consumptionChartData?.dataTable"></google-chart>
+
+    <h3>Fuel price over time</h3>
+    <google-chart [data]="fuelPriceChartData" *ngIf="fuelPriceChartData?.dataTable"></google-chart>
   </div>
 
   <div *ngIf="activeTab == 'table'" class="mt-3">

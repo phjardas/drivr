@@ -78,7 +78,7 @@ export class CarComponent implements OnInit {
     const header: any[] = ['Date', 'Liters per 100km'];
     const data = refuels
       .sort((a, b) => a.date.getTime() - b.date.getTime())
-      .map(refuel => [ refuel.date, refuel.consumption ]);
+      .map(refuel => [ refuel.date, refuel.consumption * 100 ]);
     this.consumptionChartData = Object.assign({}, this.consumptionChartData, { dataTable: [header].concat(data) });
   }
 
