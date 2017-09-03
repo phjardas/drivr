@@ -14,6 +14,11 @@ import { CarService, Car, Refuel } from './car.service';
 export class CarComponent implements OnInit {
   car: Observable<Car>;
   refuels: Observable<Refuel[]>;
+  tabs = [
+    { id: 'charts', label: 'Charts' },
+    { id: 'table', label: 'Table' }
+  ];
+  activeTab = 'charts';
 
   mileageChartData = {
     chartType: 'LineChart',

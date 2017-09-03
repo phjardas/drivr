@@ -43,7 +43,13 @@
 </div>
 
 <div class="container" *ngIf="(refuels|async)?.length">
-  <div class="row" *ngIf="(refuels|async)?.length > 2">
+  <ul class="nav nav-tabs">
+    <li class="nav-item" *ngFor="let tab of tabs">
+      <a class="nav-link" (click)="activeTab = tab.id" [ngClass]="{ active: tab.id === activeTab }">{{ tab.label }}</a>
+    </li>
+  </ul>
+
+  <div class="row" *ngIf="activeTab == 'charts' && (refuels|async)?.length > 2" class="mt-3">
     <div class="col-lg-4">
       <h3>Mileage over time</h3>
       <google-chart [data]="mileageChartData" *ngIf="mileageChartData?.dataTable"></google-chart>
@@ -58,29 +64,31 @@
     </div>
   </div>
 
-  <h3 class="mt-5">Refuels</h3>
-  <table class="table responsive">
-    <thead>
-      <tr>
-        <th>Date</th>
-        <th class="number">Mileage</th>
-        <th class="number">Distance</th>
-        <th class="number">Fuel</th>
-        <th class="number">Price</th>
-        <th class="number">Consumption</th>
-        <th class="number">Price per liter</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let refuel of refuels | async">
-        <td style="white-space: nowrap">{{refuel.date | date}}</td>
-        <td class="number">{{refuel.mileage | number}} <small>km</small></td>
-        <td class="number"><span *ngIf="refuel.distance">{{refuel.distance | number}} <small>km</small></span></td>
-        <td class="number">{{refuel.fuelAmount | number:'1.2-2'}} <small>l</small></td>
-        <td class="number">{{refuel.totalPrice | number:'1.2-2'}} <small>€</small></td>
-        <td class="number"><span *ngIf="refuel.consumption">{{refuel.consumption | number:'1.2-2'}} <small>cl/km</small></span></td>
-        <td class="number">{{refuel.pricePerLiter | number:'1.2-2'}} <small>€/l</small></td>
-      </tr>
-    </tbody>
-  </table>
+  <div *ngIf="activeTab == 'table'" class="mt-3">
+    <h3>Refuels</h3>
+    <table class="table responsive">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th class="number">Mileage</th>
+          <th class="number">Distance</th>
+          <th class="number">Fuel</th>
+          <th class="number">Price</th>
+          <th class="number">Consumption</th>
+          <th class="number">Price per liter</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let refuel of refuels | async">
+          <td style="white-space: nowrap">{{refuel.date | date}}</td>
+          <td class="number">{{refuel.mileage | number}} <small>km</small></td>
+          <td class="number"><span *ngIf="refuel.distance">{{refuel.distance | number}} <small>km</small></span></td>
+          <td class="number">{{refuel.fuelAmount | number:'1.2-2'}} <small>l</small></td>
+          <td class="number">{{refuel.totalPrice | number:'1.2-2'}} <small>€</small></td>
+          <td class="number"><span *ngIf="refuel.consumption">{{refuel.consumption | number:'1.2-2'}} <small>cl/km</small></span></td>
+          <td class="number">{{refuel.pricePerLiter | number:'1.2-2'}} <small>€/l</small></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
