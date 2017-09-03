@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
   <div class="container">
-    <a class="navbar-brand" [routerLink]="['/']"><i class="fa fa-car"></i> drivr</a>
+    <a class="navbar-brand" [routerLink]="['/']"><i class="fa fa-car mr-1"></i> drivr</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -14,21 +14,21 @@
       <ul class="navbar-nav" *ngIf="user != null">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown">
-            <i class="fa fa-user"></i> {{user.displayName}}
+            <i class="fa fa-user mr-1"></i> {{user.displayName}}
           </a>
           <div class="dropdown-menu">
-            <a class="dropdown-item" href="#" (click)="signout()"><i class="fa fa-sign-out"></i> Sign out</a>
+            <a class="dropdown-item" href="#" (click)="signout()"><i class="fa fa-sign-out mr-1"></i> Sign out</a>
           </div>
         </li>
       </ul>
       <ul class="navbar-nav" *ngIf="user == null">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown">
-            <i class="fa fa-user"></i> Sign in
+            <i class="fa fa-user mr-1"></i> Sign in
           </a>
           <div class="dropdown-menu">
-            <a class="dropdown-item" (click)="signin('google')"><i class="fa fa-google"></i> with Google</a>
-            <a class="dropdown-item" (click)="signin('github')"><i class="fa fa-github"></i> with GitHub</a>
+            <a class="dropdown-item" (click)="signin('google')"><i class="fa fa-google mr-1"></i> with Google</a>
+            <a class="dropdown-item" (click)="signin('github')"><i class="fa fa-github mr-1"></i> with GitHub</a>
           </div>
         </li>
       </ul>

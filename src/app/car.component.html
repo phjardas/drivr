@@ -17,11 +17,11 @@
           <dt class="col-lg-8">Average spending per distance</dt><dd class="col-lg-4">{{(car|async)?.stats.averagePricePerDistance * 100 | number:'1.2-2'}} ct/km</dd>
           <dt class="col-lg-8">Average spending per liter</dt><dd class="col-lg-4">{{(car|async)?.stats.averagePricePerVolume | number:'1.2-2'}} €/l</dd>
         </dl>
-        <a class="btn btn-primary" [routerLink]="['/cars', (car|async)?.id, 'refuels', '_new']"><i class="fa fa-tint" aria-hidden="true"></i> Enter new refuel</a>
+        <a class="btn btn-primary" [routerLink]="['/cars', (car|async)?.id, 'refuels', '_new']"><i class="fa fa-tint mr-1" aria-hidden="true"></i> Enter new refuel</a>
       </div>
     </div>
     <div *ngIf="(car|async) != null && (car|async)?.stats == null" class="row">
-      <a class="btn btn-primary" [routerLink]="['/cars', (car|async)?.id, 'refuels', '_new']"><i class="fa fa-tint" aria-hidden="true"></i> Enter new refuel</a>
+      <a class="btn btn-primary" [routerLink]="['/cars', (car|async)?.id, 'refuels', '_new']"><i class="fa fa-tint mr-1" aria-hidden="true"></i> Enter new refuel</a>
     </div>
   </div>
 </div>
