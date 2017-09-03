@@ -24,6 +24,15 @@ export class CarComponent implements OnInit {
     },
   };
 
+  consumptionChartData = {
+    chartType: 'LineChart',
+    dataTable: null,
+    options: {
+      curveType: 'function',
+      legend: 'none',
+    },
+  };
+
   fuelPriceChartData = {
     chartType: 'LineChart',
     dataTable: null,
@@ -47,6 +56,7 @@ export class CarComponent implements OnInit {
 
     this.refuels.subscribe(refuels => {
       this.updateMileageChart(refuels);
+      this.updateConsumptionChart(refuels);
       this.updateFuelPriceChart(refuels);
     });
   }
@@ -57,6 +67,14 @@ export class CarComponent implements OnInit {
       .sort((a, b) => a.date.getTime() - b.date.getTime())
       .map(refuel => [ refuel.date, refuel.mileage ]);
     this.mileageChartData = Object.assign({}, this.mileageChartData, { dataTable: [header].concat(data) });
+  }
+
+  updateConsumptionChart(refuels: Refuel[]) {
+    const header: any[] = ['Date', 'Liters per 100km'];
+    const data = refuels
+      .sort((a, b) => a.date.getTime() - b.date.getTime())
+      .map(refuel => [ refuel.date, refuel.consumption ]);
+    this.consumptionChartData = Object.assign({}, this.consumptionChartData, { dataTable: [header].concat(data) });
   }
 
   updateFuelPriceChart(refuels: Refuel[]) {

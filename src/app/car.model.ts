@@ -4,7 +4,7 @@ import { Stats } from './stats.model';
 export class Car {
   public id: String;
   public licensePlate: String;
-  public initialMileage: number;
+  public firstRefuel: Refuel;
   public lastRefuel: Refuel;
   public stats: Stats;
 
@@ -12,14 +12,14 @@ export class Car {
     id?: String,
     $key?: String,
     licensePlate: String,
-    initialMileage: number,
+    firstRefuel?: Refuel,
     lastRefuel?: Refuel,
     stats?: Stats
   }) {
     this.id = 'id' in data ? data.id : data.$key;
     this.licensePlate = data.licensePlate;
-    this.initialMileage = data.initialMileage;
+    this.firstRefuel = data.firstRefuel;
     this.lastRefuel = data.lastRefuel;
-    this.stats = 'stats' in data ? new Stats(data.stats) : null;
+    this.stats = data.stats ? new Stats(data.stats) : null;
   }
 }

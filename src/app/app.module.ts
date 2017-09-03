@@ -11,10 +11,12 @@ import { environment } from '../environments/environment';
 import { CarService } from './car.service';
 import { AppComponent } from './app.component';
 import { CarComponent } from './car.component';
+import { NewCarComponent } from './new-car.component';
 import { NewRefuelComponent } from './new-refuel.component';
 import { DashboardComponent } from './dashboard.component';
 
 const routes: Routes = [
+  { path: 'cars/_new', component: NewCarComponent },
   { path: 'cars/:id', component: CarComponent },
   { path: 'cars/:id/refuels/_new', component: NewRefuelComponent },
   { path: 'dashboard', component: DashboardComponent },
@@ -24,8 +26,9 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    CarComponent,
     DashboardComponent,
+    CarComponent,
+    NewCarComponent,
     NewRefuelComponent,
   ],
   imports: [

@@ -19,9 +19,9 @@ export class Stats {
     this.averageConsumption = data.averageConsumption;
     this.averagePricePerDistance = data.averagePricePerDistance;
     this.averagePricePerVolume = data.averagePricePerVolume;
-    this.refuelCount = data.refuelCount;
-    this.totalDistance = data.totalDistance;
-    this.totalFuel = data.totalFuel;
-    this.totalPrice = data.totalPrice;
+    this.refuelCount = data.refuelCount || 0;
+    this.totalDistance = data.totalDistance || 0;
+    this.totalFuel = data.totalFuel || 0;
+    this.totalPrice = data.totalPrice || 0;
   }
 }
