@@ -21,7 +21,7 @@
     </div>
     <div class="form-group">
       <label for="mileage">Mileage</label>
-      <input class="form-control" name="mileage" id="mileage" type="number" min="{{ car.lastRefuel?.mileage || car.initialMileage }}" formControlName="mileage" required autofocus>
+      <input class="form-control" name="mileage" id="mileage" type="number" min="{{ car.lastRefuel?.mileage || 0 }}" formControlName="mileage" required autofocus>
       <span class="form-text text-muted" *ngIf="form.value.distance > 0">Distance: {{ form.value.distance }}</span>
     </div>
     <div class="form-group">

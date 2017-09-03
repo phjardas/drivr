@@ -37,8 +37,8 @@ export class NewRefuelComponent {
     let consumption: number = null;
     let pricePerLiter: number = null;
 
-    if (mileage && this.car.firstRefuel) {
-      distance = mileage - (this.car.lastRefuel ? this.car.lastRefuel.mileage : this.car.firstRefuel.mileage);
+    if (mileage && this.car.lastRefuel) {
+      distance = mileage - this.car.lastRefuel.mileage;
       if (distance < 0) distance = null;
     }
 

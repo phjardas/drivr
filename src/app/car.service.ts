@@ -25,31 +25,6 @@ function find<T>(values: T[], predicate: (T) => boolean): T {
   return matches.length ? matches[0] : null;
 }
 
-function calculateStats(car: Car, refuel: Refuel): Stats {
-  const oldStats = car.stats || new Stats({});
-
-  const stats = new Stats({
-    refuelCount: oldStats.refuelCount + 1,
-    totalDistance: car.firstRefuel ? refuel.mileage - car.firstRefuel.mileage : 0,
-    totalFuel: oldStats.totalFuel + refuel.fuelAmount,
-    totalPrice: oldStats.totalPrice + refuel.totalPrice,
-  });
-
-  if (stats.totalDistance && car.firstRefuel) {
-    stats.averageConsumption = (stats.totalFuel - car.firstRefuel.fuelAmount) / stats.totalDistance;
-  }
-
-  if (stats.totalDistance && car.firstRefuel) {
-    stats.averagePricePerDistance = (stats.totalPrice - car.firstRefuel.totalPrice) / stats.totalDistance;
-  }
-
-  if (stats.totalPrice && stats.totalFuel) {
-    stats.averagePricePerVolume = stats.totalPrice / stats.totalFuel;
-  }
-
-  return stats;
-}
-
 function getSigninProvider(type: string): firebase.auth.AuthProvider {
   switch (type) {
     case 'google': return new firebase.auth.GoogleAuthProvider();
@@ -115,21 +90,47 @@ export class CarService {
     }).toPromise();
   }
 
+  _calculateStats(carId: String, refuel: Refuel): Observable<Stats> {
+    return this.getRefuels(carId)
+      .map(allRefuels => {
+        const refuels = allRefuels.sort((a, b) => a.date.getTime() - b.date.getTime());
+        refuels.push(refuel);
+        const firstRefuel = refuels[0];
+        const stats = new Stats({
+          refuelCount: refuels.length,
+          totalDistance: refuel.mileage - firstRefuel.mileage,
+          totalFuel: refuels.map(r => r.fuelAmount).reduce((a, b) => a + b, 0),
+          totalPrice: refuels.map(r => r.totalPrice).reduce((a, b) => a + b, 0),
+        });
+
+        if (stats.totalDistance && firstRefuel) {
+          stats.averageConsumption = (stats.totalFuel - firstRefuel.fuelAmount) / stats.totalDistance;
+        }
+
+        if (stats.totalDistance && firstRefuel) {
+          stats.averagePricePerDistance = (stats.totalPrice - firstRefuel.totalPrice) / stats.totalDistance;
+        }
+
+        if (stats.totalPrice && stats.totalFuel) {
+          stats.averagePricePerVolume = stats.totalPrice / stats.totalFuel;
+        }
+
+        return stats;
+      });
+  }
+
   _saveRefuel(user: firebase.User, car: Car, refuel: Refuel): Observable<void> {
-    const stats = calculateStats(car, refuel);
-    const id = uuid();
-    const refuelData = toData(refuel);
-    const updates = {
-      [`/refuels/${user.uid}/${car.id}/${id}`]: refuelData,
-      [`/cars/${user.uid}/${car.id}/lastRefuel`]: refuelData,
-      [`/cars/${user.uid}/${car.id}/stats`]: toData(stats),
-    };
+    return this._calculateStats(car.id, refuel).first().mergeMap(stats => {
+      const id = uuid();
+      const refuelData = toData(refuel);
+      const updates = {
+        [`/refuels/${user.uid}/${car.id}/${id}`]: refuelData,
+        [`/cars/${user.uid}/${car.id}/lastRefuel`]: refuelData,
+        [`/cars/${user.uid}/${car.id}/stats`]: toData(stats),
+      };
 
-    if (!car.firstRefuel) {
-      updates[`/cars/${user.uid}/${car.id}/firstRefuel`] = refuelData;
-    }
-
-    return Observable.fromPromise(this.db.object('/').update(updates));
+      return Observable.fromPromise(this.db.object('/').update(updates)).toPromise();
+    });
   }
 
   signin(type) {
