@@ -43,7 +43,7 @@ export class NewRefuelComponent {
     }
 
     if (distance && fuelAmount) {
-      consumption = fuelAmount * 100 / distance;
+      consumption = fuelAmount / distance;
     }
 
     if (totalPrice && fuelAmount) {

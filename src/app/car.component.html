@@ -81,7 +81,7 @@
           <td class="number"><span *ngIf="refuel.distance">{{refuel.distance | number}} <small>km</small></span></td>
           <td class="number">{{refuel.fuelAmount | number:'1.2-2'}} <small>l</small></td>
           <td class="number">{{refuel.totalPrice | number:'1.2-2'}} <small>€</small></td>
-          <td class="number"><span *ngIf="refuel.consumption">{{refuel.consumption | number:'1.2-2'}} <small>cl/km</small></span></td>
+          <td class="number"><span *ngIf="refuel.consumption">{{refuel.consumption * 100 | number:'1.2-2'}} <small>cl/km</small></span></td>
           <td class="number">{{refuel.pricePerLiter | number:'1.2-2'}} <small>€/l</small></td>
         </tr>
       </tbody>

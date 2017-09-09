@@ -27,7 +27,7 @@
     <div class="form-group">
       <label for="fuelAmount">Fuel amount</label>
       <input class="form-control" name="fuelAmount" id="fuelAmount" type="number" min="0" formControlName="fuelAmount" required>
-      <span class="form-text text-muted" *ngIf="form.value.consumption > 0">Consumption: {{ form.value.consumption | number:'1.2-2' }} cl/km</span>
+      <span class="form-text text-muted" *ngIf="form.value.consumption > 0">Consumption: {{ form.value.consumption * 100 | number:'1.2-2' }} cl/km</span>
     </div>
     <div class="form-group">
       <label for="totalPrice">Total price</label>
