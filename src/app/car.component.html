@@ -1,6 +1,6 @@
 <div class="jumbotron jumbotron-fluid">
   <div class="container">
-    <h2 class="display-3">{{(car|async)?.licensePlate || 'loading…'}}</h2>
+    <h2 class="display-5">{{(car|async)?.licensePlate || 'loading…'}}</h2>
 
     <div *ngIf="(car|async)?.stats != null" class="row">
       <div class="col-md">
