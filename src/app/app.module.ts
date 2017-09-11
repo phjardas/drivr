@@ -8,6 +8,7 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { Ng2GoogleChartsModule } from 'ng2-google-charts';
 
 import { environment } from '../environments/environment';
+import { AuthenticationService } from './authentication.service';
 import { CarService } from './car.service';
 import { AppComponent } from './app.component';
 import { CarComponent } from './car.component';
@@ -41,6 +42,7 @@ const routes: Routes = [
     Ng2GoogleChartsModule,
   ],
   providers: [
+    AuthenticationService,
     CarService,
   ],
   bootstrap: [AppComponent]

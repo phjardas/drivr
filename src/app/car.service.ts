@@ -8,11 +8,11 @@ import 'rxjs/add/observable/fromPromise';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireDatabase } from 'angularfire2/database';
 import * as firebase from 'firebase/app';
 import uuid from 'uuid/v1';
 
+import { AuthenticationService } from './authentication.service';
 import { Car } from './car.model';
 import { Refuel } from './refuel.model';
 import { Stats } from './stats.model';
@@ -25,14 +25,6 @@ function find<T>(values: T[], predicate: (T) => boolean): T {
   return matches.length ? matches[0] : null;
 }
 
-function getSigninProvider(type: string): firebase.auth.AuthProvider {
-  switch (type) {
-    case 'google': return new firebase.auth.GoogleAuthProvider();
-    case 'github': return new firebase.auth.GithubAuthProvider();
-    default: throw new Error(`Invalid authentication provider: ${type}`);
-  }
-}
-
 function toData(obj: any): any {
   const data = JSON.parse(JSON.stringify(obj));
   Object.keys(data).filter(key => typeof data[key] === 'undefined').forEach(key => delete data[key]);
@@ -42,13 +34,10 @@ function toData(obj: any): any {
 
 @Injectable()
 export class CarService {
-  public user = new BehaviorSubject<firebase.User>(null);
   public cars = new BehaviorSubject<Car[]>([]);
 
-  constructor(private db: AngularFireDatabase, private auth: AngularFireAuth) {
-    auth.authState.subscribe(this.user.next.bind(this.user));
-
-    this.user
+  constructor(private db: AngularFireDatabase, private auth: AuthenticationService) {
+    auth.user
       .filter(user => user != null)
       .mergeMap(user => db.list(`/cars/${user.uid}`)
       .map(datas => datas.map(data => new Car(data))))
@@ -67,7 +56,7 @@ export class CarService {
     const id = uuid();
     const carData = toData(car);
 
-    return this.user.first().mergeMap(user => {
+    return this.auth.user.first().mergeMap(user => {
       const res: PromiseLike<Car> = this.db.object(`/cars/${user.uid}/${id}`)
         .set(carData)
         .then(_=> new Car(Object.assign({}, carData, { id })));
@@ -76,14 +65,14 @@ export class CarService {
   }
 
   getRefuels(carId: String): Observable<Refuel[]> {
-    return this.user
+    return this.auth.user
       .filter(user => user != null)
       .mergeMap(user => this.db.list(`/refuels/${user.uid}/${carId}`)
       .map(refuels => refuels.map(data => new Refuel(data))));
   }
 
   addRefuel(carId: String, refuel: Refuel): Promise<void> {
-    return this.user.first().mergeMap(user => {
+    return this.auth.user.first().mergeMap(user => {
       return this.getCar(carId).first().mergeMap(car => {
         return this._saveRefuel(user, car, refuel);
       });
@@ -131,14 +120,5 @@ export class CarService {
 
       return Observable.fromPromise(this.db.object('/').update(updates)).toPromise();
     });
-  }
-
-  signin(type) {
-    const provider = getSigninProvider(type);
-    this.auth.auth.signInWithPopup(provider);
-  }
-
-  signout() {
-    this.auth.auth.signOut();
   }
 }

@@ -17,8 +17,21 @@
   </div>
 </div>
 
-<div class="jumbotron jumbotron-fluid" *ngIf="(user | async) == null">
-  <div class="container">
-    <h2 class="display-3">Welcome!</h2>
+<div *ngIf="(user | async) == null">
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h2 class="display-3">Manage your car's fuel consumption</h2>
+      <p class="lead">Record your refuels and get interesting statistics.</p>
+    </div>
+  </div>
+  <div class="container signin">
+    <p>Sign up now, it's free!</p>
+    <div class="row">
+      <div class="col-sm-6" *ngFor="let provider of authenticationProviders">
+        <button class="btn btn-outline-primary btn-lg btn-block" (click)="signin(provider.id)">
+          <i class="fa fa-{{ provider.icon }} mr-1"></i> {{ provider.label }}
+        </button>
+      </div>
+    </div>
   </div>
 </div>
