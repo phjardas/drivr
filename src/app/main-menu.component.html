@@ -1,0 +1,56 @@
+<nav class="navbar navbar-expand-sm navbar-dark bg-primary">
+  <div class="container">
+    <a class="navbar-brand" [routerLink]="['/']"><i class="fa fa-car mr-1"></i> drivr</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto" *ngIf="user != null">
+        <li class="nav-item" *ngFor="let car of cars | async">
+          <a class="nav-link" [routerLink]="['/cars', car.id]" routerLinkActive="active">
+            {{car.licensePlate}}
+          </a>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav mr-auto" *ngIf="user != null">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-user mr-1"></i> {{user.displayName}}
+          </a>
+          <div class="dropdown-menu">
+            <button class="dropdown-item" href="#" (click)="signout()"><i class="fa fa-sign-out mr-1"></i> Sign out</button>
+          </div>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav mr-auto" *ngIf="user == null">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-user mr-1"></i> Sign in
+          </a>
+          <div class="dropdown-menu">
+            <button class="dropdown-item" *ngFor="let provider of authenticationProviders" (click)="signin(provider.id)">
+              <i class="fa fa-{{ provider.icon }} mr-1"></i> with {{ provider.label }}
+            </button>
+          </div>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-globe mr-1" title="Choose language"></i>
+          </a>
+          <div class="dropdown-menu">
+            <button class="dropdown-item" *ngFor="let bundle of bundles" [disabled]="bundle.id == (currentLanguage | async)" (click)="setLanguage(bundle.id)">
+              <i class="fa fa-check mr1" *ngIf="bundle.id == (currentLanguage | async)"></i>
+              {{ bundle.label }}
+            </button>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
