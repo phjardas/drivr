@@ -4,7 +4,14 @@
 }
 
 .footer {
-  font-size: .8rem;
+  font-size: .7rem;
   text-align: right;
-  color: #999999;
+  color: #ccc;
+  margin-top: 3rem;
+  border-top: 1px solid #ddd;
+  padding-top: .5rem;
+}
+
+.footer .badge {
+  font-size: .7rem;
 }
