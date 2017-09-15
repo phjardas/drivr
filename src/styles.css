@@ -2,3 +2,9 @@
   text-align: right;
   white-space: nowrap;
 }
+
+.footer {
+  font-size: .8rem;
+  text-align: right;
+  color: #999999;
+}

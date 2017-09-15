@@ -1,4 +1,7 @@
+import { version } from './version';
+
 export const defaultEnvironment = {
+  version,
   i18n: {
     defaultLanguage: 'en',
   },
