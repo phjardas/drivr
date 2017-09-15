@@ -1,3 +1,8 @@
+@import "~bootstrap/scss/bootstrap";
+
+$fa-font-path: "~font-awesome/fonts";
+@import "~font-awesome/scss/font-awesome";
+
 html {
   height: 100%;
 }
@@ -22,8 +27,8 @@ body {
   font-size: .7rem;
   background: #e9ecef;
   padding: 1rem 0;
-}
 
-.footer .badge {
-  font-size: .7rem;
+  .badge {
+    font-size: .7rem;
+  }
 }
