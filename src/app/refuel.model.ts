@@ -1,5 +1,5 @@
 export class Refuel {
-  public id: String;
+  public id: string;
   public date: Date;
   public mileage: number;
   public fuelAmount: number;

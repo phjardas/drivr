@@ -2,7 +2,9 @@
 
 <router-outlet></router-outlet>
 
-<div class="container footer">
-  drivr version {{ version.version }} revision {{ version.revision }}
-  <span *ngIf="!production" class="badge badge-danger">development</span>
+<div class="footer">
+  <div class="container">
+    drivr version {{ version.version }} revision {{ version.revision }}
+    <span *ngIf="!production" class="badge badge-danger">development</span>
+  </div>
 </div>

@@ -2,15 +2,15 @@ import { Refuel } from './refuel.model';
 import { Stats } from './stats.model';
 
 export class Car {
-  public id: String;
-  public licensePlate: String;
+  public id: string;
+  public licensePlate: string;
   public lastRefuel: Refuel;
   public stats: Stats;
 
   constructor(data: {
-    id?: String,
-    $key?: String,
-    licensePlate: String,
+    id?: string,
+    $key?: string,
+    licensePlate: string,
     lastRefuel?: Refuel,
     stats?: Stats
   }) {
