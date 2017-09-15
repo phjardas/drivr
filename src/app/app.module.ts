@@ -11,6 +11,7 @@ import { environment } from '../environments/environment';
 import { AuthenticationService } from './authentication.service';
 import { CarService } from './car.service';
 import { AppComponent } from './app.component';
+import { MainMenuComponent } from './main-menu.component';
 import { CarComponent } from './car.component';
 import { NewCarComponent } from './new-car.component';
 import { NewRefuelComponent } from './new-refuel.component';
@@ -27,6 +28,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
+    MainMenuComponent,
     DashboardComponent,
     CarComponent,
     NewCarComponent,

@@ -5,9 +5,12 @@
   "private": true,
   "scripts": {
     "ng": "ng",
+    "version": "ts-node git.version.ts",
+    "prestart": "npm run version",
     "start": "ng serve",
+    "prebuild": "npm run version",
     "build": "ng build",
-    "dist": "ng build -prod -aot",
+    "dist": "npm run build -- --prod --aot",
     "deploy": "npm run dist && firebase deploy"
   },
   "dependencies": {
@@ -34,6 +37,7 @@
     "@angular/language-service": "^4.2.4",
     "@types/node": "~6.0.60",
     "codelyzer": "~3.1.1",
+    "git-rev-sync": "^1.9.1",
     "ts-node": "~3.2.0",
     "tslint": "~5.3.2",
     "typescript": "~2.3.3"
