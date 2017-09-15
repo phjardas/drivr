@@ -9,9 +9,11 @@ import { I18nService } from './i18n/i18n.service';
   templateUrl: './app.component.html'
 })
 export class AppComponent {
+  production: boolean;
   version: Version;
 
   constructor(translate: TranslateService, i18n: I18nService) {
+    this.production = environment.production;
     this.version = environment.version;
 
     translate.addLangs(i18n.bundles.map(bundle => bundle.id));

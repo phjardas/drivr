@@ -3,4 +3,5 @@
 
 <div class="container footer">
   drivr version {{ version.version }} revision {{ version.revision }}
+  <span *ngIf="!production" class="text-danger">development</span>
 </div>
