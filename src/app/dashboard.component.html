@@ -1,6 +1,6 @@
 <div class="jumbotron jumbotron-fluid" *ngIf="(user | async) != null">
   <div class="container">
-    <h2 class="display-5" [translate]="'dashboard.authenticated.headline'" [translateParams]="{ displayName: (user | async)?.displayName }">Welcome, {{ (user | async)?.displayName }}!</h2>
+    <h2 class="display-5">Welcome, {{ (user | async)?.displayName }}!</h2>
 
     <div *ngIf="(cars | async)?.length">
       <p>Here's your cars:</p>
@@ -20,8 +20,8 @@
 <div *ngIf="(user | async) == null">
   <div class="jumbotron jumbotron-fluid">
     <div class="container">
-      <h2 class="display-5" [translate]="'dashboard.anonymous.headline'"></h2>
-      <p class="lead">Record your refuels and get interesting statistics.</p>
+      <h2 class="display-5">Manage your cars</h2>
+      <p class="lead">Record your fuel consumption and get interesting statistics.</p>
     </div>
   </div>
   <div class="container signin">
