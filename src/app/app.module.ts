@@ -1,9 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes }   from '@angular/router';
-import { ReactiveFormsModule }   from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 import { AngularFireModule } from 'angularfire2';
-import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { Ng2GoogleChartsModule } from 'ng2-google-charts';
 
@@ -39,7 +39,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     RouterModule.forRoot(routes),
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFireDatabaseModule,
+    AngularFirestoreModule,
     AngularFireAuthModule,
     Ng2GoogleChartsModule,
   ],

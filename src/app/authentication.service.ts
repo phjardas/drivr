@@ -6,17 +6,17 @@ import * as firebase from 'firebase/app';
 
 
 export interface AuthenticationProvider {
-  id: String,
-  label: String,
-  icon: String,
-  providerFactory: () => firebase.auth.AuthProvider,
+  id: String;
+  label: String;
+  icon: String;
+  providerFactory: () => firebase.auth.AuthProvider;
 }
 
 
 @Injectable()
 export class AuthenticationService {
   public user = new BehaviorSubject<firebase.User>(null);
-  public providers : AuthenticationProvider[] = [
+  public providers: AuthenticationProvider[] = [
     {
       id: 'google',
       label: 'Google',

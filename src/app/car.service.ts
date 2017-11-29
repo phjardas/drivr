@@ -8,9 +8,8 @@ import 'rxjs/add/observable/fromPromise';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFirestore, DocumentChangeAction } from 'angularfire2/firestore';
 import * as firebase from 'firebase/app';
-import uuid from 'uuid/v1';
 
 import { AuthenticationService } from './authentication.service';
 import { Car } from './car.model';
@@ -36,11 +35,11 @@ function toData(obj: any): any {
 export class CarService {
   public cars = new BehaviorSubject<Car[]>([]);
 
-  constructor(private db: AngularFireDatabase, private auth: AuthenticationService) {
+  constructor(private db: AngularFirestore, private auth: AuthenticationService) {
     auth.user
       .filter(user => user != null)
-      .mergeMap(user => db.list(`/cars/${user.uid}`)
-      .map(datas => datas.map(data => new Car(data))))
+      .mergeMap(user => db.collection('users').doc(user.uid).collection('cars').stateChanges())
+      .map(datas => datas.map(snapshotData).map(data => new Car(data)))
       .subscribe(this.cars.next.bind(this.cars));
   }
 
@@ -53,13 +52,12 @@ export class CarService {
   }
 
   _saveCar(car): Observable<Car> {
-    const id = uuid();
     const carData = toData(car);
 
     return this.auth.user.first().mergeMap(user => {
-      const res: PromiseLike<Car> = this.db.object(`/cars/${user.uid}/${id}`)
-        .set(carData)
-        .then(_=> new Car(Object.assign({}, carData, { id })));
+      const res: PromiseLike<Car> = this.db.doc(`users/${user.uid}`).collection('cars')
+        .add(carData)
+        .then(ref => new Car(Object.assign({}, carData, { id: ref.id })));
       return Observable.fromPromise(res);
     });
   }
@@ -67,8 +65,8 @@ export class CarService {
   getRefuels(carId: String): Observable<Refuel[]> {
     return this.auth.user
       .filter(user => user != null)
-      .mergeMap(user => this.db.list(`/refuels/${user.uid}/${carId}`)
-      .map(refuels => refuels.map(data => new Refuel(data))));
+      .mergeMap(user => this.db.doc(`users/${user.uid}/cars/${carId}`).collection('refuels').stateChanges())
+      .map(refuels => refuels.map(snapshotData).map(data => new Refuel(data)));
   }
 
   addRefuel(carId: String, refuel: Refuel): Promise<void> {
@@ -110,15 +108,23 @@ export class CarService {
 
   _saveRefuel(user: firebase.User, car: Car, refuel: Refuel): Observable<void> {
     return this._calculateStats(car.id, refuel).first().mergeMap(stats => {
-      const id = uuid();
       const refuelData = toData(refuel);
-      const updates = {
-        [`/refuels/${user.uid}/${car.id}/${id}`]: refuelData,
-        [`/cars/${user.uid}/${car.id}/lastRefuel`]: refuelData,
-        [`/cars/${user.uid}/${car.id}/stats`]: toData(stats),
-      };
+      const carRef = this.db.doc(`users/${user.uid}/cars/${car.id}`);
 
-      return Observable.fromPromise(this.db.object('/').update(updates)).toPromise();
+      return Observable.fromPromise(this.db.firestore.runTransaction(tx => {
+        return carRef.collection('refuels').add(refuelData)
+        .then(refuelRef => {
+          return carRef.update({
+            lastRefuel: { ...refuelData, id: refuelRef.id },
+            stats: toData(stats),
+          });
+        })
+        .then(_ => null);
+      }));
     });
   }
+}
+
+function snapshotData(el: DocumentChangeAction): any {
+  return { id: el.payload.doc.id, ...el.payload.doc.data() };
 }
