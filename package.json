@@ -10,7 +10,7 @@
     "start": "ng serve",
     "prebuild": "npm run version",
     "build": "ng build",
-    "dist": "ng build --prod",
+    "dist": "npm run build -- --prod",
     "deploy": "npm run dist && firebase deploy"
   },
   "dependencies": {
