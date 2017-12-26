@@ -4,25 +4,35 @@
 
   <b-alert v-if="refuels.failed" variant="danger">Error: {{ refuels.error.message }}</b-alert>
 
-  <md-list v-if="refuels.loaded" class="md-triple-line">
-    <md-list-item v-for="refuel of items" :key="refuel.id">
-      <div class="md-list-item-text">
-        <span>
-          {{ refuel.date | moment('ll') }}
-          <small>at</small>
-          <formatted-number :value="refuel.mileage" :fraction-digits="0" unit="km" />
-        </span>
-        <span>
-          <formatted-number :value="refuel.fuelAmount" :fraction-digits="2" unit="liters" />
-          <small>for</small>
-          <formatted-number :value="refuel.totalPrice" :fraction-digits="2" unit="€" />
-        </span>
-        <span v-if="refuel.consumption">
-          <formatted-number :value="refuel.consumption * 100" :fraction-digits="2" unit="cl/km" />
-        </span>
-      </div>
-    </md-list-item>
-  </md-list>
+  <template v-if="refuels.loaded">
+    <md-list v-if="items.length" class="md-triple-line">
+      <md-list-item v-for="refuel of items" :key="refuel.id">
+        <div class="md-list-item-text">
+          <span>
+            {{ refuel.date | moment('ll') }}
+            <small>at</small>
+            <formatted-number :value="refuel.mileage" :fraction-digits="0" unit="km" />
+          </span>
+          <span>
+            <formatted-number :value="refuel.fuelAmount" :fraction-digits="2" unit="liters" />
+            <small>for</small>
+            <formatted-number :value="refuel.totalPrice" :fraction-digits="2" unit="€" />
+          </span>
+          <span v-if="refuel.consumption">
+            <formatted-number :value="refuel.consumption * 100" :fraction-digits="2" unit="cl/km" />
+          </span>
+        </div>
+      </md-list-item>
+    </md-list>
+
+    <md-empty-state
+      v-else
+      md-rounded
+      md-icon="local_gas_station"
+      md-label="No refuels yet">
+      <md-button class="md-primary md-raised" :to="`/cars/${this.$route.params.id}/refuels/_new`">Record your first refuel</md-button>
+    </md-empty-state>
+  </template>
 </div>
 </template>
 

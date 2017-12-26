@@ -1,6 +1,6 @@
 <template>
-<md-list class="md-double-line">
-  <template v-if="car.stats">
+<div>
+  <md-list v-if="car.stats" class="md-double-line">
     <md-list-item>
       <div class="md-list-item-text">
         <div>Total distance</div>
@@ -43,8 +43,17 @@
         <formatted-number :value="car.stats.averagePricePerVolume" unit="€/l" />
       </div>
     </md-list-item>
-  </template>
-</md-list>
+  </md-list>
+
+  <md-empty-state
+    v-else
+    md-rounded
+    md-icon="show_chart"
+    md-label="No statistics yet"
+    md-description="Statistics will become available once you've recorded two refuels">
+      <md-button class="md-primary md-raised" :to="`/cars/${this.$route.params.id}/refuels/_new`">Record refuel</md-button>
+    </md-empty-state>
+</div>
 </template>
 
 <script>
