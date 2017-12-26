@@ -31,6 +31,15 @@ async function loadRefuels(carRef) {
 }
 
 export default {
+  async createCar({ rootGetters }, car) {
+    const db = firebase.firestore();
+    const { userId } = rootGetters;
+    return db
+      .collection(`users/${userId}/cars`)
+      .add(car)
+      .then(doc => ({ ...car, id: doc.id }));
+  },
+
   async createRefuel({ state, rootGetters }, { carId, date, mileage, fuelAmount, totalPrice }) {
     const { userId } = rootGetters;
     const car = state.items[carId];

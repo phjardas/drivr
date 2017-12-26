@@ -2,7 +2,6 @@
 
 * Display notifications (toasts) when things have happened.
 * Handle error when creating new refuel.
-* Add form to add new car.
 * Modify refuel entry.
 * Delete refuel entry.
 * Modify car.

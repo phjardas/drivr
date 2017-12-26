@@ -1,5 +1,11 @@
 <template>
 <md-list>
+  <md-list-item to="/" @click="emitNavigation">
+    <md-icon>dashboard</md-icon>
+    <span class="md-list-item-text">Dashboard</span>
+  </md-list-item>
+
+  <md-divider />
   <md-subheader>Cars</md-subheader>
   <md-list-item
     v-for="car of sortedCars"
@@ -9,6 +15,10 @@
   >
     <md-icon>directions_car</md-icon>
     <span class="md-list-item-text">{{ car.licensePlate }}</span>
+  </md-list-item>
+  <md-list-item to="/cars/_new" @click="emitNavigation">
+    <md-icon>add</md-icon>
+    <span class="md-list-item-text">Add new car</span>
   </md-list-item>
 
   <md-divider />
