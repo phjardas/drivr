@@ -10,9 +10,12 @@
     <md-tabs md-sync-route>
       <md-tab md-label="Statistics" md-icon="show_chart" :to="`/cars/${car.id}`" />
       <md-tab md-label="Refuels" md-icon="local_gas_station" :to="`/cars/${car.id}/refuels`" />
+      <md-tab md-label="Settings" md-icon="settings" :to="`/cars/${car.id}/settings`" />
     </md-tabs>
+
     <router-view></router-view>
   </div>
+
   <spinner v-else />
 </div>
 </template>
