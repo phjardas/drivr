@@ -2,7 +2,7 @@
 <div>
   <md-speed-dial class="md-top-right">
     <md-speed-dial-target class="md-accent" style="z-index: 100" :to="`/cars/_new`">
-      <md-icon>add</md-icon>
+      <md-icon>directions_car</md-icon>
     </md-speed-dial-target>
   </md-speed-dial>
 

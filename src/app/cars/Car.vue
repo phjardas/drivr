@@ -3,7 +3,7 @@
   <div v-if="car">
     <md-speed-dial class="md-top-right">
       <md-speed-dial-target class="md-accent" style="z-index: 100" :to="`/cars/${car.id}/refuels/_new`">
-        <md-icon>add</md-icon>
+        <md-icon>local_gas_station</md-icon>
       </md-speed-dial-target>
     </md-speed-dial>
 
