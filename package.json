@@ -27,6 +27,7 @@
     "not ie <= 8"
   ],
   "devDependencies": {
+    "@types/webpack-env": "^1.13.3",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.0",
@@ -39,6 +40,8 @@
     "html-webpack-template": "^6.1.0",
     "node-sass": "^4.5.3",
     "sass-loader": "^6.0.6",
+    "ts-loader": "^3.2.0",
+    "typescript": "^2.6.2",
     "url-loader": "^0.6.2",
     "vue-loader": "^13.0.5",
     "vue-template-compiler": "^2.4.4",

@@ -1,12 +1,14 @@
-import Dashboard from './Dashboard';
-import Car from './Car';
-import NewCar from './NewCar';
-import CarRefuels from './CarRefuels';
-import CarStatistics from './CarStatistics';
-import CarSettings from './CarSettings';
-import NewRefuel from './NewRefuel';
+import { RouteConfig } from 'vue-router';
 
-export const routes = [
+import Dashboard from './Dashboard.vue';
+import Car from './Car.vue';
+import NewCar from './NewCar.vue';
+import CarRefuels from './CarRefuels.vue';
+import CarStatistics from './CarStatistics.vue';
+import CarSettings from './CarSettings.vue';
+import NewRefuel from './NewRefuel.vue';
+
+export const routes: RouteConfig[] = [
   { path: '/', component: Dashboard },
   { path: '/cars/_new', component: NewCar },
   {

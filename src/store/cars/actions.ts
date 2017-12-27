@@ -1,12 +1,17 @@
+import { ActionTree } from 'vuex';
 import * as firebase from 'firebase';
+import 'firebase/firestore';
+import { FirebaseFirestore, DocumentReference, CollectionReference } from '@firebase/firestore-types';
 
-function calculateStats({ refuels }) {
+import { CarsState, Car, Refuel, CarStatistics, CarData, RefuelData } from './state';
+
+function calculateStats(refuels: Refuel[]): CarStatistics | null {
   if (refuels.length < 2) return null;
 
   const firstRefuel = refuels[0];
   const lastRefuel = refuels[refuels.length - 1];
 
-  const stats = {
+  const stats: CarStatistics = {
     refuelCount: refuels.length,
     totalDistance: lastRefuel.mileage - firstRefuel.mileage,
     totalFuel: refuels.map(r => r.fuelAmount).reduce((a, b) => a + b, 0),
@@ -28,51 +33,54 @@ function calculateStats({ refuels }) {
   return stats;
 }
 
-async function loadRefuels(carRef) {
+async function loadRefuels(carRef: DocumentReference): Promise<Refuel[]> {
   const snapshot = await carRef.collection('refuels').get();
   return snapshot.docs
-    .map(doc => ({ id: doc.id, ...doc.data() }))
-    .map(refuel => ({
-      ...refuel,
-      date: new Date(refuel.date),
-      mileage: parseFloat(refuel.mileage),
-      fuelAmount: parseFloat(refuel.fuelAmount),
-      totalPrice: parseFloat(refuel.totalPrice),
-      pricePerLiter: parseFloat(refuel.pricePerLiter),
-      consumption: parseFloat(refuel.consumption),
-    }))
+    .map(doc => ({ id: doc.id, ...doc.data() } as any))
+    .map(
+      refuel =>
+        ({
+          ...refuel,
+          date: new Date(refuel.date),
+          mileage: parseFloat(refuel.mileage),
+          fuelAmount: parseFloat(refuel.fuelAmount),
+          totalPrice: parseFloat(refuel.totalPrice),
+          pricePerLiter: parseFloat(refuel.pricePerLiter),
+          consumption: parseFloat(refuel.consumption),
+        } as Refuel)
+    )
     .sort((a, b) => a.date.getTime() - b.date.getTime());
 }
 
-export default {
-  async createCar({ rootGetters }, car) {
-    const db = firebase.firestore();
-    const { userId } = rootGetters;
-    return db
+function firestore(): FirebaseFirestore {
+  if (!firebase.firestore) throw new Error('Firestore not available');
+  return firebase.firestore();
+}
+
+export const actions: ActionTree<CarsState, any> = {
+  async createCar({ rootGetters }, car: CarData): Promise<Car> {
+    const userId: string = rootGetters.userId;
+    return firestore()
       .collection(`users/${userId}/cars`)
       .add(car)
       .then(doc => ({ ...car, id: doc.id }));
   },
 
-  async createRefuel({ state, dispatch, rootGetters }, { carId, date, mileage, fuelAmount, totalPrice }) {
+  async createRefuel({ state, dispatch, rootGetters }, payload: RefuelData & { carId: string }): Promise<Refuel> {
     const { userId } = rootGetters;
+    const { carId, date, mileage, fuelAmount, totalPrice } = payload;
     const car = state.items[carId];
-    const db = firebase.firestore();
+    const db = firestore();
     const carRef = db.doc(`users/${userId}/cars/${carId}`);
 
     // FIXME actually we only need the latest refuel here
     const refuels = await loadRefuels(carRef);
 
-    const refuel = {
-      date,
-      mileage,
-      fuelAmount,
-      totalPrice,
-    };
+    const refuel: RefuelData = { date, mileage, fuelAmount, totalPrice };
 
     if (refuels.length) {
       const lastMileage = refuels[refuels.length - 1].mileage;
-      const distance = lastMileage ? mileage - lastMileage : null;
+      const distance = mileage - lastMileage;
       refuel.distance = distance;
       refuel.consumption = fuelAmount / distance;
       refuel.pricePerLiter = totalPrice / fuelAmount;
@@ -84,7 +92,7 @@ export default {
         .add(refuel)
         .then(refuelRef => {
           const refuelDoc = { ...refuel, id: refuelRef.id };
-          return carRef.update({ lastRefuel: refuelDoc }).then(() => refuelDoc);
+          return carRef.update({ lastRefuel: refuelDoc }).then(() => refuelDoc as Refuel);
         })
     );
 
@@ -93,12 +101,12 @@ export default {
     return refuelDoc;
   },
 
-  async refreshCarStatistics({ rootGetters }, { carId }) {
+  async refreshCarStatistics({ rootGetters }, payload: { carId: string }): Promise<CarStatistics | null> {
     const { userId } = rootGetters;
-    const db = firebase.firestore();
-    const carRef = db.doc(`users/${userId}/cars/${carId}`);
+    const db = firestore();
+    const carRef = db.doc(`users/${userId}/cars/${payload.carId}`);
     const refuels = await loadRefuels(carRef);
-    const stats = calculateStats({ refuels });
+    const stats = calculateStats(refuels);
     await carRef.update({ stats });
     return stats;
   },
