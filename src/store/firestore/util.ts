@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-export function setDeep(root, path, value) {
+export function setDeep(root: any, path: string[], value: any) {
   if (path.length == 1) {
     Vue.set(root, path[0], value);
     return;
@@ -11,7 +11,7 @@ export function setDeep(root, path, value) {
   setDeep(root[el], rest, value);
 }
 
-export function unsetDeep(root, path) {
+export function unsetDeep(root: any, path: string[]) {
   if (path.length == 1) {
     delete root[path[0]];
     return;

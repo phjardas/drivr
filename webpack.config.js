@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const config = {
-  entry: './src/main.js',
+  entry: './src/main.ts',
   output: {
     path: path.resolve(__dirname, './dist'),
     filename: 'app.js',
@@ -17,6 +17,14 @@ const config = {
       {
         test: /\.scss$/,
         use: ['vue-style-loader', 'css-loader', 'sass-loader'],
+      },
+      {
+        test: /\.ts$/,
+        loader: 'ts-loader',
+        options: {
+          transpileOnly: true,
+          appendTsSuffixTo: [/\.vue$/],
+        },
       },
       {
         test: /\.vue$/,
@@ -52,7 +60,7 @@ const config = {
     alias: {
       vue$: 'vue/dist/vue.esm.js',
     },
-    extensions: ['*', '.js', '.vue', '.json'],
+    extensions: ['*', '.js', '.ts', '.vue', '.json'],
   },
   performance: {
     hints: false,

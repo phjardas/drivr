@@ -1,16 +1,29 @@
 import * as firebase from 'firebase';
+import { ActionTree } from 'vuex';
+
+import { AuthState } from './state';
 import { AUTHENTICATED, ANYONYMOUS, SIGNIN_STARTED, SIGNIN_SUCCESS, SIGNIN_FAILED } from './mutation-types';
 
-const providers = {
-  google: () => new firebase.auth.GoogleAuthProvider(),
-  github: () => new firebase.auth.GithubAuthProvider(),
-  twitter: () => new firebase.auth.TwitterAuthProvider(),
-  facebook: () => new firebase.auth.FacebookAuthProvider(),
+const { auth } = firebase;
+if (!auth) throw new Error('Firebase authentication is not available');
+
+// FIXME auth.AuthProvider doesn't work :/
+type Provider = () => any;
+
+const providers: { [id: string]: Provider } = {
+  google: () => new auth.GoogleAuthProvider(),
+  github: () => new auth.GithubAuthProvider(),
+  twitter: () => new auth.TwitterAuthProvider(),
+  facebook: () => new auth.FacebookAuthProvider(),
 };
 
-export default {
+export interface SignInParams {
+  providerId: string;
+}
+
+export const actions: ActionTree<AuthState, any> = {
   INIT({ commit }) {
-    firebase.auth().onAuthStateChanged(user => {
+    auth().onAuthStateChanged(user => {
       if (user) {
         commit(AUTHENTICATED, {
           user: {
@@ -26,7 +39,7 @@ export default {
     });
   },
 
-  async signInWithProvider({ commit }, payload) {
+  async signInWithProvider({ commit }, payload: SignInParams): Promise<any> {
     commit(SIGNIN_STARTED, payload);
 
     try {
@@ -34,14 +47,15 @@ export default {
       const providerFactory = providers[providerId];
       if (!providerFactory) throw new Error(`Invalid provider ID: ${providerId}`);
       const provider = providerFactory();
-      await firebase.auth().signInWithPopup(provider);
+      await auth().signInWithPopup(provider);
       commit(SIGNIN_SUCCESS, { ...payload });
     } catch (error) {
       commit(SIGNIN_FAILED, { ...payload, error: { code: error.code, message: error.message } });
+      throw error;
     }
   },
 
-  signOut() {
-    firebase.auth().signOut();
+  signOut(): Promise<any> {
+    return auth().signOut();
   },
 };

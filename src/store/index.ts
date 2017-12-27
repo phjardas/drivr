@@ -1,16 +1,15 @@
 import Vue from 'vue';
-import Vuex from 'vuex';
+import Vuex, { Store } from 'vuex';
 
-import auth from './auth';
-import cars from './cars';
-import navigation from './navigation';
+import { module as auth } from './auth';
+import { module as cars } from './cars';
+import { module as navigation } from './navigation';
 import { mutations as firestoreMutations, module as firestore } from './firestore';
+import { RootState } from './state';
 
 Vue.use(Vuex);
 
-const debug = process.env.NODE_ENV !== 'production';
-
-const store = new Vuex.Store({
+export const store = new Store<RootState>({
   modules: {
     auth,
     cars,
@@ -19,7 +18,7 @@ const store = new Vuex.Store({
   },
   mutations: { ...firestoreMutations },
   plugins: [store => store.dispatch('INIT')],
-  strict: debug,
+  strict: process.env.NODE_ENV !== 'production',
 });
 
 if (module.hot) {
@@ -30,5 +29,3 @@ if (module.hot) {
     store.hotUpdate({ modules: { navigation: require('./navigation').default } })
   );
 }
-
-export default store;

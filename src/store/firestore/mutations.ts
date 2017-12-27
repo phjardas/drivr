@@ -1,3 +1,4 @@
+import { MutationTree } from 'vuex';
 import { setDeep, unsetDeep } from './util';
 import {
   SYNC_COLLECTION_STARTED,
@@ -9,7 +10,7 @@ import {
   DOC_REMOVED,
 } from './mutation-types';
 
-export default {
+export const mutations: MutationTree<any> = {
   [SYNC_COLLECTION_STARTED](state, { storePath }) {
     setDeep(state, storePath, {
       loading: true,

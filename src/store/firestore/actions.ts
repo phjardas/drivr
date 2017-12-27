@@ -1,4 +1,6 @@
+import { ActionTree } from 'vuex';
 import * as firebase from 'firebase';
+import 'firebase/firestore';
 import {
   SYNC_COLLECTION_STARTED,
   SYNC_COLLECTION_READY,
@@ -8,14 +10,17 @@ import {
   DOC_MODIFIED,
   DOC_REMOVED,
 } from './mutation-types';
+import { Unsubscribe } from './model';
 
-export default {
-  firestoreSyncCollection({ commit }, { collection, storePath: storePathIn }) {
+export const actions: ActionTree<any, any> = {
+  firestoreSyncCollection({ commit }, { collection, storePath: storePathIn }): Unsubscribe {
     const storePath = Array.isArray(storePathIn) ? storePathIn : storePathIn.split(/\//);
     console.log('synchronizing firestore collection %s to', collection, storePath);
     commit(SYNC_COLLECTION_STARTED, { collection, storePath });
 
     let ready = false;
+    if (!firebase.firestore) throw new Error('Firestore is not available');
+
     const unsubscribe = firebase
       .firestore()
       .collection(collection)
