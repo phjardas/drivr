@@ -1,16 +1,17 @@
 <template>
 <div id="login">
-  <div>
-    <p>Please sign in:</p>
-    <div>
-      <button v-for="provider of providers"
-              :key="provider.id"
-              @click="signInWithProvider({ providerId: provider.id })"
-              class="btn btn-primary mr-1">
-        {{provider.label}}
-      </button>
-    </div>
-  </div>
+  <md-empty-state
+    md-icon="directions_car"
+    md-label="drivr"
+    md-description="Please sign in"
+  >
+    <md-button v-for="provider of providers"
+            :key="provider.id"
+            @click="signInWithProvider({ providerId: provider.id })"
+            class="md-raised md-primary">
+      {{ provider.label }}
+    </md-button>
+  </md-empty-state>
 </div>
 </template>
 

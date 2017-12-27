@@ -1,6 +1,11 @@
 <template>
 <div id="splash">
-  <spinner label="loading…" />
+  <md-empty-state
+    md-icon="directions_car"
+    md-label="drivr"
+  >
+    <spinner />
+  </md-empty-state>
 </div>
 </template>
 
@@ -23,11 +28,5 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-
-  .spinner {
-    background: rgba(255, 255, 255, 0.5);
-    padding: 16px 24px;
-    border-radius: 8px;
-  }
 }
 </style>
