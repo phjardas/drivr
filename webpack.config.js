@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const config = {
   entry: './src/main.ts',
@@ -96,12 +97,15 @@ if (process.env.NODE_ENV === 'production') {
         warnings: false,
       },
     }),
-    new webpack.LoaderOptionsPlugin({
-      minimize: true,
+    new webpack.LoaderOptionsPlugin({ minimize: true }),
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+      openAnalyzer: false,
+      reportFilename: '../webpack-bundles-report.html',
     }),
   ];
 } else {
-  config.plugins = [...config.plugins, new webpack.NamedModulesPlugin()];
+  config.plugins = [...config.plugins, new webpack.NamedModulesPlugin(), new BundleAnalyzerPlugin()];
   config.devServer = {
     historyApiFallback: true,
     noInfo: true,
