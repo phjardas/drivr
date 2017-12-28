@@ -1,8 +1,11 @@
-export interface User {
+export interface UserData {
   id?: string;
   email?: string;
   displayName?: string;
   label?: string;
+}
+
+export interface User extends UserData {
   authenticated: boolean;
   anonymous: boolean;
 }
