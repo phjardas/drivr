@@ -79,6 +79,7 @@ const config = {
       links: ['https://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons'],
       minify: { collapseWhitespace: true, removeComments: true },
     }),
+    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
   ],
 };
 
