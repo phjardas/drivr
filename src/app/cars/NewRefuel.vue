@@ -87,7 +87,7 @@ export default {
         mileage: {
           required,
           numeric,
-          minValue: minValue(this.minMileage),
+          minValue: minValue(this.minMileage ? this.minMileage : 0),
         },
         fuelAmount: {
           required,
