@@ -24,6 +24,15 @@ export interface CarStatistics {
   averagePricePerVolume?: number;
 }
 
+export interface CarShare {
+  inviteId: string;
+  inviteeId: string;
+  ownerId: string;
+  carId: string;
+  sharedAt: Date;
+  acceptedAt: Date;
+}
+
 export interface CarData {
   licensePlate: string;
   lastRefuel?: Refuel;

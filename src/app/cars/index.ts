@@ -7,9 +7,11 @@ import CarRefuels from './CarRefuels.vue';
 import CarStatistics from './CarStatistics.vue';
 import CarSettings from './CarSettings.vue';
 import NewRefuel from './NewRefuel.vue';
+import AcceptInvite from './AcceptInvite.vue';
 
 export const routes: RouteConfig[] = [
   { path: '/', component: Dashboard },
+  { path: '/invite/:id', component: AcceptInvite },
   { path: '/cars/_new', component: NewCar },
   {
     path: '/cars/:id',

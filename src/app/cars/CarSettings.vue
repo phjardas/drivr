@@ -6,6 +6,10 @@
       {{ refreshingStatistics ? 'Refreshing statistics' : 'Refresh statistics' }}
     </span>
   </md-list-item>
+  <md-list-item @click.prevent="createInvite">
+    <md-icon>share</md-icon>
+    <span class="md-list-item-text">Create collaboration invite</span>
+  </md-list-item>
 </md-list>
 </template>
 
@@ -24,11 +28,15 @@ export default {
   }),
 
   methods: {
-    ...mapActions(['refreshCarStatistics']),
+    ...mapActions(['refreshCarStatistics', 'createCarInvite']),
     async refreshStatistics() {
       this.refreshingStatistics = true;
       await this.refreshCarStatistics({ carId: this.car.id });
       this.refreshingStatistics = false;
+    },
+    async createInvite() {
+      const invite = await this.createCarInvite({ carId: this.car.id });
+      console.log('created invite:', invite);
     },
   },
 };
