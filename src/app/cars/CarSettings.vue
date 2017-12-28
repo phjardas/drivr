@@ -36,7 +36,7 @@ export default {
     },
     async createInvite() {
       const invite = await this.createCarInvite({ carId: this.car.id });
-      console.log('created invite:', invite);
+      this.$router.push(`/invite/${invite.id}`);
     },
   },
 };
