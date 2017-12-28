@@ -1,0 +1,70 @@
+<div class="loading">
+  <div class="md-empty-state">
+    <div class="icon">directions_car</div>
+    <h1>drivr</h1>
+    <div class="spinner"></div>
+    <div class="label">loading&hellip;</div>
+  </div>
+</div>
+
+<style>
+  .loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #eee;
+    font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: rgba(0, 0, 0, .87);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .loading .icon {
+    display: inline-flex;
+    user-select: none;
+    align-items: center;
+    justify-content: center;
+    vertical-align: center;
+    font-family: "Material Icons";
+    font-feature-settings: "liga";
+    font-style: normal;
+    letter-spacing: normal;
+    line-height: 1;
+    text-rendering: optimizeLegibility;
+    text-transform: none;
+    word-wrap: normal;
+    white-space: nowrap;
+    width: 160px;
+    min-width: 160px;
+    height: 160px;
+    font-size: 160px!important;
+    color: rgba(0, 0, 0, .26);
+  }
+
+  .loading .md-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    max-width: 420px;
+    padding: 36px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .loading h1 {
+    font-size: 26px;
+    font-weight: 500;
+    line-height: 40px;
+  }
+
+  .loading .label {
+    font-size: 16px;
+    line-height: 24px;
+  }
+</style>

@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -73,11 +74,12 @@ const config = {
       template: require('html-webpack-template'),
       title: 'drivr',
       appMountId: 'app',
+      appMountHtmlSnippet: fs.readFileSync('src/splash.html'),
       baseHref: '/',
       mobile: true,
       lang: 'en-US',
       links: ['https://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons'],
-      minify: { collapseWhitespace: true, removeComments: true },
+      minify: { collapseWhitespace: true, removeComments: true, minifyCSS: true },
     }),
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
   ],
@@ -106,7 +108,13 @@ if (process.env.NODE_ENV === 'production') {
     }),
   ];
 } else {
-  config.plugins = [...config.plugins, new webpack.NamedModulesPlugin(), new BundleAnalyzerPlugin()];
+  config.plugins = [
+    ...config.plugins,
+    new webpack.NamedModulesPlugin(),
+    new BundleAnalyzerPlugin({
+      openAnalyzer: false,
+    }),
+  ];
   config.devServer = {
     historyApiFallback: true,
     noInfo: true,
