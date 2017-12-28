@@ -1,0 +1,17 @@
+declare module 'vue-material/dist/components/MdApp';
+declare module 'vue-material/dist/components/MdButton';
+declare module 'vue-material/dist/components/MdContent';
+declare module 'vue-material/dist/components/MdDatepicker';
+declare module 'vue-material/dist/components/MdDivider';
+declare module 'vue-material/dist/components/MdDrawer';
+declare module 'vue-material/dist/components/MdEmptyState';
+declare module 'vue-material/dist/components/MdField';
+declare module 'vue-material/dist/components/MdIcon';
+declare module 'vue-material/dist/components/MdLayout';
+declare module 'vue-material/dist/components/MdList';
+declare module 'vue-material/dist/components/MdProgress';
+declare module 'vue-material/dist/components/MdSnackbar';
+declare module 'vue-material/dist/components/MdSpeedDial';
+declare module 'vue-material/dist/components/MdSubheader';
+declare module 'vue-material/dist/components/MdTabs';
+declare module 'vue-material/dist/components/MdToolbar';

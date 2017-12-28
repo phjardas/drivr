@@ -2,13 +2,12 @@ import 'babel-polyfill';
 import Vue from 'vue';
 
 import './firebase';
+import './material';
 import { store } from './store';
 import Application from './app/Application';
 
-import 'vue-material/dist/vue-material.min.css';
 import './app/styles.scss';
 
-Vue.use(require('vue-material').default);
 Vue.use(require('vue-moment'));
 
 new Vue({
