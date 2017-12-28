@@ -1,5 +1,6 @@
-import * as firebase from 'firebase';
+import * as firebase from 'firebase/app';
 import { FirebaseOptions } from '@firebase/app-types';
+import 'firebase/auth';
 import 'firebase/firestore';
 
 const config: FirebaseOptions = {
@@ -12,3 +13,11 @@ const config: FirebaseOptions = {
 };
 
 firebase.initializeApp(config);
+
+if (!firebase.auth) throw new Error('Firebase Authentication is not available');
+export const auth = firebase.auth();
+export const authModule = firebase.auth;
+
+if (!firebase.firestore) throw new Error('Firestore is not available');
+export const firestore = firebase.firestore();
+export const firestoreModule = firebase.firestore;

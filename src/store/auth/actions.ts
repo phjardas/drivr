@@ -1,20 +1,17 @@
-import * as firebase from 'firebase';
+import { auth, authModule } from '../../firebase';
+import { AuthProvider } from '@firebase/auth-types';
 import { ActionTree } from 'vuex';
 
 import { AuthState } from './state';
 import { AUTHENTICATED, ANYONYMOUS, SIGNIN_STARTED, SIGNIN_SUCCESS, SIGNIN_FAILED } from './mutation-types';
 
-const { auth } = firebase;
-if (!auth) throw new Error('Firebase authentication is not available');
-
-// FIXME auth.AuthProvider doesn't work :/
-type Provider = () => any;
+type Provider = () => AuthProvider;
 
 const providers: { [id: string]: Provider } = {
-  google: () => new auth.GoogleAuthProvider(),
-  github: () => new auth.GithubAuthProvider(),
-  twitter: () => new auth.TwitterAuthProvider(),
-  facebook: () => new auth.FacebookAuthProvider(),
+  google: () => new authModule.GoogleAuthProvider(),
+  github: () => new authModule.GithubAuthProvider(),
+  twitter: () => new authModule.TwitterAuthProvider(),
+  facebook: () => new authModule.FacebookAuthProvider(),
 };
 
 export interface SignInParams {
@@ -23,7 +20,7 @@ export interface SignInParams {
 
 export const actions: ActionTree<AuthState, any> = {
   INIT({ commit }) {
-    auth().onAuthStateChanged(user => {
+    auth.onAuthStateChanged(user => {
       if (user) {
         commit(AUTHENTICATED, {
           user: {
@@ -47,7 +44,7 @@ export const actions: ActionTree<AuthState, any> = {
       const providerFactory = providers[providerId];
       if (!providerFactory) throw new Error(`Invalid provider ID: ${providerId}`);
       const provider = providerFactory();
-      await auth().signInWithPopup(provider);
+      await auth.signInWithPopup(provider);
       commit(SIGNIN_SUCCESS, { ...payload });
     } catch (error) {
       commit(SIGNIN_FAILED, { ...payload, error: { code: error.code, message: error.message } });
@@ -56,6 +53,6 @@ export const actions: ActionTree<AuthState, any> = {
   },
 
   signOut(): Promise<any> {
-    return auth().signOut();
+    return auth.signOut();
   },
 };

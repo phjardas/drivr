@@ -1,6 +1,5 @@
 import { ActionTree } from 'vuex';
-import * as firebase from 'firebase';
-import 'firebase/firestore';
+import { firestore } from '../../firebase';
 import {
   SYNC_COLLECTION_STARTED,
   SYNC_COLLECTION_READY,
@@ -19,39 +18,35 @@ export const actions: ActionTree<any, any> = {
     commit(SYNC_COLLECTION_STARTED, { collection, storePath });
 
     let ready = false;
-    if (!firebase.firestore) throw new Error('Firestore is not available');
 
-    const unsubscribe = firebase
-      .firestore()
-      .collection(collection)
-      .onSnapshot(
-        snapshot => {
-          snapshot.docChanges.forEach(change => {
-            switch (change.type) {
-              case 'added':
-                commit(DOC_ADDED, { storePath, id: change.doc.id, doc: change.doc.data() });
-                break;
-              case 'modified':
-                commit(DOC_MODIFIED, { storePath, id: change.doc.id, doc: change.doc.data() });
-                break;
-              case 'removed':
-                commit(DOC_REMOVED, { storePath, id: change.doc.id });
-                break;
-              default:
-                console.warn('Unrecognized document change:', change);
-            }
-          });
-
-          if (!ready) {
-            commit(SYNC_COLLECTION_READY, { collection, storePath });
-            ready = true;
+    const unsubscribe = firestore.collection(collection).onSnapshot(
+      snapshot => {
+        snapshot.docChanges.forEach(change => {
+          switch (change.type) {
+            case 'added':
+              commit(DOC_ADDED, { storePath, id: change.doc.id, doc: change.doc.data() });
+              break;
+            case 'modified':
+              commit(DOC_MODIFIED, { storePath, id: change.doc.id, doc: change.doc.data() });
+              break;
+            case 'removed':
+              commit(DOC_REMOVED, { storePath, id: change.doc.id });
+              break;
+            default:
+              console.warn('Unrecognized document change:', change);
           }
-        },
-        error => {
-          console.error(`Error subscribing to collection ${collection}:`, error);
-          commit(SYNC_COLLECTION_FAILED, { collection, storePath, error });
+        });
+
+        if (!ready) {
+          commit(SYNC_COLLECTION_READY, { collection, storePath });
+          ready = true;
         }
-      );
+      },
+      error => {
+        console.error(`Error subscribing to collection ${collection}:`, error);
+        commit(SYNC_COLLECTION_FAILED, { collection, storePath, error });
+      }
+    );
 
     return () => {
       console.log('unsubscribing from firestore collection %s', collection);

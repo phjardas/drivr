@@ -1,9 +1,9 @@
 import { ActionTree } from 'vuex';
-import * as firebase from 'firebase';
-import 'firebase/firestore';
+import { firestore } from '../../firebase';
 import { FirebaseFirestore, DocumentReference, CollectionReference } from '@firebase/firestore-types';
 
-import { CarsState, Car, Refuel, CarStatistics, CarData, RefuelData } from './state';
+import { CarsState } from './state';
+import { Car, Refuel, CarStatistics, CarData, RefuelData } from './model';
 
 function calculateStats(refuels: Refuel[]): CarStatistics | null {
   if (refuels.length < 2) return null;
@@ -52,15 +52,10 @@ async function loadRefuels(carRef: DocumentReference): Promise<Refuel[]> {
     .sort((a, b) => a.date.getTime() - b.date.getTime());
 }
 
-function firestore(): FirebaseFirestore {
-  if (!firebase.firestore) throw new Error('Firestore not available');
-  return firebase.firestore();
-}
-
 export const actions: ActionTree<CarsState, any> = {
   async createCar({ rootGetters }, car: CarData): Promise<Car> {
     const userId: string = rootGetters.userId;
-    return firestore()
+    return firestore
       .collection(`users/${userId}/cars`)
       .add(car)
       .then(doc => ({ ...car, id: doc.id }));
@@ -70,8 +65,7 @@ export const actions: ActionTree<CarsState, any> = {
     const { userId } = rootGetters;
     const { carId, date, mileage, fuelAmount, totalPrice } = payload;
     const car = state.items[carId];
-    const db = firestore();
-    const carRef = db.doc(`users/${userId}/cars/${carId}`);
+    const carRef = firestore.doc(`users/${userId}/cars/${carId}`);
 
     // FIXME actually we only need the latest refuel here
     const refuels = await loadRefuels(carRef);
@@ -86,7 +80,7 @@ export const actions: ActionTree<CarsState, any> = {
       refuel.pricePerLiter = totalPrice / fuelAmount;
     }
 
-    const refuelDoc = await db.runTransaction(tx =>
+    const refuelDoc = await firestore.runTransaction(tx =>
       carRef
         .collection('refuels')
         .add(refuel)
@@ -103,8 +97,7 @@ export const actions: ActionTree<CarsState, any> = {
 
   async refreshCarStatistics({ rootGetters }, payload: { carId: string }): Promise<CarStatistics | null> {
     const { userId } = rootGetters;
-    const db = firestore();
-    const carRef = db.doc(`users/${userId}/cars/${payload.carId}`);
+    const carRef = firestore.doc(`users/${userId}/cars/${payload.carId}`);
     const refuels = await loadRefuels(carRef);
     const stats = calculateStats(refuels);
     await carRef.update({ stats });
