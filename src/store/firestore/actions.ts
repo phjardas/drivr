@@ -1,57 +1,64 @@
-import { ActionTree } from 'vuex';
+import { ActionContext } from 'vuex';
+import { Query, DocumentChange } from '@firebase/firestore-types';
 import { firestore } from '../../firebase';
-import {
-  SYNC_COLLECTION_STARTED,
-  SYNC_COLLECTION_READY,
-  SYNC_COLLECTION_STOPPED,
-  SYNC_COLLECTION_FAILED,
-  DOC_ADDED,
-  DOC_MODIFIED,
-  DOC_REMOVED,
-} from './mutation-types';
-import { Unsubscribe } from './model';
+import { SyncedCollection, Unsubscribe } from './model';
 
-export const actions: ActionTree<any, any> = {
-  firestoreSyncCollection({ commit }, { collection, storePath: storePathIn }): Unsubscribe {
-    const storePath = Array.isArray(storePathIn) ? storePathIn : storePathIn.split(/\//);
-    console.log('synchronizing firestore collection %s to', collection, storePath);
-    commit(SYNC_COLLECTION_STARTED, { collection, storePath });
+export interface SyncFirestoreCollectionParams {
+  ref: Query;
+  mutationPrefix: string;
+  transform?(item: any): any | Promise<any>;
+  context?: any;
+}
 
+export async function syncFirestoreCollection<S, R>(
+  context: ActionContext<S, R>,
+  params: SyncFirestoreCollectionParams
+): Promise<Unsubscribe> {
+  const { commit } = context;
+  const { ref, mutationPrefix } = params;
+  const transform = params.transform || ((item: any) => item);
+  const mutationContext = { context: params.context || {} };
+  commit(`${mutationPrefix}.started`, mutationContext);
+
+  const handleError = (error: Error) =>
+    commit(`${mutationPrefix}.failed`, { ...mutationContext, error: { message: error.message } });
+
+  const publish = async (type: string, change: DocumentChange) => {
+    const doc = await transform({ id: change.doc.id, ...change.doc.data() });
+    if (doc) commit(`${mutationPrefix}.${type}`, { ...mutationContext, id: change.doc.id, doc });
+  };
+
+  try {
     let ready = false;
-
-    const unsubscribe = firestore.collection(collection).onSnapshot(
-      snapshot => {
-        snapshot.docChanges.forEach(change => {
-          switch (change.type) {
-            case 'added':
-              commit(DOC_ADDED, { storePath, id: change.doc.id, doc: change.doc.data() });
-              break;
-            case 'modified':
-              commit(DOC_MODIFIED, { storePath, id: change.doc.id, doc: change.doc.data() });
-              break;
-            case 'removed':
-              commit(DOC_REMOVED, { storePath, id: change.doc.id });
-              break;
-            default:
-              console.warn('Unrecognized document change:', change);
-          }
-        });
-
-        if (!ready) {
-          commit(SYNC_COLLECTION_READY, { collection, storePath });
-          ready = true;
+    const unsubscribe = ref.onSnapshot(async snapshot => {
+      snapshot.docChanges.forEach(async change => {
+        switch (change.type) {
+          case 'added':
+            publish('added', change);
+            break;
+          case 'modified':
+            publish('modified', change);
+            break;
+          case 'removed':
+            commit(`${mutationPrefix}.removed`, { ...mutationContext, id: change.doc.id });
+            break;
+          default:
+            console.warn('Unrecognized document change:', change);
         }
-      },
-      error => {
-        console.error(`Error subscribing to collection ${collection}:`, error);
-        commit(SYNC_COLLECTION_FAILED, { collection, storePath, error });
+      });
+
+      if (!ready) {
+        commit(`${mutationPrefix}.ready`, mutationContext);
+        ready = true;
       }
-    );
+    }, handleError);
 
     return () => {
-      console.log('unsubscribing from firestore collection %s', collection);
-      commit(SYNC_COLLECTION_STOPPED, { collection, storePath });
       unsubscribe();
+      commit(`${mutationPrefix}.stopped`, mutationContext);
     };
-  },
-};
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+}

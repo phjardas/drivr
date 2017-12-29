@@ -21,17 +21,18 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import Spinner from '../Spinner';
 
 export default {
   components: { Spinner },
 
-  computed: mapState({
-    car(state) {
-      return state.cars.items[this.$route.params.id];
+  computed: {
+    ...mapGetters(['getCar']),
+    car() {
+      return this.getCar(this.$route.params.id);
     },
-  }),
+  },
 
   watch: {
     car(car) {
@@ -41,7 +42,7 @@ export default {
 
   methods: {
     setPageTitle() {
-      this.$store.dispatch('setPageTitle', { title: this.car ? this.car.licensePlate : 'loading…' });
+      this.$store.dispatch('setPageTitle', { title: this.car ? this.car.label : 'loading…' });
     },
   },
 

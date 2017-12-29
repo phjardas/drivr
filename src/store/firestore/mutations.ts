@@ -1,60 +1,41 @@
 import { MutationTree } from 'vuex';
+
+import { emptySyncedCollection } from './model';
 import { setDeep, unsetDeep } from './util';
-import {
-  SYNC_COLLECTION_STARTED,
-  SYNC_COLLECTION_READY,
-  SYNC_COLLECTION_STOPPED,
-  SYNC_COLLECTION_FAILED,
-  DOC_ADDED,
-  DOC_MODIFIED,
-  DOC_REMOVED,
-} from './mutation-types';
 
-export const mutations: MutationTree<any> = {
-  [SYNC_COLLECTION_STARTED](state, { storePath }) {
-    setDeep(state, storePath, {
-      loading: true,
-      loaded: false,
-      failed: false,
-      error: null,
-      items: {},
-    });
-  },
+export interface MapMutationsParams {
+  prefix: string;
+  statePath: string[] | ((context: any) => string[]);
+}
 
-  [SYNC_COLLECTION_READY](state, { storePath }) {
-    setDeep(state, [...storePath, 'loading'], false);
-    setDeep(state, [...storePath, 'loaded'], true);
-  },
+export function mapMutations<S>(params: MapMutationsParams): MutationTree<S> {
+  const { prefix, statePath } = params;
+  const getStatePath: (context: any) => string[] = typeof statePath === 'function' ? statePath : () => statePath;
 
-  [SYNC_COLLECTION_STOPPED](state, { storePath }) {
-    setDeep(state, storePath, {
-      loading: false,
-      loaded: false,
-      failed: false,
-      error: null,
-      items: {},
-    });
-  },
-
-  [SYNC_COLLECTION_FAILED](state, { storePath, error }) {
-    setDeep(state, storePath, {
-      loading: false,
-      loaded: false,
-      failed: true,
-      error,
-      items: {},
-    });
-  },
-
-  [DOC_ADDED](state, { storePath, id, doc }) {
-    setDeep(state, [...storePath, 'items', id], { id, ...doc });
-  },
-
-  [DOC_MODIFIED](state, { storePath, id, doc }) {
-    setDeep(state, [...storePath, 'items', id], { id, ...doc });
-  },
-
-  [DOC_REMOVED](state, { storePath, id }) {
-    unsetDeep(state, [...storePath, 'items', id]);
-  },
-};
+  return {
+    [`${prefix}.started`](state, mutation) {
+      setDeep(state, getStatePath(mutation.context), { ...emptySyncedCollection(), loading: true });
+    },
+    [`${prefix}.stopped`](state, mutation) {
+      setDeep(state, getStatePath(mutation.context), emptySyncedCollection());
+    },
+    [`${prefix}.ready`](state, mutation) {
+      setDeep(state, [...getStatePath(mutation.context), 'loading'], false);
+      setDeep(state, [...getStatePath(mutation.context), 'loaded'], true);
+    },
+    [`${prefix}.failed`](state, mutation) {
+      setDeep(state, [...getStatePath(mutation.context), 'loading'], false);
+      setDeep(state, [...getStatePath(mutation.context), 'failed'], true);
+      setDeep(state, [...getStatePath(mutation.context), 'error'], mutation.error);
+    },
+    [`${prefix}.added`](state, mutation) {
+      setDeep(state, [...getStatePath(mutation.context), 'items', mutation.id], mutation.doc);
+    },
+    [`${prefix}.modified`](state, mutation) {
+      setDeep(state, [...getStatePath(mutation.context), 'items', mutation.id], mutation.doc);
+    },
+    [`${prefix}.removed`](state, mutation) {
+      unsetDeep(state, [...getStatePath(mutation.context), 'items', mutation.id]);
+    },
+  };
+}

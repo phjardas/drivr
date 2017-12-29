@@ -37,9 +37,9 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
-import FormattedNumber from '../FormattedNumber';
+import { mapGetters } from 'vuex';
 import Spinner from '../Spinner';
+import FormattedNumber from '../FormattedNumber';
 
 export default {
   components: { FormattedNumber, Spinner },
@@ -51,28 +51,23 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['userId']),
-    ...mapState(['refuels']),
-    items: function() {
+    ...mapGetters(['getCar', 'getCarRefuels']),
+    car() {
+      return this.getCar(this.$route.params.id);
+    },
+    refuels() {
+      return this.getCarRefuels(this.car.id);
+    },
+    items() {
       return Object.keys(this.refuels.items)
         .map(id => this.refuels.items[id])
-        .map(refuel => ({
-          ...refuel,
-          date: new Date(refuel.date),
-          mileage: parseFloat(refuel.mileage),
-          fuelAmount: parseFloat(refuel.fuelAmount),
-          totalPrice: parseFloat(refuel.totalPrice),
-          pricePerLiter: parseFloat(refuel.pricePerLiter),
-          consumption: parseFloat(refuel.consumption),
-        }))
         .sort((a, b) => b.date.getTime() - a.date.getTime());
     },
   },
 
   created() {
-    this.unsubscribe = this.$store.dispatch('firestoreSyncCollection', {
-      collection: `users/${this.userId}/cars/${this.$route.params.id}/refuels`,
-      storePath: 'refuels',
+    this.unsubscribe = this.$store.dispatch('loadCarRefuels', {
+      carId: this.car.id,
     });
   },
 
@@ -81,12 +76,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-.table {
-  th,
-  td {
-    white-space: nowrap;
-  }
-}
-</style>

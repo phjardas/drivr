@@ -3,16 +3,16 @@
   <spinner v-if="submitting" label="saving new car…" />
   <form v-else novalidate class="md-layout-row md-layout-wrap md-gutter" @submit.prevent="submit">
     <div class="md-flex md-flex-small-100">
-      <md-field :class="getValidationClass('licensePlate')">
-        <label for="licensePlate">License plate</label>
-        <md-input name="licensePlate" id="licensePlate" v-model="form.licensePlate" @input="$v.$touch" autofocus />
-        <span class="md-helper-text">Or any other label to identify your car.</span>
-        <span class="md-error" v-if="!$v.form.licensePlate.required">This field is required.</span>
+      <md-field :class="getValidationClass('label')">
+        <label for="label">Label</label>
+        <md-input name="label" id="label" v-model="form.label" @input="$v.$touch" autofocus />
+        <span class="md-helper-text">For instance the license plate or make and model.</span>
+        <span class="md-error" v-if="!$v.form.label.required">This field is required.</span>
       </md-field>
     </div>
     <div class="md-flex md-flex-small-100">
       <md-button class="md-raised md-primary" @click="submit" :disabled="$v.form.$invalid">Save new car</md-button>
-      <md-button to="/dashboard">Cancel</md-button>
+      <md-button to="/">Cancel</md-button>
     </div>
   </form>
 
@@ -36,7 +36,7 @@ export default {
 
   data() {
     return {
-      form: { licensePlate: null },
+      form: { label: null },
       submitting: false,
       error: null,
     };
@@ -45,7 +45,7 @@ export default {
   validations() {
     return {
       form: {
-        licensePlate: {
+        label: {
           required,
         },
       },

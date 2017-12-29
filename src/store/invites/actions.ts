@@ -2,6 +2,7 @@ import { ActionTree } from 'vuex';
 import { firestore, firestoreModule } from '../../firebase';
 import { RootState } from '../state';
 import { InvitesState } from './state';
+import { Car } from '../cars/model';
 import { InviteData, Invite, CarInfo, UserInfo } from './model';
 import {
   INVITE_LOAD_STARTED,
@@ -25,13 +26,13 @@ async function loadInvite(id: string): Promise<Invite> {
 }
 
 export const actions: ActionTree<InvitesState, RootState> = {
-  async createCarInvite({ commit, rootState }, payload: { carId: string }): Promise<Invite> {
+  async createCarInvite({ commit, rootGetters, rootState }, payload: { carId: string }): Promise<Invite> {
     const user = rootState.auth.user;
     if (!user || !user.id) throw new Error('Unauthenticated!');
     const inviter: UserInfo = { id: user.id, label: user.label || '' };
-    const carData = rootState.cars.items[payload.carId];
+    const carData: Car = rootGetters.getCar(payload.carId);
     if (!carData) throw new Error(`Invalid car ID: ${payload.carId}`);
-    const car: CarInfo = { id: carData.id, label: carData.licensePlate };
+    const car: CarInfo = { id: carData.id, label: carData.label };
     const invite: InviteData = { inviter, car };
     const inviteRef = await invitesRef.add({ ...invite, createdAt: firestoreModule.FieldValue.serverTimestamp() });
     return loadInvite(inviteRef.id);
@@ -69,22 +70,11 @@ export const actions: ActionTree<InvitesState, RootState> = {
         const doc = await tx.get(inviteRef);
         if (doc.data().acceptedAt) throw new Error('Invite was already accepted');
 
-        // now mark the invite as accepted
+        // mark the invite as accepted
         await tx.update(inviteRef, { invitee, acceptedAt: firestoreModule.FieldValue.serverTimestamp() });
 
-        const carShareData = {
-          inviteId: invite.id,
-          inviteeId: invitee.id,
-          ownerId: invite.inviter.id,
-          carId: invite.car.id,
-          sharedAt: invite.createdAt,
-          acceptedAt: firestoreModule.FieldValue.serverTimestamp(),
-        };
-        await tx.set(firestore.doc(`users/${invitee.id}/sharedCars/${invite.car.id}`), carShareData);
-        await tx.set(
-          firestore.doc(`users/${invite.inviter.id}/cars/${invite.car.id}/shares/${invitee.id}`),
-          carShareData
-        );
+        // add the invitee as a user to the car
+        await tx.update(firestore.doc(`cars/${invite.car.id}`), { [`users.${invitee.id}`]: true });
       });
 
       commit(INVITE_ACCEPT_DONE, { ...payload, invitee });

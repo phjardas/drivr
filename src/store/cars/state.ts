@@ -1,12 +1,12 @@
-import { SyncedCollection } from '../firestore/model';
-import { Car } from './model';
+import { SyncedCollection, emptySyncedCollection } from '../firestore/model';
+import { Car, Refuel } from './model';
 
-export type CarsState = SyncedCollection<Car>;
+export interface CarsState {
+  cars: SyncedCollection<Car>;
+  refuels: { [carId: string]: SyncedCollection<Refuel> };
+}
 
 export const state: CarsState = {
-  loading: false,
-  loaded: false,
-  failed: false,
-  error: null,
-  items: {},
+  cars: emptySyncedCollection(),
+  refuels: {},
 };
