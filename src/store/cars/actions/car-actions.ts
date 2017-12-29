@@ -1,5 +1,5 @@
 import { ActionTree, ActionContext } from 'vuex';
-import { firestore } from '../../../firebase';
+import { firestore, firestoreModule } from '../../../firebase/firestore';
 import { FirebaseFirestore, DocumentReference, CollectionReference } from '@firebase/firestore-types';
 
 import { CarsState } from '../state';

@@ -1,4 +1,5 @@
-import { auth, authModule, firestore, firestoreModule } from '../../firebase';
+import { auth, authModule } from '../../firebase/auth';
+import { firestore, firestoreModule } from '../../firebase/firestore';
 import { AuthProvider } from '@firebase/auth-types';
 import { ActionTree } from 'vuex';
 

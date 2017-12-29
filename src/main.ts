@@ -1,7 +1,6 @@
 import 'babel-polyfill';
 import Vue from 'vue';
 
-import './firebase';
 import './material';
 import { store } from './store';
 import Application from './app/Application';
