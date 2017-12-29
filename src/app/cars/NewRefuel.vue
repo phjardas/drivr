@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapGetters, mapState, mapActions } from 'vuex';
 import { validationMixin } from 'vuelidate';
 import minValue from 'vuelidate/lib/validators/minValue';
 import numeric from 'vuelidate/lib/validators/numeric';
@@ -103,28 +103,31 @@ export default {
     };
   },
 
-  computed: mapState({
-    car(state) {
-      return state.cars.items[this.$route.params.id];
-    },
-    minMileage() {
-      return this.car && this.car.lastRefuel && this.car.lastRefuel.mileage;
-    },
-    distance() {
-      return (
-        this.minMileage &&
-        this.form.mileage &&
-        this.form.mileage > this.minMileage &&
-        this.form.mileage - this.minMileage
-      );
-    },
-    consumption() {
-      return this.distance && this.form.fuelAmount && this.form.fuelAmount / this.distance;
-    },
-    price() {
-      return this.form.totalPrice && this.form.fuelAmount && this.form.totalPrice / this.form.fuelAmount;
-    },
-  }),
+  computed: {
+    ...mapGetters(['cars']),
+    ...mapState({
+      car() {
+        return this.cars.items[this.$route.params.id];
+      },
+      minMileage() {
+        return this.car && this.car.lastRefuel && this.car.lastRefuel.mileage;
+      },
+      distance() {
+        return (
+          this.minMileage &&
+          this.form.mileage &&
+          this.form.mileage > this.minMileage &&
+          this.form.mileage - this.minMileage
+        );
+      },
+      consumption() {
+        return this.distance && this.form.fuelAmount && this.form.fuelAmount / this.distance;
+      },
+      price() {
+        return this.form.totalPrice && this.form.fuelAmount && this.form.totalPrice / this.form.fuelAmount;
+      },
+    }),
+  },
 
   watch: {
     car(car) {

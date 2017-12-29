@@ -15,7 +15,7 @@
       <md-list-item v-for="car of items" :key="car.id" :to="`/cars/${car.id}`">
         <md-icon>directions_car</md-icon>
         <div class="md-list-item-text">
-          <span>{{ car.licensePlate }}</span>
+          <span>{{ car.label }}</span>
 
           <span v-if="car.stats">
             {{ car.stats.refuelCount }} refuels,
@@ -46,18 +46,18 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
 import Spinner from '../Spinner';
-import { mapState, mapActions } from 'vuex';
 
 export default {
   components: { Spinner },
 
   computed: {
-    ...mapState(['cars']),
-    items: function() {
+    ...mapGetters(['cars']),
+    items() {
       return Object.keys(this.cars.items)
         .map(id => this.cars.items[id])
-        .sort((a, b) => a.licensePlate.localeCompare(b.licensePlate));
+        .sort((a, b) => a.label.localeCompare(b.label));
     },
   },
 

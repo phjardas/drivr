@@ -13,7 +13,7 @@ export function setDeep(root: any, path: string[], value: any) {
 
 export function unsetDeep(root: any, path: string[]) {
   if (path.length == 1) {
-    delete root[path[0]];
+    Vue.delete(root, path[0]);
     return;
   }
 

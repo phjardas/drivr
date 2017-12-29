@@ -1,6 +1,6 @@
-import { SyncedCollection } from '../firestore/model';
-
 export interface RefuelData {
+  carId: string;
+  userId: string;
   date: Date;
   mileage: number;
   fuelAmount: number;
@@ -12,6 +12,7 @@ export interface RefuelData {
 
 export interface Refuel extends RefuelData {
   id: string;
+  createdAt: Date;
 }
 
 export interface CarStatistics {
@@ -34,11 +35,13 @@ export interface CarShare {
 }
 
 export interface CarData {
-  licensePlate: string;
+  label: string;
   lastRefuel?: Refuel;
   stats?: CarStatistics;
 }
 
 export interface Car extends CarData {
   id: string;
+  ownerId: string;
+  users: { [userId: string]: boolean };
 }

@@ -57,16 +57,17 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import FormattedNumber from '../FormattedNumber';
 
 export default {
   components: { FormattedNumber },
 
-  computed: mapState({
-    car(state) {
-      return state.cars.items[this.$route.params.id];
+  computed: {
+    ...mapGetters(['getCar']),
+    car() {
+      return this.getCar(this.$route.params.id);
     },
-  }),
+  },
 };
 </script>

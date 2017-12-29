@@ -14,18 +14,19 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   data: () => ({
     refreshingStatistics: false,
   }),
 
-  computed: mapState({
-    car(state) {
-      return state.cars.items[this.$route.params.id];
+  computed: {
+    ...mapGetters(['getCar']),
+    car() {
+      return this.getCar(this.$route.params.id);
     },
-  }),
+  },
 
   methods: {
     ...mapActions(['refreshCarStatistics', 'createCarInvite']),

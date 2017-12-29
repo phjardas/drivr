@@ -14,7 +14,7 @@
     @click="emitNavigation"
   >
     <md-icon>directions_car</md-icon>
-    <span class="md-list-item-text">{{ car.licensePlate }}</span>
+    <span class="md-list-item-text">{{ car.label }}</span>
   </md-list-item>
   <md-list-item to="/cars/_new" @click="emitNavigation">
     <md-icon>add</md-icon>
@@ -30,15 +30,15 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   computed: {
-    ...mapState(['cars']),
-    sortedCars: function() {
+    ...mapGetters(['cars']),
+    sortedCars() {
       return Object.keys(this.cars.items)
         .map(id => this.cars.items[id])
-        .sort((a, b) => a.licensePlate.localeCompare(b.licensePlate));
+        .sort((a, b) => a.label.localeCompare(b.label));
     },
   },
 

@@ -61,7 +61,7 @@ export default {
   },
 
   created() {
-    this.$store.dispatch('firestoreSyncCollection', { collection: `users/${this.userId}/cars`, storePath: 'cars' });
+    this.$store.dispatch('loadCars');
   },
 };
 </script>
