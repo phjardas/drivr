@@ -48,11 +48,11 @@
   <md-empty-state
     v-else
     md-rounded
-    md-icon="show_chart"
+    md-icon="dashboard"
     md-label="No statistics yet"
     md-description="Statistics will become available once you've recorded two refuels">
-      <md-button class="md-primary md-raised" :to="`/cars/${this.$route.params.id}/refuels/_new`">Record refuel</md-button>
-    </md-empty-state>
+    <md-button class="md-primary md-raised" :to="`/cars/${this.$route.params.id}/refuels/_new`">Record refuel</md-button>
+  </md-empty-state>
 </div>
 </template>
 
