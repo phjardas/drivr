@@ -56,4 +56,17 @@ export const actions: ActionTree<CarsState, any> = {
 
     return refuelDoc;
   },
+
+  async deleteRefuel({ dispatch }, payload: { carId: string; refuelId: string }): Promise<any> {
+    const { carId, refuelId } = payload;
+    const latest = await loadLatestRefuel(carId);
+    if (latest && latest.id !== refuelId) throw new Error(`You can only delete the latest refuel.`);
+
+    await firestore.doc(`refuels/${refuelId}`).delete();
+
+    const newLatest = await loadLatestRefuel(carId);
+    await firestore.doc(`cars/${carId}`).update({ lastRefuel: newLatest });
+
+    await dispatch('refreshCarStatistics', { carId });
+  },
 };

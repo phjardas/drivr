@@ -6,7 +6,7 @@
 
   <template v-if="refuels.loaded">
     <md-list v-if="items.length" class="md-triple-line">
-      <md-list-item v-for="refuel of items" :key="refuel.id">
+      <md-list-item v-for="(refuel, index) of items" :key="refuel.id">
         <div class="md-list-item-text">
           <span>
             {{ refuel.date | moment('ll') }}
@@ -22,6 +22,9 @@
             <formatted-number :value="refuel.consumption * 100" :fraction-digits="2" unit="cl/km" />
           </span>
         </div>
+        <md-button v-if="index === 0" class="md-icon-button md-list-action" @click="doDeleteRefuel(refuel.id)">
+          <md-icon>delete</md-icon>
+        </md-button>
       </md-list-item>
     </md-list>
 
@@ -37,7 +40,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import Spinner from '../Spinner';
 import FormattedNumber from '../FormattedNumber';
 
@@ -62,6 +65,13 @@ export default {
       return Object.keys(this.refuels.items)
         .map(id => this.refuels.items[id])
         .sort((a, b) => b.date.getTime() - a.date.getTime());
+    },
+  },
+
+  methods: {
+    ...mapActions(['deleteRefuel']),
+    doDeleteRefuel(refuelId) {
+      this.deleteRefuel({ carId: this.car.id, refuelId });
     },
   },
 
