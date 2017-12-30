@@ -2,7 +2,7 @@
 <div>
   <spinner v-if="refuelData.loading" />
 
-  <div v-else-if="refuels.length" class="md-layout-row md-layout-wrap md-gutter">
+  <div v-else-if="refuels.length > 1" class="md-layout-row md-layout-wrap md-gutter">
     <div class="md-flex md-flex-small-100">
       <h3 class="md-subheading">Mileage over time</h3>
       <mileage-chart :refuels="refuels" :height="200" />
