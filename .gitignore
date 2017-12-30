@@ -2,3 +2,5 @@
 *.log
 /dist/
 /webpack-bundles-report.html
+/backup.json
+/backup.json.gz

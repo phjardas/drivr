@@ -5,9 +5,9 @@ export interface RefuelData {
   mileage: number;
   fuelAmount: number;
   totalPrice: number;
+  pricePerLiter: number;
   distance?: number;
   consumption?: number;
-  pricePerLiter?: number;
 }
 
 export interface Refuel extends RefuelData {
