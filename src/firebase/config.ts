@@ -1,7 +1,7 @@
 import { FirebaseOptions } from '@firebase/app-types';
 
 export const config: FirebaseOptions =
-  process.env.NODE_ENV !== 'production'
+  process.env.NODE_ENV === 'production'
     ? {
         apiKey: 'AIzaSyD5IlsvQ5Ie2mUAsbENSc_BPpLpmF-yJzw',
         authDomain: 'drivr-f620a.firebaseapp.com',
