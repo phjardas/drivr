@@ -5,6 +5,7 @@ import Car from './Car.vue';
 import NewCar from './NewCar.vue';
 import CarRefuels from './CarRefuels.vue';
 import CarStatistics from './CarStatistics.vue';
+import CarCharts from './CarCharts.vue';
 import CarSettings from './CarSettings.vue';
 import NewRefuel from './NewRefuel.vue';
 import AcceptInvite from './AcceptInvite.vue';
@@ -19,6 +20,7 @@ export const routes: RouteConfig[] = [
     children: [
       { path: '', component: CarStatistics },
       { path: 'refuels', component: CarRefuels },
+      { path: 'charts', component: CarCharts },
       { path: 'settings', component: CarSettings },
     ],
   },

@@ -8,8 +8,9 @@
     </md-speed-dial>
 
     <md-tabs md-sync-route>
-      <md-tab md-label="Statistics" md-icon="show_chart" :to="`/cars/${car.id}`" />
+      <md-tab md-label="Statistics" md-icon="dashboard" :to="`/cars/${car.id}`" />
       <md-tab md-label="Refuels" md-icon="local_gas_station" :to="`/cars/${car.id}/refuels`" />
+      <md-tab md-label="Charts" md-icon="show_chart" :to="`/cars/${car.id}/charts`" />
       <md-tab md-label="Settings" md-icon="settings" :to="`/cars/${car.id}/settings`" />
     </md-tabs>
 
