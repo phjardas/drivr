@@ -11,7 +11,8 @@
     "deploy": "npm run deploy:hosting && npm run deploy:functions",
     "deploy:functions": "firebase deploy --only functions",
     "deploy:hosting": "npm run dist && firebase deploy --only hosting",
-    "backup": "ts-node scripts/backup.ts"
+    "backup": "ts-node scripts/backup.ts",
+    "postinstall": "(cd functions && npm install)"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
