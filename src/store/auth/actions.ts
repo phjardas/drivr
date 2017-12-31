@@ -28,6 +28,7 @@ export const actions: ActionTree<AuthState, any> = {
 
       const user: UserData = {
         id: fbUser.uid,
+        roles: {},
       };
       if (fbUser.displayName) user.displayName = fbUser.displayName;
       if (fbUser.email) user.email = fbUser.email;
@@ -37,7 +38,8 @@ export const actions: ActionTree<AuthState, any> = {
       const dbUser = await userRef.get();
 
       if (dbUser.exists) {
-        userRef.update({ ...user, lastLogin: firestoreModule.FieldValue.serverTimestamp() });
+        userRef.update({ lastLogin: firestoreModule.FieldValue.serverTimestamp() });
+        user.roles = dbUser.data().roles || {};
       } else {
         userRef.set({
           ...user,
@@ -46,9 +48,7 @@ export const actions: ActionTree<AuthState, any> = {
         });
       }
 
-      commit(AUTHENTICATED, {
-        user,
-      });
+      commit(AUTHENTICATED, { user });
     });
   },
 

@@ -3,6 +3,7 @@ export interface UserData {
   email?: string;
   displayName?: string;
   label?: string;
+  roles: { [role: string]: boolean };
 }
 
 export interface User extends UserData {

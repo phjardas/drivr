@@ -22,6 +22,10 @@
   </md-list-item>
 
   <md-divider />
+  <md-list-item v-if="hasAnyRole('admin')" to="/admin">
+    <md-icon>settings</md-icon>
+    <span class="md-list-item-text">Administration</span>
+  </md-list-item>
   <md-list-item @click="signOut">
     <md-icon>exit_to_app</md-icon>
     <span class="md-list-item-text">Sign out</span>
@@ -34,7 +38,7 @@ import { mapGetters, mapActions } from 'vuex';
 
 export default {
   computed: {
-    ...mapGetters(['cars']),
+    ...mapGetters(['cars', 'hasAnyRole']),
     sortedCars() {
       return Object.keys(this.cars.items)
         .map(id => this.cars.items[id])
