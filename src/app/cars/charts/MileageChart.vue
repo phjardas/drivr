@@ -24,6 +24,13 @@ export default {
               },
             },
           ],
+          yAxes: [
+            {
+              ticks: {
+                min: Math.min(...this.refuels.map(r => r.mileage)) * 0.99,
+              },
+            },
+          ],
         },
       },
 
