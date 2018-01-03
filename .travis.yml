@@ -4,6 +4,7 @@ node_js:
 cache:
   directories:
   - node_modules
+  - functions/node_modules
 script:
 - npm run dist
 after_success:
