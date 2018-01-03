@@ -1,13 +1,13 @@
 import { MutationTree } from 'vuex';
 import { CarsState } from './state';
-import { mapMutations } from '../firestore';
+import { mapCollectionMutations } from '../firestore';
 
 export const mutations: MutationTree<CarsState> = {
-  ...mapMutations({
+  ...mapCollectionMutations({
     prefix: 'loadCars',
     statePath: ['cars'],
   }),
-  ...mapMutations({
+  ...mapCollectionMutations({
     prefix: 'loadCarRefuels',
     statePath: (context: any) => {
       return ['refuels', context.carId];
