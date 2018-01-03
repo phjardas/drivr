@@ -22,6 +22,7 @@
                 @blur="$v.form.label.$touch()"
                 hint="For instance the license plate or make and model."
                 persistent-hint
+                autofocus
               />
               <div class="v-flex v-flex-small-100">
                 <v-btn raised color="primary" @click="submit" :disabled="$v.form.$invalid">Save new car</v-btn>

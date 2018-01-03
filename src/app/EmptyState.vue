@@ -1,5 +1,5 @@
 <template>
-  <div class="empty-state" :class="emptyStateClasses">
+  <div class="empty-state">
     <div class="empty-state-container">
       <template v-if="icon">
         <v-icon class="empty-state-icon">{{ icon }}</v-icon>
@@ -14,18 +14,11 @@
 <script>
 export default {
   props: {
-    rounded: Boolean,
     icon: String,
     label: String,
     description: String,
   },
-
-  computed: {
-    emptyStateClasses() {
-      return { rounded: this.rounded };
-    },
-  },
-}
+};
 </script>
 
 <style lang="scss">
@@ -40,20 +33,15 @@ export default {
 .empty-state {
   @include empty-state-base;
   max-width: 420px;
+  max-height: 420px;
   padding: 36px;
   margin: 0 auto;
   position: relative;
-
-  &.rounded {
-    max-width: auto;
-    border-radius: 50%;
-    padding: 40px;
-    background: #e0e0e0;
-  }
 }
 
 .empty-state-container {
   @include empty-state-base;
+  z-index: 2;
 }
 
 .empty-state-icon {
