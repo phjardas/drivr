@@ -1,9 +1,9 @@
 <template>
-<div class="page-container">
+<v-app light>
   <Splash v-if="!user" />
   <Login v-if="user && user.anonymous" />
   <Main v-if="user && user.authenticated" />
-</div>
+</v-app>
 </template>
 
 <script>

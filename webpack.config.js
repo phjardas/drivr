@@ -81,7 +81,7 @@ const config = {
       baseHref: '/',
       mobile: true,
       lang: 'en-US',
-      links: ['https://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons'],
+      links: ['https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'],
       minify: { collapseWhitespace: true, removeComments: true, minifyCSS: true },
     }),
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
@@ -114,9 +114,6 @@ if (process.env.NODE_ENV === 'production') {
   config.plugins = [
     ...config.plugins,
     new webpack.NamedModulesPlugin(),
-    new BundleAnalyzerPlugin({
-      openAnalyzer: false,
-    }),
   ];
   config.devServer = {
     historyApiFallback: true,

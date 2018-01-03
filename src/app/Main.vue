@@ -1,62 +1,36 @@
 <template>
-<md-app>
-  <md-app-toolbar class="md-primary">
-    <md-button class="md-icon-button" @click="showDrawer">
-      <md-icon>menu</md-icon>
-    </md-button>
-    <span class="md-title">{{ title }}</span>
-  </md-app-toolbar>
-
-  <md-app-drawer md-permanent="full" :md-active.sync="drawerVisible">
-    <md-app-toolbar class="md-primary">
-      <span class="md-title">drivr</span>
-    </md-app-toolbar>
-
-    <Nav @navigation="hideDrawer" />
-  </md-app-drawer>
-
-  <md-app-content>
+<div>
+  <v-navigation-drawer app fixed clipped v-model="drawerVisible">
+    <Nav />
+  </v-navigation-drawer>
+  <v-toolbar app dark clipped-left fixed color="primary">
+    <v-toolbar-title>
+      <v-toolbar-side-icon @click.stop="toggleDrawer" />
+      <app-title />
+    </v-toolbar-title>
+  </v-toolbar>
+  <v-content>
     <router-view></router-view>
-  </md-app-content>
-</md-app>
+  </v-content>
+</div>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 
-import Nav from './Nav';
+import Nav from './nav/Nav';
+import AppTitle from './AppTitle';
 
 export default {
-  components: { Nav },
+  components: { Nav, AppTitle },
 
-  data: () => ({ drawerVisible: false }),
-
-  computed: {
-    ...mapState({
-      title: state => state.navigation.title,
-      appDrawerVisible: state => state.navigation.appDrawerVisible,
-    }),
-    ...mapGetters(['userId']),
-  },
-
-  watch: {
-    appDrawerVisible(visible) {
-      this.drawerVisible = visible;
-    },
-    drawerVisible(visible) {
-      if (!visible) {
-        this.hideDrawer();
-      }
-    },
-  },
+  data: () => ({
+    drawerVisible: null,
+  }),
 
   methods: {
-    ...mapActions(['setAppDrawerVisibility']),
-    showDrawer() {
-      this.setAppDrawerVisibility({ visible: true });
-    },
-    hideDrawer() {
-      this.setAppDrawerVisibility({ visible: false });
+    toggleDrawer() {
+      this.drawerVisible = !this.drawerVisible;
     },
   },
 
@@ -65,10 +39,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-.md-app {
-  min-height: 100vh;
-}
-</style>
-

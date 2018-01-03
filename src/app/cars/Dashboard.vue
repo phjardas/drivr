@@ -1,56 +1,57 @@
 <template>
 <div>
-  <md-speed-dial class="md-top-right">
-    <md-speed-dial-target class="md-accent" style="z-index: 100" :to="`/cars/_new`">
-      <md-icon>directions_car</md-icon>
-    </md-speed-dial-target>
-  </md-speed-dial>
+  <v-btn fab bottom right dark fixed color="accent" :to="`/cars/_new`">
+    <v-icon>directions_car</v-icon>
+  </v-btn>
 
   <spinner v-if="cars.loading" />
 
-  <b-alert v-if="cars.failed" variant="danger">Error: {{ cars.error.message }}</b-alert>
+  <p v-if="cars.failed">Error: {{ cars.error.message }}</p>
 
-  <template v-if="cars.loaded">
-    <md-list v-if="items.length" class="md-triple-line">
-      <md-list-item v-for="car of items" :key="car.id" :to="`/cars/${car.id}`">
-        <md-icon>directions_car</md-icon>
-        <div class="md-list-item-text">
-          <span>{{ car.label }}</span>
+  <template if="cars.loaded">
+    <v-container v-if="items.length" fluid grid-list-lg>
+      <v-layout row wrap>
+        <v-flex xs12 md6 offset-md3 v-for="car of items" :key="car.id">
+          <v-card :to="`/cars/${car.id}`">
+            <v-card-title primary-title>
+              <div>
+                <h3 class="headline mb-0">{{ car.label }}</h3>
 
-          <span v-if="car.stats">
-            {{ car.stats.refuelCount }} refuels,
-            {{ car.stats.totalDistance }} km
-          </span>
-          <span v-else>No refuels yet</span>
+                <div v-if="car.stats">
+                  {{ car.stats.refuelCount }} refuels,
+                  {{ car.stats.totalDistance }} km
+                </div>
+                <div v-else>No refuels yet</div>
 
-          <span v-if="car.stats && car.stats.averageConsumption">
-            {{ (car.stats.averageConsumption * 100).toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            }) }}
-            cl/km
-          </span>
-        </div>
-      </md-list-item>
-    </md-list>
+                <div v-if="car.stats && car.stats.averageConsumption">
+                  <formatted-number :value="car.stats.averageConsumption * 100" unit="cl/km" />
+                </div>
+              </div>
+            </v-card-title>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
 
-    <md-empty-state
+    <empty-state
       v-else
-      md-rounded
-      md-icon="directions_car"
-      md-label="No cars yet">
-      <md-button class="md-primary md-raised" to="/cars/_new">Register your car</md-button>
-    </md-empty-state>
+      rounded
+      icon="directions_car"
+      label="No cars yet">
+      <v-btn color="primary" raised to="/cars/_new">Register your car</v-btn>
+    </empty-state>
   </template>
 </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import EmptyState from '../EmptyState';
+import FormattedNumber from '../FormattedNumber';
 import Spinner from '../Spinner';
 
 export default {
-  components: { Spinner },
+  components: { EmptyState, FormattedNumber, Spinner },
 
   computed: {
     ...mapGetters(['cars']),

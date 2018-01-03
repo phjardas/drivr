@@ -1,21 +1,34 @@
 <template>
 <div>
-  <div v-if="car">
-    <md-speed-dial class="md-top-right">
-      <md-speed-dial-target class="md-accent" style="z-index: 100" :to="`/cars/${car.id}/refuels/_new`">
-        <md-icon>local_gas_station</md-icon>
-      </md-speed-dial-target>
-    </md-speed-dial>
+  <template v-if="car">
+    <v-btn fab bottom right dark fixed color="accent" :to="`/cars/${car.id}/refuels/_new`">
+      <v-icon>local_gas_station</v-icon>
+    </v-btn>
 
-    <md-tabs md-sync-route>
-      <md-tab md-label="Statistics" md-icon="dashboard" :to="`/cars/${car.id}`" />
-      <md-tab md-label="Refuels" md-icon="local_gas_station" :to="`/cars/${car.id}/refuels`" />
-      <md-tab md-label="Charts" md-icon="show_chart" :to="`/cars/${car.id}/charts`" />
-      <md-tab md-label="Settings" md-icon="settings" :to="`/cars/${car.id}/settings`" />
-    </md-tabs>
+    <v-tabs fixed icons centered>
+      <v-tabs-bar grow>
+        <v-tabs-slider color="accent"></v-tabs-slider>
+        <v-tabs-item :to="`/cars/${car.id}`" router>
+          <v-icon>dashboard</v-icon>
+          Statistics
+        </v-tabs-item>
+        <v-tabs-item :to="`/cars/${car.id}/refuels`" router>
+          <v-icon>local_gas_station</v-icon>
+          Refuels
+        </v-tabs-item>
+        <v-tabs-item :to="`/cars/${car.id}/charts`" router>
+          <v-icon>show_chart</v-icon>
+          Charts
+        </v-tabs-item>
+        <v-tabs-item :to="`/cars/${car.id}/settings`" router>
+          <v-icon>settings</v-icon>
+          Settings
+        </v-tabs-item>
+      </v-tabs-bar>
+    </v-tabs>
 
     <router-view></router-view>
-  </div>
+  </template>
 
   <spinner v-else />
 </div>

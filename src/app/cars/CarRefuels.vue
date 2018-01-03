@@ -2,50 +2,58 @@
 <div>
   <spinner v-if="refuels.loading" />
 
-  <b-alert v-if="refuels.failed" variant="danger">Error: {{ refuels.error.message }}</b-alert>
+  <p v-if="refuels.failed">Error: {{ refuels.error.message }}</p>
 
   <template v-if="refuels.loaded">
-    <md-list v-if="items.length" class="md-triple-line">
-      <md-list-item v-for="(refuel, index) of items" :key="refuel.id">
-        <div class="md-list-item-text">
-          <span>
-            {{ refuel.date | moment('ll') }}
-            <small>at</small>
-            <formatted-number :value="refuel.mileage" :fraction-digits="0" unit="km" />
-          </span>
-          <span>
-            <formatted-number :value="refuel.fuelAmount" :fraction-digits="2" unit="liters" />
-            <small>for</small>
-            <formatted-number :value="refuel.totalPrice" :fraction-digits="2" unit="€" />
-          </span>
-          <span v-if="refuel.consumption">
-            <formatted-number :value="refuel.consumption * 100" :fraction-digits="2" unit="cl/km" />
-          </span>
-        </div>
-        <md-button v-if="index === 0" class="md-icon-button md-list-action" @click="doDeleteRefuel(refuel.id)">
-          <md-icon>delete</md-icon>
-        </md-button>
-      </md-list-item>
-    </md-list>
+    <v-container v-if="items.length" fluid grid-list-md>
+      <v-layout row wrap>
+        <v-flex xs12 md6 offset-md3 v-for="(refuel, index) of items" :key="refuel.id">
+          <v-card>
+            <v-card-title primary-title>
+              <div>
+                <h3 class="headline">{{ refuel.date | moment('ll') }}</h3>
+                <div>
+                  <formatted-number :value="refuel.fuelAmount" :fraction-digits="2" unit="liters" />
+                  <small>for</small>
+                  <formatted-number :value="refuel.totalPrice" :fraction-digits="2" unit="€" />
+                </div>
+                <div>Mileage: <formatted-number :value="refuel.mileage" :fraction-digits="0" unit="km" /></div>
+                <div v-if="refuel.consumption">
+                  Consumption: <formatted-number :value="refuel.consumption * 100" :fraction-digits="2" unit="cl/km" />
+                </div>
+              </div>
+            </v-card-title>
+            <v-card-actions v-if="index === 0">
+              <v-btn flat color="red" @click="doDeleteRefuel(refuel.id)">
+                <v-icon>delete</v-icon>
+                delete
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
 
-    <md-empty-state
+    <empty-state
       v-else
-      md-rounded
-      md-icon="local_gas_station"
-      md-label="No refuels yet">
-      <md-button class="md-primary md-raised" :to="`/cars/${this.$route.params.id}/refuels/_new`">Record your first refuel</md-button>
-    </md-empty-state>
+      rounded
+      icon="local_gas_station"
+      label="No refuels yet"
+      class="mt-3">
+      <v-btn raised color="primary" :to="`/cars/${this.$route.params.id}/refuels/_new`">Record your first refuel</v-btn>
+    </empty-state>
   </template>
 </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import Spinner from '../Spinner';
+import EmptyState from '../EmptyState';
 import FormattedNumber from '../FormattedNumber';
+import Spinner from '../Spinner';
 
 export default {
-  components: { FormattedNumber, Spinner },
+  components: { EmptyState, FormattedNumber, Spinner },
 
   data() {
     return {

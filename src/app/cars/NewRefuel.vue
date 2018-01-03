@@ -2,52 +2,94 @@
 <div>
   <template v-if="car">
     <spinner v-if="submitting" label="saving new refuel…" />
-    <form v-else novalidate class="md-layout-row md-layout-wrap md-gutter" @submit.prevent="submit">
-      <div class="md-flex md-flex-small-100">
-        <h2 class="md-title">
-          <md-icon>local_gas_station</md-icon>
-          New Refuel
-        </h2>
-      </div>
-      <div class="md-flex md-flex-small-100">
-        <md-datepicker name="date" id="date" v-model="form.date" @input="$v.$touch" :class="getValidationClass('date')" />
-      </div>
-      <div class="md-flex md-flex-small-100">
-        <md-field :class="getValidationClass('mileage')">
-          <label for="mileage">Mileage <small>(km)</small></label>
-          <md-input name="mileage" id="mileage" type="number" v-model.number="form.mileage" @input="$v.$touch" autofocus />
-          <span class="md-helper-text" v-if="distance">Distance travelled: <formatted-number :value="distance" :fraction-digits="0" unit="km" />.</span>
-          <span class="md-helper-text" v-else>The total distance your car has traveled at this time.</span>
-          <span class="md-error" v-if="!$v.form.mileage.required">This field is required.</span>
-          <span class="md-error" v-else-if="!$v.form.mileage.numeric">Must be a number.</span>
-          <span class="md-error" v-else-if="!$v.form.mileage.minValue">Must be at least {{ minMileage }} km.</span>
-        </md-field>
-      </div>
-      <div class="md-flex md-flex-small-100">
-        <md-field :class="getValidationClass('fuelAmount')">
-          <label for="fuelAmount">Fuel <small>(liters)</small></label>
-          <md-input name="fuelAmount" id="fuelAmount" type="number" step="0.01" v-model.number="form.fuelAmount" @input="$v.$touch" />
-          <span class="md-helper-text" v-if="consumption">Consumption: <formatted-number :value="consumption * 100" unit="cl/km" />.</span>
-          <span class="md-error" v-if="!$v.form.fuelAmount.required">This field is required.</span>
-          <span class="md-error" v-else-if="!$v.form.fuelAmount.float">Must be a number.</span>
-          <span class="md-error" v-else-if="!$v.form.fuelAmount.minValue">Must be a positive number.</span>
-        </md-field>
-      </div>
-      <div class="md-flex md-flex-small-100">
-        <md-field :class="getValidationClass('totalPrice')">
-          <label for="totalPrice">Total price <small>(€)</small></label>
-          <md-input name="totalPrice" id="totalPrice" type="number" step="0.01" v-model.number="form.totalPrice" @input="$v.$touch" />
-          <span class="md-helper-text" v-if="price">Price: <formatted-number :value="price" unit="€/l" />.</span>
-          <span class="md-error" v-if="!$v.form.totalPrice.required">This field is required.</span>
-          <span class="md-error" v-else-if="!$v.form.totalPrice.float">Must be a number.</span>
-          <span class="md-error" v-else-if="!$v.form.totalPrice.minValue">Must be a positive number.</span>
-        </md-field>
-      </div>
-      <div class="md-flex md-flex-small-100">
-        <md-button class="md-raised md-primary" @click="submit" :disabled="$v.form.$invalid">Save new refuel</md-button>
-        <md-button :to="`/cars/${car.id}`">Cancel</md-button>
-      </div>
-    </form>
+
+    <v-container v-else fluid>
+      <v-layout row wrap>
+        <v-flex xs12 md6 offset-md3>
+          <v-card>
+            <v-card-title primary-title>
+              <h2 class="headline">
+                <v-icon>local_gas_station</v-icon>
+                New Refuel
+              </h2>
+            </v-card-title>
+            <v-card-text>
+              <v-layout>
+                <v-flex xs6>
+                  <v-dialog persistent lazy full-width width="290px">
+                    <v-text-field
+                      slot="activator"
+                      label="Date"
+                      v-model="form.date"
+                      prepend-icon="event"
+                      readonly
+                    />
+                    <v-date-picker v-model="form.date" autosave />
+                  </v-dialog>
+                </v-flex>
+                <v-spacer />
+                <v-flex xs5>
+                  <v-dialog persistent lazy full-width width="290px">
+                    <v-text-field
+                      slot="activator"
+                      label="Time"
+                      v-model="form.time"
+                      prepend-icon="access_time"
+                      readonly
+                    />
+                    <v-time-picker v-model="form.time" autosave format="24hr" />
+                  </v-dialog>
+                </v-flex>
+              </v-layout>
+
+              <v-text-field
+                label="Mileage"
+                type="number"
+                v-model.number="form.mileage"
+                prepend-icon="navigation"
+                suffix="km"
+                :error-messages="errorsFor('mileage')"
+                @input="$v.form.mileage.$touch()"
+                @blur="$v.form.mileage.$touch()"
+                :hint="distance ? `Distance: ${distance} km` : 'The total distance your car has traveled at this time.'"
+                persistent-hint
+              />
+
+              <v-text-field
+                label="Fuel amount"
+                type="fuelAmount"
+                v-model.number="form.fuelAmount"
+                prepend-icon="local_gas_station"
+                suffix="liters"
+                :error-messages="errorsFor('fuelAmount')"
+                @input="$v.form.fuelAmount.$touch()"
+                @blur="$v.form.fuelAmount.$touch()"
+                :hint="consumption ? `Consumption: ${(consumption * 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} cl/km` : null"
+                persistent-hint
+              />
+
+              <v-text-field
+                label="Total price"
+                type="totalPrice"
+                v-model.number="form.totalPrice"
+                prepend-icon="euro_symbol"
+                suffix="€"
+                :error-messages="errorsFor('totalPrice')"
+                @input="$v.form.totalPrice.$touch()"
+                @blur="$v.form.totalPrice.$touch()"
+                :hint="price ? `Fuel price: ${price.toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 })} €/l` : null"
+                persistent-hint
+              />
+
+              <div>
+                <v-btn raised color="primary" @click="submit" :disabled="$v.form.$invalid">Save new refuel</v-btn>
+                <v-btn flat :to="`/cars/${car.id}`">Cancel</v-btn>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
   </template>
   <spinner v-else label="loading…" />
 </div>
@@ -72,8 +114,11 @@ export default {
   components: { FormattedNumber, Spinner },
 
   data() {
+    const now = new Date().toISOString();
+    const date = now.substr(0, 10);
+    const time = now.substr(11, 5);
     return {
-      form: { date: new Date(), mileage: null, fuelAmount: null, totalPrice: null },
+      form: { date, time, mileage: null, fuelAmount: null, totalPrice: null },
       submitting: false,
     };
   },
@@ -82,6 +127,9 @@ export default {
     return {
       form: {
         date: {
+          required,
+        },
+        time: {
           required,
         },
         mileage: {
@@ -138,22 +186,27 @@ export default {
   methods: {
     ...mapActions(['createRefuel']),
     setPageTitle() {
-      this.$store.dispatch('setPageTitle', { title: this.car ? this.car.licensePlate : 'loading…' });
+      this.$store.dispatch('setPageTitle', { title: this.car ? this.car.label : 'loading…' });
     },
-    getValidationClass(fieldName) {
+    errorsFor(fieldName) {
       const field = this.$v.form[fieldName];
-
-      return (
-        field && {
-          'md-invalid': field.$invalid && field.$dirty,
-        }
-      );
+      if (!field || !field.$dirty || !field.$invalid) return [];
+      const errors = [];
+      if ('required' in field && !field.required) errors.push('This field is required.');
+      if ('numeric' in field && !field.numeric) errors.push('Must be a number.');
+      if ('float' in field && !field.float) errors.push('Must be a number.');
+      if ('minValue' in field && !field.minValue) errors.push(`Must be at least ${field.$params.minValue.min}.`);
+      return errors;
     },
     submit() {
       this.$v.$touch();
       if (!this.$v.form.$invalid) {
         this.submitting = true;
-        this.createRefuel({ carId: this.car.id, ...this.form })
+        const value = { carId: this.car.id, ...this.form };
+        value.date = new Date(`${value.date}T${value.time}:00`);
+        delete value.time;
+
+        this.createRefuel(value)
           .then(() => {
             this.submitting = false;
             this.$router.push(`/cars/${this.car.id}`);

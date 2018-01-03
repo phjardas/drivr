@@ -1,8 +1,15 @@
 <template>
 <div>
-  <md-tabs md-sync-route>
-    <md-tab md-label="Statistics" md-icon="dashboard" to="/admin/statistics" />
-  </md-tabs>
+  <v-tabs fixed icons centered>
+    <v-tabs-bar grow>
+      <v-tabs-slider color="accent"></v-tabs-slider>
+      <v-tabs-item to="/admin/statistics" router>
+        <v-icon>dashboard</v-icon>
+        Statistics
+      </v-tabs-item>
+    </v-tabs-bar>
+  </v-tabs>
+
   <router-view></router-view>
 </div>
 </template>

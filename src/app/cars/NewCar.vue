@@ -1,24 +1,42 @@
 <template>
 <div>
   <spinner v-if="submitting" label="saving new car…" />
-  <form v-else novalidate class="md-layout-row md-layout-wrap md-gutter" @submit.prevent="submit">
-    <div class="md-flex md-flex-small-100">
-      <md-field :class="getValidationClass('label')">
-        <label for="label">Label</label>
-        <md-input name="label" id="label" v-model="form.label" @input="$v.$touch" autofocus />
-        <span class="md-helper-text">For instance the license plate or make and model.</span>
-        <span class="md-error" v-if="!$v.form.label.required">This field is required.</span>
-      </md-field>
-    </div>
-    <div class="md-flex md-flex-small-100">
-      <md-button class="md-raised md-primary" @click="submit" :disabled="$v.form.$invalid">Save new car</md-button>
-      <md-button to="/">Cancel</md-button>
-    </div>
-  </form>
 
-  <md-snackbar v-if="error" md-position="center" :md-duration="Infinity" :md-active="true" md-persistent>
-    <span><md-icon style="color: red">error</md-icon> Error: {{ error.message }}</span>
-  </md-snackbar>
+  <v-container v-else fluid>
+    <v-layout row wrap>
+      <v-flex xs12 md6 offset-md3>
+        <v-card>
+          <v-card-title primary-title>
+            <h2 class="headline">
+              <v-icon>directions_car</v-icon>
+              New Car
+            </h2>
+          </v-card-title>
+          <v-card-text>
+            <form novalidate @submit.prevent="submit">
+              <v-text-field
+                label="Label"
+                v-model="form.label"
+                :error-messages="errorsFor('label')"
+                @input="$v.form.label.$touch()"
+                @blur="$v.form.label.$touch()"
+                hint="For instance the license plate or make and model."
+                persistent-hint
+              />
+              <div class="v-flex v-flex-small-100">
+                <v-btn raised color="primary" @click="submit" :disabled="$v.form.$invalid">Save new car</v-btn>
+                <v-btn flat to="/">Cancel</v-btn>
+              </div>
+            </form>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
+
+  <v-snackbar v-if="error" v-position="center" :v-duration="Infinity" :v-active="true" v-persistent>
+    <span><v-icon style="color: red">error</v-icon> Error: {{ error.message }}</span>
+  </v-snackbar>
 </div>
 </template>
 
@@ -26,6 +44,7 @@
 import { mapActions } from 'vuex';
 import { validationMixin } from 'vuelidate';
 import required from 'vuelidate/lib/validators/required';
+import minLength from 'vuelidate/lib/validators/minLength';
 
 import Spinner from '../Spinner';
 
@@ -47,6 +66,7 @@ export default {
       form: {
         label: {
           required,
+          minLength: minLength(3),
         },
       },
     };
@@ -57,14 +77,13 @@ export default {
     setPageTitle() {
       this.$store.dispatch('setPageTitle', { title: 'Register new car' });
     },
-    getValidationClass(fieldName) {
+    errorsFor(fieldName) {
       const field = this.$v.form[fieldName];
-
-      return (
-        field && {
-          'md-invalid': field.$invalid && field.$dirty,
-        }
-      );
+      if (!field || !field.$dirty || !field.$invalid) return [];
+      const errors = [];
+      if (!field.required) errors.push('This field is required.');
+      if (!field.minLength) errors.push(`Must have a minimum length of ${field.$params.minLength.min}`);
+      return errors;
     },
     submit() {
       this.$v.$touch();

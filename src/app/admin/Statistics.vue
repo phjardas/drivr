@@ -1,57 +1,88 @@
 <template>
 <div>
   <spinner v-if="!statistics" />
-  <md-list v-else class="md-double-line">
-    <md-list-item>
-      <md-icon>person</md-icon>
-      <div class="md-list-item-text">
-        <span>Number of users</span>
-        <formatted-number :value="statistics.userCount" :fraction-digits="0" />
-      </div>
-    </md-list-item>
-    <md-list-item>
-      <md-icon>directions_car</md-icon>
-      <div class="md-list-item-text">
-        <span>Number of cars</span>
-        <formatted-number :value="statistics.carCount" :fraction-digits="0" />
-      </div>
-    </md-list-item>
-    <md-list-item>
-      <md-icon>local_gas_station</md-icon>
-      <div class="md-list-item-text">
-        <span>Number of refuels</span>
-        <formatted-number :value="statistics.refuelCount" :fraction-digits="0" />
-      </div>
-    </md-list-item>
-    <md-list-item>
-      <md-icon>navigation</md-icon>
-      <div class="md-list-item-text">
-        <span>Total distance</span>
-        <formatted-number :value="statistics.totalDistance" :fraction-digits="0" unit="km" />
-      </div>
-    </md-list-item>
-    <md-list-item>
-      <md-icon>local_gas_station</md-icon>
-      <div class="md-list-item-text">
-        <span>Total fuel consumption</span>
-        <formatted-number :value="statistics.totalFuel" :fraction-digits="2" unit="liters" />
-      </div>
-    </md-list-item>
-    <md-list-item>
-      <md-icon>euro_symbol</md-icon>
-      <div class="md-list-item-text">
-        <span>Total spending</span>
-        <formatted-number :value="statistics.totalMoney" :fraction-digits="2" unit="€" />
-      </div>
-    </md-list-item>
-    <md-list-item>
-      <div class="md-list-item-text">
-        <md-button class="md-raised" @click="calculateStatistics" :disabled="recalculating">
+  <v-container v-else fluid grid-list-lg>
+    <v-layout row wrap>
+      <v-flex xs12 md6 offset-md3>
+        <v-card>
+          <v-card-title primary-title>
+            <span class="headline">
+              <v-icon>person</v-icon>
+              <formatted-number :value="statistics.userCount" :fraction-digits="0" />
+              users
+            </span>
+          </v-card-title>
+        </v-card>
+      </v-flex>
+
+      <v-flex xs12 md6 offset-md3>
+        <v-card>
+          <v-card-title primary-title>
+            <span class="headline">
+              <v-icon>directions_car</v-icon>
+              <formatted-number :value="statistics.carCount" :fraction-digits="0" />
+              cars
+            </span>
+          </v-card-title>
+        </v-card>
+      </v-flex>
+
+      <v-flex xs12 md6 offset-md3>
+        <v-card>
+          <v-card-title primary-title>
+            <span class="headline">
+              <v-icon>local_gas_station</v-icon>
+              <formatted-number :value="statistics.refuelCount" :fraction-digits="0" />
+              refuels
+            </span>
+          </v-card-title>
+        </v-card>
+      </v-flex>
+
+      <v-flex xs12 md6 offset-md3>
+        <v-card>
+          <v-card-title primary-title>
+            <span class="headline">
+              <v-icon>navigation</v-icon>
+              <formatted-number :value="statistics.totalDistance" :fraction-digits="0" unit="km" />
+            </span>
+          </v-card-title>
+          <v-card-text>Total distance</v-card-text>
+        </v-card>
+      </v-flex>
+
+      <v-flex xs12 md6 offset-md3>
+        <v-card>
+          <v-card-title primary-title>
+            <span class="headline">
+              <v-icon>local_gas_station</v-icon>
+              <formatted-number :value="statistics.totalFuel" :fraction-digits="2" unit="liters" />
+            </span>
+          </v-card-title>
+          <v-card-text>Total fuel consumption</v-card-text>
+        </v-card>
+      </v-flex>
+
+      <v-flex xs12 md6 offset-md3>
+        <v-card>
+          <v-card-title primary-title>
+            <span class="headline">
+              <v-icon>euro_symbol</v-icon>
+              <formatted-number :value="statistics.totalMoney" :fraction-digits="2" unit="€" />
+            </span>
+          </v-card-title>
+          <v-card-text>Total spending</v-card-text>
+        </v-card>
+      </v-flex>
+
+      <v-flex xs12 md6 offset-md3>
+        <v-btn flat @click="calculateStatistics" :disabled="recalculating">
+          <v-progress-circular indeterminate v-if="recalculating" class="mr-1" />
           Recalculate statistics
-        </md-button>
-      </div>
-    </md-list-item>
-  </md-list>
+        </v-btn>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </div>
 </template>
 
@@ -111,6 +142,7 @@ export default {
   },
 
   created() {
+    this.$store.dispatch('setPageTitle', { title: 'Statistics' });
     this.loadStatistics();
   },
 
