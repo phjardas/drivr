@@ -10,25 +10,33 @@
         <v-flex xs12 md6 offset-md3 v-for="(refuel, index) of items" :key="refuel.id">
           <v-card>
             <v-card-title primary-title>
-              <div>
-                <h3 class="headline">{{ refuel.date | moment('ll') }}</h3>
-                <div>
-                  <formatted-number :value="refuel.fuelAmount" :fraction-digits="2" unit="liters" />
-                  <small>for</small>
-                  <formatted-number :value="refuel.totalPrice" :fraction-digits="2" unit="€" />
-                </div>
-                <div>Mileage: <formatted-number :value="refuel.mileage" :fraction-digits="0" unit="km" /></div>
-                <div v-if="refuel.consumption">
-                  Consumption: <formatted-number :value="refuel.consumption * 100" :fraction-digits="2" unit="cl/km" />
-                </div>
-              </div>
+              <span class="headline">{{ refuel.date | moment('ll') }}</span>
+              <v-spacer />
+              <v-menu bottom left v-if="index === 0">
+                <v-btn icon slot="activator">
+                  <v-icon>more_vert</v-icon>
+                </v-btn>
+                <v-list>
+                  <v-list-tile avatar @click="doDeleteRefuel(refuel.id)">
+                    <v-list-tile-avatar><v-icon>delete</v-icon></v-list-tile-avatar>
+                    <v-list-tile-content>
+                      <v-list-tile-title>Delete</v-list-tile-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-list>
+              </v-menu>
             </v-card-title>
-            <v-card-actions v-if="index === 0">
-              <v-btn flat color="red" @click="doDeleteRefuel(refuel.id)">
-                <v-icon>delete</v-icon>
-                delete
-              </v-btn>
-            </v-card-actions>
+            <v-card-text>
+              <div>
+                <formatted-number :value="refuel.fuelAmount" :fraction-digits="2" unit="liters" />
+                <small>for</small>
+                <formatted-number :value="refuel.totalPrice" :fraction-digits="2" unit="€" />
+              </div>
+              <div>Mileage: <formatted-number :value="refuel.mileage" :fraction-digits="0" unit="km" /></div>
+              <div v-if="refuel.consumption">
+                Consumption: <formatted-number :value="refuel.consumption * 100" :fraction-digits="2" unit="cl/km" />
+              </div>
+            </v-card-text>
           </v-card>
         </v-flex>
       </v-layout>
