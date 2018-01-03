@@ -53,6 +53,7 @@
                 @blur="$v.form.mileage.$touch()"
                 :hint="distance ? `Distance: ${distance} km` : 'The total distance your car has traveled at this time.'"
                 persistent-hint
+                autofocus
               />
 
               <v-text-field
