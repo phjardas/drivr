@@ -1,6 +1,6 @@
 <template>
 <div class="spinner">
-  <md-progress-spinner md-mode="indeterminate"></md-progress-spinner>
+  <v-progress-circular indeterminate />
   <span v-if="label" class="spinner-label">{{ label }}</span>
 </div>
 </template>

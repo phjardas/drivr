@@ -1,6 +1,5 @@
 <script>
 import { Line } from 'vue-chartjs';
-import { accentColor } from './colors';
 
 export default {
   extends: Line,
@@ -10,6 +9,8 @@ export default {
   },
 
   data() {
+    const { accentLight: backgroundColor } = this.$vuetify.theme;
+
     return {
       chartOptions: {
         legend: { display: false },
@@ -39,7 +40,8 @@ export default {
           {
             label: 'Fuel price',
             data: this.refuels.map(r => ({ t: r.date, y: r.pricePerLiter })),
-            backgroundColor: accentColor,
+            backgroundColor,
+            pointRadius: 0,
           },
         ],
       },

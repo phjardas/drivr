@@ -2,33 +2,59 @@
 <div>
   <spinner v-if="refuelData.loading" />
 
-  <div v-else-if="refuels.length > 1" class="md-layout-row md-layout-wrap md-gutter">
-    <div class="md-flex md-flex-small-100">
-      <h3 class="md-subheading">Mileage over time</h3>
-      <mileage-chart :refuels="refuels" :height="200" />
-    </div>
-    <div class="md-flex md-flex-small-100">
-      <h3 class="md-subheading">Consumption over time</h3>
-      <consumption-chart :refuels="refuels" :height="200" />
-    </div>
-    <div class="md-flex md-flex-small-100">
-      <h3 class="md-subheading">Fuel price over time</h3>
-      <fuel-price-chart :refuels="refuels" :height="200" />
-    </div>
-    <div class="md-flex md-flex-small-100">
-      <h3 class="md-subheading">Range per refuel</h3>
-      <range-chart :refuels="refuels" :height="200" />
-    </div>
-  </div>
+  <v-container v-else-if="refuels.length > 1" fluid grid-list-lg>
+    <v-layout row wrap>
+      <v-flex xs12>
+        <v-card>
+          <v-card-title primary-title>
+            <h3 class="headline mb-3">Mileage over time</h3>
+          </v-card-title>
+          <v-card-text>
+            <mileage-chart :refuels="refuels" :height="200" />
+          </v-card-text>
+        </v-card>
+      </v-flex>
+      <v-flex xs12>
+        <v-card>
+          <v-card-title primary-title>
+            <h3 class="headline mb-3">Consumption over time</h3>
+          </v-card-title>
+          <v-card-text>
+            <consumption-chart :refuels="refuels" :height="200" />
+          </v-card-text>
+        </v-card>
+      </v-flex>
+      <v-flex xs12>
+        <v-card>
+          <v-card-title primary-title>
+            <h3 class="headline mb-3">Fuel price over time</h3>
+          </v-card-title>
+          <v-card-text>
+            <fuel-price-chart :refuels="refuels" :height="200" />
+          </v-card-text>
+        </v-card>
+      </v-flex>
+      <v-flex xs12>
+        <v-card>
+          <v-card-title primary-title>
+            <h3 class="headline mb-3">Range per refuel</h3>
+          </v-card-title>
+          <v-card-text>
+            <range-chart :refuels="refuels" :height="200" />
+          </v-card-text>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
 
-  <md-empty-state
+  <empty-state
     v-else
-    md-rounded
-    md-icon="show_chart"
-    md-label="No charts yet"
-    md-description="Charts will become available once you've recorded two refuels">
-    <md-button class="md-primary md-raised" :to="`/cars/${this.$route.params.id}/refuels/_new`">Record refuel</md-button>
-  </md-empty-state>
+    rounded
+    icon="local_gas_station"
+    label="No refuels yet"
+    class="mt-3">
+    <v-btn raised color="primary" :to="`/cars/${this.$route.params.id}/refuels/_new`">Record your first refuel</v-btn>
+  </empty-state>
 </div>
 </template>
 
@@ -38,10 +64,11 @@ import MileageChart from './charts/MileageChart';
 import ConsumptionChart from './charts/ConsumptionChart';
 import FuelPriceChart from './charts/FuelPriceChart';
 import RangeChart from './charts/RangeChart';
+import EmptyState from '../EmptyState';
 import Spinner from '../Spinner';
 
 export default {
-  components: { MileageChart, ConsumptionChart, FuelPriceChart, RangeChart, Spinner },
+  components: { MileageChart, ConsumptionChart, FuelPriceChart, RangeChart, EmptyState, Spinner },
 
   computed: {
     ...mapGetters(['getCarRefuels']),

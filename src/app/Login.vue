@@ -1,24 +1,29 @@
 <template>
 <div id="login">
-  <md-empty-state
-    md-icon="directions_car"
-    md-label="drivr"
-    md-description="Please sign in"
-  >
-    <md-button v-for="provider of providers"
-            :key="provider.id"
-            @click="signInWithProvider({ providerId: provider.id })"
-            class="md-raised md-primary">
-      {{ provider.label }}
-    </md-button>
-  </md-empty-state>
+  <empty-state
+    icon="directions_car"
+    label="drivr">
+    <spinner v-if="signin && signin.pending" label="Signing you in" />
+    <template v-else>
+      <p>Please sign in</p>
+      <v-btn v-for="provider of providers" :key="provider.id" color="primary" @click="signInWithProvider({ providerId: provider.id })">
+        {{ provider.label }}
+      </v-btn>
+    </template>
+  </empty-state>
 </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import EmptyState from './EmptyState';
+import Spinner from './Spinner';
 
 export default {
+  components: { EmptyState, Spinner },
+  computed: mapState({
+    signin: state => state.auth.signin,
+  }),
   data: () => ({
     providers: [{ id: 'google', label: 'Google' }, { id: 'github', label: 'GitHub' }],
   }),

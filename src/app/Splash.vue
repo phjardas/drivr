@@ -1,11 +1,6 @@
 <template>
 <div id="splash">
-  <md-empty-state
-    md-icon="directions_car"
-    md-label="drivr"
-  >
-    <spinner />
-  </md-empty-state>
+  <spinner />
 </div>
 </template>
 

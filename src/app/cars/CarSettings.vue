@@ -1,16 +1,33 @@
 <template>
-<md-list>
-  <md-list-item @click.prevent="refreshStatistics" :disabled="refreshingStatistics">
-    <md-icon>refresh</md-icon>
-    <span class="md-list-item-text">
-      {{ refreshingStatistics ? 'Refreshing statistics' : 'Refresh statistics' }}
-    </span>
-  </md-list-item>
-  <md-list-item @click.prevent="createInvite">
-    <md-icon>share</md-icon>
-    <span class="md-list-item-text">Create collaboration invite</span>
-  </md-list-item>
-</md-list>
+<v-container fluid grid-list-md>
+  <v-layout row wrap>
+    <v-flex xs12 md6 offset-md3>
+      <v-card>
+        <v-card-text primary-title>
+          <v-list>
+            <v-list-tile @click.prevent="refreshStatistics" :disabled="refreshingStatistics">
+              <v-list-tile-action>
+                <v-progress-circular indeterminate v-if="refreshingStatistics" />
+                <v-icon v-else>refresh</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>Refresh statistics</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile @click.prevent="createInvite">
+              <v-list-tile-action>
+                <v-icon>share</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>Create collaboration invite</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list>
+        </v-card-text>
+      </v-card>
+    </v-flex>
+  </v-layout>
+</v-container>
 </template>
 
 <script>

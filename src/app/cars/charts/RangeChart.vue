@@ -1,6 +1,5 @@
 <script>
 import { Bar } from 'vue-chartjs';
-import { accentColor } from './colors';
 
 function createRangeHistogram(refuels) {
   const bucketSize = 10;
@@ -38,6 +37,7 @@ export default {
   },
 
   data() {
+    const { primaryDark: backgroundColor } = this.$vuetify.theme;
     const histogram = createRangeHistogram(this.refuels);
 
     return {
@@ -60,7 +60,7 @@ export default {
           {
             label: 'Range Histogram',
             data: histogram.data,
-            backgroundColor: accentColor,
+            backgroundColor,
           },
         ],
       },
