@@ -10,7 +10,10 @@
         <v-flex xs12 md6 offset-md3 v-for="(refuel, index) of items" :key="refuel.id">
           <v-card>
             <v-card-title primary-title>
-              <span class="headline">{{ refuel.date | moment('ll') }}</span>
+              <span class="headline">
+                {{ refuel.date | moment('ll') }}
+                <small>at {{ refuel.date | moment('LT') }}</small>
+              </span>
               <v-spacer />
               <v-menu bottom left v-if="index === 0">
                 <v-btn icon slot="activator">
@@ -27,15 +30,49 @@
               </v-menu>
             </v-card-title>
             <v-card-text>
-              <div>
-                <formatted-number :value="refuel.fuelAmount" :fraction-digits="2" unit="liters" />
-                <small>for</small>
-                <formatted-number :value="refuel.totalPrice" :fraction-digits="2" unit="€" />
-              </div>
-              <div>Mileage: <formatted-number :value="refuel.mileage" :fraction-digits="0" unit="km" /></div>
-              <div v-if="refuel.consumption">
-                Consumption: <formatted-number :value="refuel.consumption * 100" :fraction-digits="2" unit="cl/km" />
-              </div>
+              <v-container fluid grid-list-md>
+                <v-layout row wrap>
+                  <v-flex xs4 md3>
+                    <div>Mileage</div>
+                    <div><formatted-number :value="refuel.mileage" :fraction-digits="0" unit="km" /></div>
+                  </v-flex>
+                  <v-flex xs4 md3>
+                    <div>Fuel amount</div>
+                    <div><formatted-number :value="refuel.fuelAmount" :fraction-digits="2" unit="liters" /></div>
+                  </v-flex>
+                  <v-flex xs4 md3>
+                    <div>Total price</div>
+                    <div><formatted-number :value="refuel.totalPrice" :fraction-digits="2" unit="€" /></div>
+                  </v-flex>
+                  <v-flex xs4 md3>
+                    <div>Fuel price</div>
+                    <div><formatted-number :value="refuel.pricePerLiter" :fraction-digits="3" unit="€/l" /></div>
+                  </v-flex>
+                  <v-flex xs4 md3 v-if="refuel.distance">
+                    <div>Distance</div>
+                    <div><formatted-number :value="refuel.distance" :fraction-digits="0" unit="km" /></div>
+                  </v-flex>
+                  <v-flex xs4 md3 v-if="refuel.consumption">
+                    <div>Consumption</div>
+                    <div><formatted-number :value="refuel.consumption * 100" :fraction-digits="2" unit="cl/km" /></div>
+                  </v-flex>
+                  <v-flex xs12 v-else-if="refuel.incomplete">
+                    <small>
+                      <v-icon small color="error">warning</v-icon>
+                      Not completely filled up: statistics are not available for this refuel.
+                    </small>
+                  </v-flex>
+                  <v-flex xs12 v-else-if="refuel.previousIncomplete">
+                    <small>
+                      <v-icon small color="error">warning</v-icon>
+                      The previous refuel was not completely filled up: statistics are not available.
+                    </small>
+                  </v-flex>
+                  <v-flex xs12 v-else>
+                    <small>This is the first refuel and contains no statistics.</small>
+                  </v-flex>
+                </v-layout>
+              </v-container>
             </v-card-text>
           </v-card>
         </v-flex>

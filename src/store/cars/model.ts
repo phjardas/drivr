@@ -6,6 +6,8 @@ export interface RefuelData {
   fuelAmount: number;
   totalPrice: number;
   pricePerLiter: number;
+  incomplete?: boolean;
+  previousIncomplete?: boolean;
   distance?: number;
   consumption?: number;
 }

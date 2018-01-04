@@ -65,7 +65,9 @@
                 :error-messages="errorsFor('fuelAmount')"
                 @input="$v.form.fuelAmount.$touch()"
                 @blur="$v.form.fuelAmount.$touch()"
-                :hint="consumption ? `Consumption: ${(consumption * 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} cl/km` : null"
+                :hint="consumption ?
+                  `Consumption: ${(consumption * 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} cl/km`
+                  : (previousIncomplete ? 'The previous refuel was not completely filled: can not calculate consumption' : null)"
                 persistent-hint
               />
 
@@ -79,6 +81,14 @@
                 @input="$v.form.totalPrice.$touch()"
                 @blur="$v.form.totalPrice.$touch()"
                 :hint="price ? `Fuel price: ${price.toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 })} €/l` : null"
+                persistent-hint
+              />
+
+              <v-switch
+                label="Completely filled up"
+                v-model="form.filledUp"
+                color="primary"
+                :hint="`${form.filledUp ? '' : 'If the tank is not completely filled up, we cannot calculate the consumption.'}`"
                 persistent-hint
               />
 
@@ -119,7 +129,7 @@ export default {
     const date = now.substr(0, 10);
     const time = now.substr(11, 5);
     return {
-      form: { date, time, mileage: null, fuelAmount: null, totalPrice: null },
+      form: { date, time, mileage: null, fuelAmount: null, totalPrice: null, filledUp: true, },
       submitting: false,
     };
   },
@@ -161,6 +171,9 @@ export default {
       minMileage() {
         return this.car && this.car.lastRefuel && this.car.lastRefuel.mileage;
       },
+      previousIncomplete() {
+        return this.car && this.car.lastRefuel && this.car.lastRefuel.incomplete;
+      },
       distance() {
         return (
           this.minMileage &&
@@ -170,7 +183,7 @@ export default {
         );
       },
       consumption() {
-        return this.distance && this.form.fuelAmount && this.form.fuelAmount / this.distance;
+        return this.distance && this.form.fuelAmount && !this.previousIncomplete && this.form.fuelAmount / this.distance;
       },
       price() {
         return this.form.totalPrice && this.form.fuelAmount && this.form.totalPrice / this.form.fuelAmount;
@@ -206,6 +219,8 @@ export default {
         const value = { carId: this.car.id, ...this.form };
         value.date = new Date(`${value.date}T${value.time}:00`);
         delete value.time;
+        value.incomplete = !value.filledUp;
+        delete value.filledUp;
 
         this.createRefuel(value)
           .then(() => {

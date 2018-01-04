@@ -2,6 +2,17 @@
 <div>
   <v-container v-if="car.stats" fluid grid-list-lg>
     <v-layout row wrap>
+      <v-flex v-if="car.lastRefuel" xs6 sm4 md3>
+        <v-card>
+          <v-card-title primary-title>
+            <div>
+              <h3 class="headline mb-0"><formatted-number :value="car.lastRefuel.mileage" :fraction-digits="0" unit="km" /></h3>
+              <div>Current mileage</div>
+            </div>
+          </v-card-title>
+        </v-card>
+      </v-flex>
+
       <v-flex xs6 sm4 md3>
         <v-card>
           <v-card-title primary-title>
@@ -84,11 +95,11 @@
   <empty-state
     v-else
     rounded
-    icon="dashboard"
+    icon="local_gas_station"
     label="No statistics yet"
     description="Statistics will become available once you've recorded two refuels"
     class="mt-3">
-      <v-btn raised color="primary" :to="`/cars/${this.$route.params.id}/refuels/_new`">Record your first refuel</v-btn>
+      <v-btn raised color="primary" :to="`/cars/${this.$route.params.id}/refuels/_new`">Record refuel</v-btn>
   </empty-state>
 </div>
 </template>

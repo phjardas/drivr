@@ -31,7 +31,7 @@ export const actions: ActionTree<CarsState, any> = {
 
   async createRefuel({ state, rootGetters }, payload: RefuelData & { carId: string }): Promise<Refuel> {
     const { userId } = rootGetters;
-    const { carId, date, mileage, fuelAmount, totalPrice } = payload;
+    const { carId, date, mileage, fuelAmount, totalPrice, incomplete } = payload;
     const refuel = {
       ...payload,
       userId,
@@ -41,10 +41,16 @@ export const actions: ActionTree<CarsState, any> = {
 
     const latestRefuel = await loadLatestRefuel(carId);
     if (latestRefuel) {
+      if (latestRefuel.incomplete) {
+        refuel.previousIncomplete = true;
+      }
+
       const lastMileage = latestRefuel.mileage;
       const distance = mileage - lastMileage;
       refuel.distance = distance;
-      refuel.consumption = fuelAmount / distance;
+      if (!incomplete && !refuel.previousIncomplete) {
+        refuel.consumption = fuelAmount / distance;
+      }
     }
 
     const ref = await firestore.collection('refuels').add(refuel);

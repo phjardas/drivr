@@ -51,9 +51,10 @@
     v-else
     rounded
     icon="local_gas_station"
-    label="No refuels yet"
+    label="No charts yet"
+    description="Charts will become available once you've recorded two refuels"
     class="mt-3">
-    <v-btn raised color="primary" :to="`/cars/${this.$route.params.id}/refuels/_new`">Record your first refuel</v-btn>
+      <v-btn raised color="primary" :to="`/cars/${this.$route.params.id}/refuels/_new`">Record refuel</v-btn>
   </empty-state>
 </div>
 </template>
