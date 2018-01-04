@@ -81,6 +81,7 @@ async function createRefuels({ carId, userId, count }) {
     }
 
     const ref = await refuelsRef.add(refuelData);
+    await carsRef.doc(carId).update({ lastRefuel: { ...refuelData, id: ref.id }});
     console.log('Created refuel #%d: %s', i + 1, ref.id);
 
     date = date.add(1, 'days');
