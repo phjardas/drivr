@@ -69,4 +69,9 @@ export const actions: ActionTree<CarsState, any> = {
     await firestore.doc(`cars/${payload.carId}`).update({ stats });
     return stats;
   },
+
+  async deleteCar({ dispatch }, payload: { carId: string }): Promise<any> {
+    await dispatch('deleteRefuels', { carId: payload.carId });
+    await firestore.doc(`cars/${payload.carId}`).delete();
+  },
 };

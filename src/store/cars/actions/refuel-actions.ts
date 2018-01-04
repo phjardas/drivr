@@ -69,4 +69,13 @@ export const actions: ActionTree<CarsState, any> = {
 
     await dispatch('refreshCarStatistics', { carId });
   },
+
+  async deleteRefuels(_, payload: { carId: string }): Promise<any> {
+    const refuelsColl = firestore.collection('refuels');
+    const snapshot = await refuelsColl.where('carId', '==', payload.carId).get();
+    if (!snapshot.empty) {
+      console.log('Deleting %d refuels of car %s', snapshot.docs.length, payload.carId);
+      await Promise.all(snapshot.docs.map(doc => refuelsColl.doc(doc.id).delete()));
+    }
+  },
 };
