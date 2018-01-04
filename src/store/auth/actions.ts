@@ -37,17 +37,20 @@ export const actions: ActionTree<AuthState, any> = {
 
       const userRef = firestore.doc(`/users/${user.id}`);
       const dbUser = await userRef.get();
+      const dbUserData = dbUser.exists ? dbUser.data() : {};
 
-      if (dbUser.exists) {
-        userRef.update({ lastLogin: firestoreModule.FieldValue.serverTimestamp() });
-        user.roles = dbUser.data().roles || {};
-      } else {
-        userRef.set({
-          ...user,
-          createdAt: firestoreModule.FieldValue.serverTimestamp(),
-          lastLogin: firestoreModule.FieldValue.serverTimestamp(),
-        });
+      if (!dbUser.exists) {
+        await userRef.set({ createdAt: firestoreModule.FieldValue.serverTimestamp() });
       }
+
+      const update: any = { lastLogin: firestoreModule.FieldValue.serverTimestamp() };
+      if (!dbUserData.displayName) update.displayName = user.displayName;
+      if (!dbUserData.email) update.email = user.email;
+      if (!dbUserData.label) update.label = user.label;
+      if (!dbUserData.photoURL) update.photoURL = user.photoURL;
+      await userRef.update(update);
+
+      user.roles = dbUserData.roles || {};
 
       commit(AUTHENTICATED, { user });
     });
