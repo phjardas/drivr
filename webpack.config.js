@@ -1,15 +1,35 @@
 const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const GitRevisionPlugin = require('git-revision-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
+const dist = path.resolve(__dirname, './dist');
+
 const config = {
-  entry: './src/main.ts',
-  output: {
-    path: path.resolve(__dirname, './dist'),
-    filename: 'app.js',
+  entry: {
+    app: './src/main.ts',
+    vendor: [
+      'chart.js',
+      'firebase',
+      '@firebase/firestore',
+      '@firebase/webchannel-wrapper',
+      'vue',
+      'vue-chartjs',
+      'vue-moment',
+      'vue-router',
+      'vuelidate',
+      'vuetify',
+      'vuex',
+    ],
   },
+  output: {
+    path: dist,
+    filename: '[name].[chunkhash].js',
+  },
+  recordsPath: path.join(__dirname, 'records.json'),
   module: {
     rules: [
       {
@@ -69,9 +89,22 @@ const config = {
   },
   devtool: '#eval-source-map',
   plugins: [
+    new CleanWebpackPlugin([dist]),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     }),
+    new webpack.BannerPlugin({
+      banner: new GitRevisionPlugin().version(),
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: ({ resource }) => /node_modules/.test(resource),
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'manifest',
+      minChunks: Infinity,
+    }),
+    new webpack.NamedModulesPlugin(),
     new HtmlWebpackPlugin({
       inject: false,
       template: require('html-webpack-template'),
@@ -111,10 +144,7 @@ if (process.env.NODE_ENV === 'production') {
     }),
   ];
 } else {
-  config.plugins = [
-    ...config.plugins,
-    new webpack.NamedModulesPlugin(),
-  ];
+  config.output.filename = '[name].js';
   config.devServer = {
     historyApiFallback: true,
     noInfo: true,
