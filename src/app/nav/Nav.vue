@@ -6,12 +6,11 @@
     <nav-item text="Add new car" icon="add" to="/cars/_new" />
   </nav-group>
   <nav-item v-if="hasAnyRole('admin')" text="Administration" icon="settings" to="/admin" />
-  <nav-item text="Sign out" icon="exit_to_app" @click="signOut" />
 </v-list>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
 import NavGroup from './NavGroup';
 import NavItem from './NavItem';
 
@@ -25,10 +24,6 @@ export default {
         .map(id => this.cars.items[id])
         .sort((a, b) => a.label.localeCompare(b.label));
     },
-  },
-
-  methods: {
-    ...mapActions(['signOut']),
   },
 };
 </script>

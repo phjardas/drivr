@@ -3,12 +3,7 @@
   <v-navigation-drawer app fixed clipped v-model="drawerVisible">
     <Nav />
   </v-navigation-drawer>
-  <v-toolbar app dark clipped-left fixed color="primary">
-    <v-toolbar-title>
-      <v-toolbar-side-icon @click.stop="toggleDrawer" />
-      <app-title />
-    </v-toolbar-title>
-  </v-toolbar>
+  <app-bar @toggleDrawer="toggleDrawer" />
   <v-content>
     <router-view></router-view>
   </v-content>
@@ -19,10 +14,10 @@
 import { mapActions } from 'vuex';
 
 import Nav from './nav/Nav';
-import AppTitle from './AppTitle';
+import AppBar from './AppBar';
 
 export default {
-  components: { Nav, AppTitle },
+  components: { Nav, AppBar },
 
   data: () => ({
     drawerVisible: null,

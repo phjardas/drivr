@@ -32,6 +32,7 @@ export const actions: ActionTree<AuthState, any> = {
       };
       if (fbUser.displayName) user.displayName = fbUser.displayName;
       if (fbUser.email) user.email = fbUser.email;
+      if (fbUser.photoURL) user.photoURL = fbUser.photoURL;
       user.label = user.displayName || user.email;
 
       const userRef = firestore.doc(`/users/${user.id}`);

@@ -2,6 +2,7 @@ export interface UserData {
   id?: string;
   email?: string;
   displayName?: string;
+  photoURL?: string;
   label?: string;
   roles: { [role: string]: boolean };
 }
