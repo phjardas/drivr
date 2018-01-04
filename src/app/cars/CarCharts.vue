@@ -4,8 +4,8 @@
 
   <v-container v-else-if="refuels.length > 1" fluid grid-list-lg>
     <v-layout row wrap>
-      <v-flex xs12>
-        <v-card>
+      <v-flex xs12 md6>
+        <v-card tile>
           <v-card-title primary-title>
             <h3 class="headline mb-3">Mileage over time</h3>
           </v-card-title>
@@ -14,8 +14,8 @@
           </v-card-text>
         </v-card>
       </v-flex>
-      <v-flex xs12>
-        <v-card>
+      <v-flex xs12 md6>
+        <v-card tile>
           <v-card-title primary-title>
             <h3 class="headline mb-3">Consumption over time</h3>
           </v-card-title>
@@ -24,8 +24,8 @@
           </v-card-text>
         </v-card>
       </v-flex>
-      <v-flex xs12>
-        <v-card>
+      <v-flex xs12 md6>
+        <v-card tile>
           <v-card-title primary-title>
             <h3 class="headline mb-3">Fuel price over time</h3>
           </v-card-title>
@@ -34,8 +34,8 @@
           </v-card-text>
         </v-card>
       </v-flex>
-      <v-flex xs12>
-        <v-card>
+      <v-flex xs12 md6>
+        <v-card tile>
           <v-card-title primary-title>
             <h3 class="headline mb-3">Range per refuel</h3>
           </v-card-title>
@@ -62,9 +62,9 @@
 <script>
 import { mapGetters } from 'vuex';
 import MileageChart from './charts/MileageChart';
-import ConsumptionChart from './charts/ConsumptionChart';
+import ConsumptionChart from './charts/ConsumptionChartWrapper';
 import FuelPriceChart from './charts/FuelPriceChart';
-import RangeChart from './charts/RangeChart';
+import RangeChart from './charts/RangeChartWrapper';
 import EmptyState from '../EmptyState';
 import Spinner from '../Spinner';
 
