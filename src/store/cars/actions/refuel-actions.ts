@@ -29,7 +29,7 @@ export const actions: ActionTree<CarsState, any> = {
     });
   },
 
-  async createRefuel({ state, dispatch, rootGetters }, payload: RefuelData & { carId: string }): Promise<Refuel> {
+  async createRefuel({ state, rootGetters }, payload: RefuelData & { carId: string }): Promise<Refuel> {
     const { userId } = rootGetters;
     const { carId, date, mileage, fuelAmount, totalPrice } = payload;
     const refuel = {
@@ -52,12 +52,10 @@ export const actions: ActionTree<CarsState, any> = {
     const refuelDoc = { ...doc.data(), id: doc.id } as Refuel;
 
     await firestore.doc(`cars/${carId}`).update({ lastRefuel: refuelDoc });
-    await dispatch('refreshCarStatistics', { carId });
-
     return refuelDoc;
   },
 
-  async deleteRefuel({ dispatch }, payload: { carId: string; refuelId: string }): Promise<any> {
+  async deleteRefuel(_, payload: { carId: string; refuelId: string }): Promise<any> {
     const { carId, refuelId } = payload;
     const latest = await loadLatestRefuel(carId);
     if (latest && latest.id !== refuelId) throw new Error(`You can only delete the latest refuel.`);
@@ -66,8 +64,6 @@ export const actions: ActionTree<CarsState, any> = {
 
     const newLatest = await loadLatestRefuel(carId);
     await firestore.doc(`cars/${carId}`).update({ lastRefuel: newLatest });
-
-    await dispatch('refreshCarStatistics', { carId });
   },
 
   async deleteRefuels(_, payload: { carId: string }): Promise<any> {
