@@ -1,9 +1,14 @@
+import Vue from 'vue';
 import { ActionTree, ActionContext } from 'vuex';
 import { firestore } from '../../../firebase/firestore';
 
 import { CarsState } from '../state';
 import { Car, CarData } from '../model';
 import { syncFirestoreCollection, Unsubscribe } from '../../firestore';
+
+function ga() {
+  return (Vue as any).$ga;
+}
 
 export const actions: ActionTree<CarsState, any> = {
   async loadCars(context: ActionContext<CarsState, any>): Promise<Unsubscribe> {
@@ -21,11 +26,13 @@ export const actions: ActionTree<CarsState, any> = {
     const userId: string = rootGetters.userId;
     const ref = await firestore.collection('cars').add({ ...car, ownerId: userId, users: { [userId]: true } });
     const doc = await ref.get();
+    ga().event('Cars', 'create');
     return { ...doc.data(), id: doc.id } as Car;
   },
 
   async deleteCar({ dispatch }, payload: { carId: string }): Promise<any> {
     await dispatch('deleteRefuels', { carId: payload.carId });
     await firestore.doc(`cars/${payload.carId}`).delete();
+    ga().event('Cars', 'delete');
   },
 };

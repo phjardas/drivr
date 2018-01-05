@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import { ActionTree, ActionContext } from 'vuex';
 import { firestore, firestoreModule } from '../../../firebase/firestore';
 import { FirebaseFirestore, DocumentReference, CollectionReference } from '@firebase/firestore-types';
@@ -5,6 +6,10 @@ import { FirebaseFirestore, DocumentReference, CollectionReference } from '@fire
 import { CarsState } from '../state';
 import { Refuel, RefuelData } from '../model';
 import { syncFirestoreCollection, Unsubscribe } from '../../firestore';
+
+function ga() {
+  return (Vue as any).$ga;
+}
 
 async function loadLatestRefuel(carId: string): Promise<Refuel | null> {
   const snapshot = await firestore
@@ -58,6 +63,7 @@ export const actions: ActionTree<CarsState, any> = {
     const refuelDoc = { ...doc.data(), id: doc.id } as Refuel;
 
     await firestore.doc(`cars/${carId}`).update({ lastRefuel: refuelDoc });
+    ga().event('Refuels', 'create');
     return refuelDoc;
   },
 
@@ -70,6 +76,7 @@ export const actions: ActionTree<CarsState, any> = {
 
     const newLatest = await loadLatestRefuel(carId);
     await firestore.doc(`cars/${carId}`).update({ lastRefuel: newLatest });
+    ga().event('Refuels', 'delete');
   },
 
   async deleteRefuels(_, payload: { carId: string }): Promise<any> {

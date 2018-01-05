@@ -46,7 +46,7 @@
             <v-card-actions>
               <v-spacer />
               <v-btn flat @click="deleteDialogVisible = false">Cancel</v-btn>
-              <v-btn flat primary color="error" @click="doDeleteCar">Delete</v-btn>
+              <v-btn flat color="error" @click="doDeleteCar">Delete</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>

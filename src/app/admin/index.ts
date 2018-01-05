@@ -7,7 +7,10 @@ export const routes: RouteConfig[] = [
   {
     path: '/admin',
     component: Admin,
-    children: [{ path: '', redirect: 'statistics' }, { path: 'statistics', component: Statistics }],
+    children: [
+      { path: '', redirect: 'statistics' },
+      { path: 'statistics', name: 'admin-statistics', component: Statistics },
+    ],
     meta: { anyRole: ['admin'] },
   },
 ];

@@ -8,15 +8,13 @@
 
 <script>
 import { mapState } from 'vuex';
-import router from './router';
 
 import Login from './Login';
-import Main from './Main';
 import Splash from './Splash';
+const Main = () => import(/* webpackChunkName: "main" */ './Main');
 
 export default {
   name: 'app',
-  router,
   components: { Login, Main, Splash },
 
   computed: mapState({
