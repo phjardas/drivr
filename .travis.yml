@@ -1,0 +1,8 @@
+language: node_js
+node_js:
+  - '12'
+script:
+  - yarn --immutable --immutable-cache --inline-builds
+  - yarn build
+after_success:
+  - ./travis-deploy.sh
