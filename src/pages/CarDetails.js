@@ -2,6 +2,7 @@ import { Card, CardContent, Container, Fab, Grid, List, ListItem, ListItemText, 
 import { LocalGasStation as RefuelIcon } from '@material-ui/icons';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import CacheWarning from '../CacheWarning';
 import Layout from '../Layout';
 
 const useStyles = makeStyles(({ spacing }) => ({
@@ -15,12 +16,13 @@ const useStyles = makeStyles(({ spacing }) => ({
   },
 }));
 
-export default function CarDetails({ car }) {
+export default function CarDetails({ car, cached }) {
   const classes = useStyles();
 
   return (
     <Layout title={car.label} back="/cars">
       <Container className={classes.wrapper}>
+        {cached && <CacheWarning />}
         <Grid container spacing={4}>
           {car.lastRefuel && (
             <Grid item xs={12} md={6}>
