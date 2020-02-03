@@ -1,5 +1,5 @@
 import { Button, Card, CardContent, CircularProgress, Grid, makeStyles, TextField, Typography } from '@material-ui/core';
-import { Field, Form, Formik } from 'formik';
+import { Field, Form, Formik, useFormikContext } from 'formik';
 import React, { useCallback, useMemo } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
@@ -89,19 +89,13 @@ function NewRefuelForm({ car, user }) {
     [car, user, navigate]
   );
 
-  const NewRefuelSchema = useMemo(() => {
-    let mileage = number().required();
-
-    if (car.lastRefuel) {
-      mileage = mileage.min(car.lastRefuel.mileage);
-    } else {
-      mileage.min(0);
-    }
-
+  const schema = useMemo(() => {
     return object({
       date: string().required(),
       time: string().required(),
-      mileage,
+      mileage: number()
+        .required()
+        .min(car.lastRefuel ? car.lastRefuel.mileage : 0),
       fuelAmount: number()
         .required()
         .min(0),
@@ -113,72 +107,123 @@ function NewRefuelForm({ car, user }) {
   }, [car]);
 
   return (
-    <Formik initialValues={initialValues} validationSchema={NewRefuelSchema} onSubmit={onSubmit}>
-      {({ values, errors, dirty, isValid, isSubmitting }) => (
-        <>
-          <Card className={classes.card}>
-            <CardContent>
-              <Typography variant="h5" component="h2">
-                New Refuel
-              </Typography>
-              <Form>
-                <Grid container spacing={4}>
-                  <Grid item sm={6}>
-                    <Field name="date">
-                      {({ field, meta }) => (
-                        <TextField type="date" label="Date" required {...field} error={Boolean(meta.error)} helperText={meta.error} fullWidth />
-                      )}
-                    </Field>
-                  </Grid>
-                  <Grid item sm={6}>
-                    <Field name="time">
-                      {({ field, meta }) => (
-                        <TextField type="time" label="Time" required {...field} error={Boolean(meta.error)} helperText={meta.error} fullWidth />
-                      )}
-                    </Field>
-                  </Grid>
-                  <Grid item sm={12}>
-                    <Field name="mileage">
-                      {({ field, meta }) => (
-                        <TextField label="Mileage (km)" required {...field} error={Boolean(meta.error)} helperText={meta.error} fullWidth autoFocus />
-                      )}
-                    </Field>
-                  </Grid>
-                  <Grid item sm={12}>
-                    <Field name="fuelAmount">
-                      {({ field, meta }) => (
-                        <TextField label="Fuel amount (liters)" required {...field} error={Boolean(meta.error)} helperText={meta.error} fullWidth />
-                      )}
-                    </Field>
-                  </Grid>
-                  <Grid item sm={12}>
-                    <Field name="totalPrice">
-                      {({ field, meta }) => (
-                        <TextField label="Total price (€)" required {...field} error={Boolean(meta.error)} helperText={meta.error} fullWidth />
-                      )}
-                    </Field>
-                  </Grid>
-                  <Grid item sm={12}>
-                    <Button
-                      type="submit"
-                      color="primary"
-                      variant="contained"
-                      disabled={!dirty || !isValid || isSubmitting}
-                      startIcon={isSubmitting && <CircularProgress />}
-                    >
-                      Save new refuel
-                    </Button>
-                    <Button type="reset" variant="text" component={Link} to={`/cars/${car.id}`} className={classes.cancelButton}>
-                      Cancel
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Form>
-            </CardContent>
-          </Card>
-          <pre>{JSON.stringify({ values, errors, dirty, isValid, isSubmitting, lastRefuel: car.lastRefuel }, null, 2)}</pre>
-        </>
-      )}
-    </Formik>
+    <Card className={classes.card}>
+      <CardContent>
+        <Typography variant="h5" component="h2">
+          New Refuel
+        </Typography>
+        <Formik initialValues={initialValues} validationSchema={schema} onSubmit={onSubmit}>
+          {() => (
+            <Form>
+              <NewRefuelFormContent car={car} schema={schema} classes={classes} />
+            </Form>
+          )}
+        </Formik>
+      </CardContent>
+    </Card>
   );
+}
+
+function NewRefuelFormContent({ car, schema, classes }) {
+  const { values, dirty, isValid, isSubmitting } = useFormikContext();
+  const parsed = useMemo(() => parseValues(values, schema), [values, schema]);
+  const derived = useMemo(() => deriveValues(parsed, car), [parsed, car]);
+
+  return (
+    <>
+      <Grid container spacing={4}>
+        <Grid item sm={6}>
+          <Field name="date">
+            {({ field, meta }) => <TextField type="date" label="Date" required {...field} error={Boolean(meta.error)} helperText={meta.error} fullWidth />}
+          </Field>
+        </Grid>
+        <Grid item sm={6}>
+          <Field name="time">
+            {({ field, meta }) => <TextField type="time" label="Time" required {...field} error={Boolean(meta.error)} helperText={meta.error} fullWidth />}
+          </Field>
+        </Grid>
+        <Grid item sm={12}>
+          <Field name="mileage">
+            {({ field, meta }) => (
+              <TextField
+                label="Mileage (km)"
+                required
+                {...field}
+                error={Boolean(meta.error)}
+                helperText={meta.error || (derived.distance && `Distance: ${derived.distance.toLocaleString()} km`)}
+                fullWidth
+                autoFocus
+              />
+            )}
+          </Field>
+        </Grid>
+        <Grid item sm={12}>
+          <Field name="fuelAmount">
+            {({ field, meta }) => (
+              <TextField
+                label="Fuel amount (liters)"
+                required
+                {...field}
+                error={Boolean(meta.error)}
+                helperText={meta.error || (derived.consumption && `Consumption: ${(derived.consumption * 100).toLocaleString()} cl/km`)}
+                fullWidth
+              />
+            )}
+          </Field>
+        </Grid>
+        <Grid item sm={12}>
+          <Field name="totalPrice">
+            {({ field, meta }) => (
+              <TextField
+                label="Total price (€)"
+                required
+                {...field}
+                error={Boolean(meta.error)}
+                helperText={meta.error || (derived.pricePerLiter && `Price: ${derived.pricePerLiter.toLocaleString()} €/l`)}
+                fullWidth
+              />
+            )}
+          </Field>
+        </Grid>
+        <Grid item sm={12}>
+          <Button
+            type="submit"
+            color="primary"
+            variant="contained"
+            disabled={!dirty || !isValid || isSubmitting}
+            startIcon={isSubmitting && <CircularProgress />}
+          >
+            Save new refuel
+          </Button>
+          <Button type="reset" variant="text" component={Link} to={`/cars/${car.id}`} className={classes.cancelButton}>
+            Cancel
+          </Button>
+        </Grid>
+      </Grid>
+    </>
+  );
+}
+
+function parseValues(values, schema) {
+  try {
+    return schema.validateSync(values, { abortEarly: false });
+  } catch (error) {
+    return error.value;
+  }
+}
+
+function deriveValues(values, car) {
+  if (!values) return {};
+  const { lastRefuel } = car;
+  const { mileage, fuelAmount, totalPrice } = values;
+
+  const distance = mileage && lastRefuel && mileage > lastRefuel.mileage ? mileage - lastRefuel.mileage : undefined;
+  const consumption = distance && fuelAmount ? fuelAmount / distance : undefined;
+  const pricePerLiter = fuelAmount && totalPrice ? totalPrice / fuelAmount : undefined;
+
+  return {
+    distance,
+    consumption,
+    pricePerLiter,
+  };
 }
