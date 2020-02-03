@@ -11,7 +11,7 @@ export default function Cars() {
   const [user] = useAuthState(auth);
   const [cars, loading, error] = useCollectionData(firestore.collection('cars').where(`users.${user.uid}`, '==', true), { idField: 'id' });
 
-  if (loading) return <Loading />;
+  if (loading) return <Loading layout={true} />;
   if (error) return <div>Error: {error.message}</div>;
 
   return (

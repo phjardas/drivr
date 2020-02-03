@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import App from './App';
-import { unregister as unregisterServiceWorker } from './serviceWorker';
+import { register as registerServiceWorker } from './serviceWorker';
 import { ThemeProvider } from './theme';
 
 ReactDOM.render(
@@ -14,4 +14,4 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-unregisterServiceWorker();
+registerServiceWorker();

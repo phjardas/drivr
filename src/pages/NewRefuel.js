@@ -14,7 +14,7 @@ export default function NewRefuel() {
   const [user] = useAuthState(auth);
   const [car, loading, error] = useDocumentData(firestore.collection('cars').doc(id), { idField: 'id' });
 
-  if (loading) return <Loading />;
+  if (loading) return <Loading layout={true} />;
   if (error) return <div>Error: {error.message}</div>;
 
   return (
@@ -132,17 +132,17 @@ function NewRefuelFormContent({ car, schema, classes }) {
   return (
     <>
       <Grid container spacing={4}>
-        <Grid item sm={6}>
+        <Grid item xs={6}>
           <Field name="date">
             {({ field, meta }) => <TextField type="date" label="Date" required {...field} error={Boolean(meta.error)} helperText={meta.error} fullWidth />}
           </Field>
         </Grid>
-        <Grid item sm={6}>
+        <Grid item xs={6}>
           <Field name="time">
             {({ field, meta }) => <TextField type="time" label="Time" required {...field} error={Boolean(meta.error)} helperText={meta.error} fullWidth />}
           </Field>
         </Grid>
-        <Grid item sm={12}>
+        <Grid item xs={12}>
           <Field name="mileage">
             {({ field, meta }) => (
               <TextField
@@ -157,7 +157,7 @@ function NewRefuelFormContent({ car, schema, classes }) {
             )}
           </Field>
         </Grid>
-        <Grid item sm={12}>
+        <Grid item xs={12}>
           <Field name="fuelAmount">
             {({ field, meta }) => (
               <TextField
@@ -171,7 +171,7 @@ function NewRefuelFormContent({ car, schema, classes }) {
             )}
           </Field>
         </Grid>
-        <Grid item sm={12}>
+        <Grid item xs={12}>
           <Field name="totalPrice">
             {({ field, meta }) => (
               <TextField
@@ -185,7 +185,7 @@ function NewRefuelFormContent({ car, schema, classes }) {
             )}
           </Field>
         </Grid>
-        <Grid item sm={12}>
+        <Grid item xs={12}>
           <Button
             type="submit"
             color="primary"
