@@ -1,0 +1,15 @@
+{
+  "hosting": {
+    "public": "build",
+    "ignore": ["firebase.json", "**/.*", ".yarn/**/*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "functions": {
+    "predeploy": "yarn workspace drivr-functions run build"
+  }
+}
