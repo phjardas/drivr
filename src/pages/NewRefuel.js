@@ -28,7 +28,7 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
   card: {
     maxWidth: `calc(100% - ${spacing(4)}px)`,
     width: 600,
-    margin: `${spacing(2)}px auto`,
+    margin: '0 auto',
   },
   cancelButton: {
     color: palette.text.secondary,

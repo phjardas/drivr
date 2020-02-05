@@ -1,16 +1,14 @@
 import { List, ListItem, ListItemText } from '@material-ui/core';
+import { Add as AddIcon } from '@material-ui/icons';
 import React from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { Link } from 'react-router-dom';
-import { auth, firestore } from '../firebase';
+import { useCars } from '../data';
+import Fab from '../Fab';
 import Layout from '../Layout';
 import Loading from '../Loading';
 
 export default function Cars() {
-  const [user] = useAuthState(auth);
-  const [cars, loading, error] = useCollectionData(firestore.collection('cars').where(`users.${user.uid}`, '==', true), { idField: 'id' });
-
+  const [cars, loading, error] = useCars();
   if (loading) return <Loading layout={true} />;
   if (error) return <div>Error: {error.message}</div>;
 
@@ -23,6 +21,9 @@ export default function Cars() {
           </ListItem>
         ))}
       </List>
+      <Fab component={Link} to="/cars/_new">
+        <AddIcon />
+      </Fab>
     </Layout>
   );
 }

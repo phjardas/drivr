@@ -1,10 +1,18 @@
-import { AppBar, IconButton, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, IconButton, makeStyles, Toolbar, Typography } from '@material-ui/core';
 import { ArrowBack as ArrowBackIcon } from '@material-ui/icons';
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
+const useStyles = makeStyles(({ spacing }) => ({
+  main: {
+    margin: `${spacing(2)}px 0`,
+  },
+}));
+
 export default function Layout({ title, back, children }) {
+  const classes = useStyles();
+
   return (
     <>
       <Helmet>
@@ -20,7 +28,7 @@ export default function Layout({ title, back, children }) {
           <Typography variant="h6">{title || 'drivr'}</Typography>
         </Toolbar>
       </AppBar>
-      <main>{children}</main>
+      <main className={classes.main}>{children}</main>
     </>
   );
 }

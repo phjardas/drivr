@@ -1,43 +1,42 @@
-import { Card, CardContent, Container, Fab, Grid, List, ListItem, ListItemText, makeStyles, Typography } from '@material-ui/core';
+import { Card, CardContent, Container, Grid, List, ListItem, ListItemText, Typography } from '@material-ui/core';
 import { LocalGasStation as RefuelIcon } from '@material-ui/icons';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import CacheWarning from '../CacheWarning';
+import Fab from '../Fab';
 import Layout from '../Layout';
 
-const useStyles = makeStyles(({ spacing }) => ({
-  wrapper: {
-    marginTop: spacing(2),
-  },
-  fab: {
-    position: 'fixed',
-    bottom: spacing(2),
-    right: spacing(2),
-  },
-}));
-
-export default function CarDetails({ car, cached }) {
-  const classes = useStyles();
-
+export default function CarDetails({ car }) {
   return (
     <Layout title={car.label} back="/cars">
-      <Container className={classes.wrapper}>
-        {cached && <CacheWarning />}
-        <Grid container spacing={4}>
-          {car.lastRefuel && (
-            <Grid item xs={12} md={6}>
+      <Container>
+        {car._cached && <CacheWarning />}
+        <Grid container spacing={2}>
+          {!car.stats && (
+            <Grid item xs={12}>
               <Card>
                 <CardContent>
-                  <Typography variant="h5" component="h2">
-                    Last Refuel
-                  </Typography>
+                  <Typography>This car has not enough refuels yet to show statistics.</Typography>
                 </CardContent>
-                <Refuel refuel={car.lastRefuel} />
+              </Card>
+            </Grid>
+          )}
+          {car.lastRefuel && (
+            <Grid item xs={12} sm={6}>
+              <Card>
+                <>
+                  <CardContent>
+                    <Typography variant="h5" component="h2">
+                      Last Refuel
+                    </Typography>
+                  </CardContent>
+                  <Refuel refuel={car.lastRefuel} />
+                </>
               </Card>
             </Grid>
           )}
           {car.stats && (
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} sm={6}>
               <Card>
                 <CardContent>
                   <Typography variant="h5" component="h2">
@@ -49,7 +48,7 @@ export default function CarDetails({ car, cached }) {
             </Grid>
           )}
         </Grid>
-        <Fab color="secondary" className={classes.fab} component={Link} to={`/cars/${car.id}/refuels/_new`}>
+        <Fab component={Link} to={`/cars/${car.id}/refuels/_new`}>
           <RefuelIcon />
         </Fab>
       </Container>
