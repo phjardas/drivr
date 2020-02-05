@@ -2,16 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import App from './App';
-import { register as registerServiceWorker } from './serviceWorker';
+import { CacheProvider } from './cache';
 import { ThemeProvider } from './theme';
 
 ReactDOM.render(
-  <ThemeProvider>
-    <HelmetProvider>
-      <App />
-    </HelmetProvider>
-  </ThemeProvider>,
+  <CacheProvider>
+    <ThemeProvider>
+      <HelmetProvider>
+        <App />
+      </HelmetProvider>
+    </ThemeProvider>
+  </CacheProvider>,
   document.getElementById('root')
 );
-
-registerServiceWorker();

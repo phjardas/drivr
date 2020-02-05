@@ -3,6 +3,8 @@ import { ArrowBack as ArrowBackIcon } from '@material-ui/icons';
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import CacheNotification from './CacheNotification';
+import UpdateNotification from './UpdateNotification';
 
 const useStyles = makeStyles(({ spacing }) => ({
   main: {
@@ -29,6 +31,8 @@ export default function Layout({ title, back, children }) {
         </Toolbar>
       </AppBar>
       <main className={classes.main}>{children}</main>
+      <CacheNotification />
+      <UpdateNotification />
     </>
   );
 }
