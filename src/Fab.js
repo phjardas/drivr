@@ -19,7 +19,7 @@ export default function Fab(props) {
 
   return (
     <Zoom in={true} timeout={transitionDuration} unmountOnExit>
-      <MaterialFab color="secondary" className={classes.fab} {...props} />
+      <MaterialFab color="primary" className={classes.fab} {...props} />
     </Zoom>
   );
 }

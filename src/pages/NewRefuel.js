@@ -102,7 +102,7 @@ function NewRefuelForm({ car, user }) {
   return (
     <Card className={classes.card}>
       <CardContent>
-        <Typography variant="h5" component="h2">
+        <Typography variant="h5" component="h2" gutterBottom>
           New Refuel
         </Typography>
         <Formik initialValues={initialValues} validationSchema={schema} onSubmit={onSubmit}>

@@ -4,11 +4,15 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import CacheNotification from './CacheNotification';
+import DarkModeButton from './DarkModeButton';
 import UpdateNotification from './UpdateNotification';
 
 const useStyles = makeStyles(({ spacing }) => ({
   gutter: {
     margin: `${spacing(2)}px 0`,
+  },
+  actions: {
+    marginLeft: 'auto',
   },
 }));
 
@@ -20,7 +24,7 @@ export default function Layout({ title, back, gutter, children }) {
       <Helmet>
         <title>{title ? `${title} - drivr` : 'drivr'}</title>
       </Helmet>
-      <AppBar position="sticky">
+      <AppBar position="sticky" color="secondary">
         <Toolbar>
           {back && (
             <IconButton edge="start" color="inherit" component={Link} to={back}>
@@ -28,6 +32,9 @@ export default function Layout({ title, back, gutter, children }) {
             </IconButton>
           )}
           <Typography variant="h6">{title || 'drivr'}</Typography>
+          <div className={classes.actions}>
+            <DarkModeButton />
+          </div>
         </Toolbar>
       </AppBar>
       <main className={gutter && classes.gutter}>{children}</main>

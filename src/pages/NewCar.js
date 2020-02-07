@@ -70,7 +70,7 @@ function NewCarForm({ cars, user }) {
   return (
     <Card className={classes.card}>
       <CardContent>
-        <Typography variant="h5" component="h2">
+        <Typography variant="h5" component="h2" gutterBottom>
           New Car
         </Typography>
         <Formik initialValues={initialValues} validationSchema={schema} onSubmit={onSubmit}>

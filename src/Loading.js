@@ -1,4 +1,4 @@
-import { CircularProgress, makeStyles, Paper } from '@material-ui/core';
+import { CircularProgress, makeStyles, Paper, Typography } from '@material-ui/core';
 import React from 'react';
 import Logo from './assets/Logo';
 import Delay from './Delay';
@@ -15,12 +15,13 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: spacing(4),
+    padding: spacing(6),
   },
   logo: {
-    color: palette.primary.main,
     fontSize: '5rem',
-    marginBottom: spacing(4),
+  },
+  spinner: {
+    marginTop: spacing(6),
   },
 }));
 
@@ -41,7 +42,10 @@ function Spinner() {
     <Delay wait={300}>
       <Paper className={classes.wrapper}>
         <Logo className={classes.logo} />
-        <CircularProgress color="secondary" />
+        <Typography variant="h4" tag="h1">
+          drivr
+        </Typography>
+        <CircularProgress color="primary" className={classes.spinner} />
       </Paper>
     </Delay>
   );
