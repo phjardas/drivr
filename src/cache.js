@@ -1,20 +1,30 @@
-import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { register as registerServiceWorker } from './serviceWorker';
 
 const Context = createContext({ cached: false, updated: false });
 
 export function CacheProvider({ children }) {
   const [state, setState] = useState({ cached: false, updated: false });
-  const setCached = useCallback(() => setState((s) => ({ ...s, cached: true })), [setState]);
-  const setUpdated = useCallback(() => setState((s) => ({ ...s, updated: true })), [setState]);
 
   useEffect(() => {
-    registerServiceWorker({ onSuccess: setCached, onUpdate: setUpdated });
-    if (process.env.NODE_ENV !== 'production') {
-      window._setCached = setCached;
-      window._setUpdated = setUpdated;
-    }
-  }, [setCached, setUpdated]);
+    registerServiceWorker({
+      onSuccess: () => setState((s) => ({ ...s, cached: true })),
+      onUpdate: (registration) => {
+        console.log('content was updated');
+        const waitingServiceWorker = registration.waiting;
+
+        if (waitingServiceWorker) {
+          waitingServiceWorker.addEventListener('statechange', (event) => {
+            if (event.target.state === 'activated') {
+              console.log('new service worker was activated, ready to reload');
+              setState((s) => ({ ...s, updated: true }));
+            }
+          });
+          waitingServiceWorker.postMessage({ type: 'SKIP_WAITING' });
+        }
+      },
+    });
+  }, [setState]);
 
   return <Context.Provider value={state}>{children}</Context.Provider>;
 }
