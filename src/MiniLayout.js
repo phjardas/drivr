@@ -1,4 +1,4 @@
-import { makeStyles, Paper } from '@material-ui/core';
+import { makeStyles, Paper, Typography } from '@material-ui/core';
 import React from 'react';
 import Logo from './assets/Logo';
 
@@ -18,7 +18,9 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
   logo: {
     color: palette.primary.main,
     fontSize: '5rem',
-    marginBottom: spacing(4),
+  },
+  main: {
+    marginTop: spacing(4),
   },
 }));
 
@@ -28,7 +30,10 @@ export default function MiniLayout({ children }) {
   return (
     <Paper className={classes.wrapper}>
       <Logo className={classes.logo} />
-      {children}
+      <Typography variant="h4" tag="h1">
+        drivr
+      </Typography>
+      <div className={classes.main}>{children}</div>
     </Paper>
   );
 }
