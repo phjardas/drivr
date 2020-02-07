@@ -7,6 +7,7 @@ import CacheNotification from './CacheNotification';
 import DarkModeButton from './DarkModeButton';
 import Footer from './Footer';
 import UpdateNotification from './UpdateNotification';
+import UserProfileButton from './UserProfileButton';
 
 const useStyles = makeStyles(({ spacing }) => ({
   gutter: {
@@ -35,6 +36,7 @@ export default function Layout({ title, back, gutter, children }) {
           <Typography variant="h6">{title || 'drivr'}</Typography>
           <div className={classes.actions}>
             <DarkModeButton />
+            <UserProfileButton />
           </div>
         </Toolbar>
       </AppBar>

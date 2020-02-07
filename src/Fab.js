@@ -1,11 +1,12 @@
 import { Fab as MaterialFab, makeStyles, useTheme, Zoom } from '@material-ui/core';
 import React from 'react';
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles(({ spacing, zIndex }) => ({
   fab: {
     position: 'fixed',
     bottom: spacing(2),
     right: spacing(2),
+    zIndex: zIndex.speedDial,
   },
 }));
 

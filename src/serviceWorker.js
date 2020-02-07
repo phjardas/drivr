@@ -49,26 +49,24 @@ function registerValidSW(swUrl, config) {
     .then((registration) => {
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
-        if (installingWorker == null) {
-          return;
-        }
+        if (installingWorker == null) return;
         installingWorker.onstatechange = () => {
           if (installingWorker.state === 'installed') {
             if (navigator.serviceWorker.controller) {
+              console.log('[server-worker] content was updated');
               if (config && config.onUpdate) config.onUpdate(registration);
             } else {
+              console.log('[server-worker] content was cached');
               if (config && config.onSuccess) config.onSuccess(registration);
             }
           }
         };
       };
     })
-    .catch((error) => {
-      console.error('Error during service worker registration:', error);
-    });
+    .catch((error) => console.error('[server-worker] error during service worker registration:', error));
 }
 
-function checkValidServiceWorker(swUrl, config) {
+async function checkValidServiceWorker(swUrl, config) {
   // Check if the service worker can be found. If it can't reload the page.
   fetch(swUrl, { headers: { 'Service-Worker': 'script' } })
     .then((response) => {
@@ -82,7 +80,7 @@ function checkValidServiceWorker(swUrl, config) {
         registerValidSW(swUrl, config);
       }
     })
-    .catch(() => console.log('No internet connection found. App is running in offline mode.'));
+    .catch(() => console.log('[server-worker] no internet connection found. App is running in offline mode.'));
 }
 
 export function unregister() {

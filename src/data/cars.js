@@ -1,13 +1,13 @@
 import React, { createContext, useContext } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollection } from 'react-firebase-hooks/firestore';
-import { auth, firestore } from '../firebase';
+import { useAuth } from '../auth';
+import { firestore } from '../firebase';
 
 const Context = createContext();
 
 export function CarsProvider({ children }) {
-  const [user] = useAuthState(auth);
-  const [docs, loading, error] = useCollection(firestore.collection('cars').where(`users.${user.uid}`, '==', true), {
+  const { user } = useAuth();
+  const [docs, loading, error] = useCollection(firestore.collection('cars').where(`users.${user.id}`, '==', true), {
     snapshotListenOptions: { includeMetadataChanges: true },
   });
 

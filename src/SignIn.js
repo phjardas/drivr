@@ -48,7 +48,7 @@ export default function SignIn() {
       <Grid container spacing={2}>
         {providers.map((provider) => (
           <Grid item xs={12} key={provider.id}>
-            <Button color="primary" variant="contained" fullWidth onClick={signIn(provider)}>
+            <Button color="secondary" variant="contained" fullWidth onClick={signIn(provider)}>
               Sign in with {provider.label}
             </Button>
           </Grid>

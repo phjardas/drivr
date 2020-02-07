@@ -1,14 +1,14 @@
 import { Button, Card, CardContent, CircularProgress, Grid, makeStyles, TextField, Typography } from '@material-ui/core';
 import { Field, Form, Formik, useFormikContext } from 'formik';
 import React, { useCallback, useMemo } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import { boolean, number, object, string } from 'yup';
-import { auth, Firebase, firestore } from '../firebase';
+import { useAuth } from '../auth';
+import { Firebase, firestore } from '../firebase';
 import Layout from '../Layout';
 
 export default function NewRefuel({ car }) {
-  const [user] = useAuthState(auth);
+  const { user } = useAuth();
 
   return (
     <Layout title={car.label} back={`/cars/${car.id}`} gutter>
@@ -55,7 +55,7 @@ function NewRefuelForm({ car, user }) {
       const payload = {
         date: new Date(`${date}T${time}`),
         carId: car.id,
-        userId: user.uid,
+        userId: user.id,
         createdAt: Firebase.firestore.FieldValue.serverTimestamp(),
         mileage,
         totalPrice,

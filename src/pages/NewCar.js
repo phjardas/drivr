@@ -1,16 +1,16 @@
 import { Button, Card, CardContent, CircularProgress, Grid, makeStyles, TextField, Typography } from '@material-ui/core';
 import { Field, Form, Formik } from 'formik';
 import React, { useCallback, useMemo } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import { object, string } from 'yup';
+import { useAuth } from '../auth';
 import { useCars } from '../data';
-import { auth, firestore } from '../firebase';
+import { firestore } from '../firebase';
 import Layout from '../Layout';
 import Loading from '../Loading';
 
 export default function NewCar() {
-  const [user] = useAuthState(auth);
+  const { user } = useAuth();
   const [cars, loading, error] = useCars();
   if (loading) return <Loading layout={true} />;
   if (error) return <div>Error: {error.message}</div>;
@@ -55,7 +55,7 @@ function NewCarForm({ cars, user }) {
   const onSubmit = useCallback(
     async (data, { setSubmitting, setState }) => {
       try {
-        const ref = await firestore.collection('cars').add({ ...data, ownerId: user.uid, users: { [user.uid]: true } });
+        const ref = await firestore.collection('cars').add({ ...data, ownerId: user.id, users: { [user.id]: true } });
         const result = await ref.get();
         navigate(`/cars/${result.id}`);
       } catch (error) {
