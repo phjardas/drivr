@@ -8,7 +8,7 @@ import Layout from '../Layout';
 
 export default function CarDetails({ car }) {
   return (
-    <Layout title={car.label} back="/cars">
+    <Layout title={car.label} back="/cars" gutter>
       <Container>
         {car._cached && <CacheWarning />}
         <Grid container spacing={2}>

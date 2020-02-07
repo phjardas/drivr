@@ -7,12 +7,12 @@ import CacheNotification from './CacheNotification';
 import UpdateNotification from './UpdateNotification';
 
 const useStyles = makeStyles(({ spacing }) => ({
-  main: {
+  gutter: {
     margin: `${spacing(2)}px 0`,
   },
 }));
 
-export default function Layout({ title, back, children }) {
+export default function Layout({ title, back, gutter, children }) {
   const classes = useStyles();
 
   return (
@@ -30,7 +30,7 @@ export default function Layout({ title, back, children }) {
           <Typography variant="h6">{title || 'drivr'}</Typography>
         </Toolbar>
       </AppBar>
-      <main className={classes.main}>{children}</main>
+      <main className={gutter && classes.gutter}>{children}</main>
       <CacheNotification />
       <UpdateNotification />
     </>

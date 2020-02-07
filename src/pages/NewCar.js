@@ -16,7 +16,7 @@ export default function NewCar() {
   if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <Layout title="New car" back="/cars">
+    <Layout title="New car" back="/cars" gutter>
       <NewCarForm user={user} cars={cars} />
     </Layout>
   );

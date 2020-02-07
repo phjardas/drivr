@@ -2,23 +2,16 @@ import { Button, Card, CardContent, CircularProgress, Grid, makeStyles, TextFiel
 import { Field, Form, Formik, useFormikContext } from 'formik';
 import React, { useCallback, useMemo } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useDocumentData } from 'react-firebase-hooks/firestore';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { boolean, number, object, string } from 'yup';
 import { auth, Firebase, firestore } from '../firebase';
 import Layout from '../Layout';
-import Loading from '../Loading';
 
-export default function NewRefuel() {
-  const { id } = useParams();
+export default function NewRefuel({ car }) {
   const [user] = useAuthState(auth);
-  const [car, loading, error] = useDocumentData(firestore.collection('cars').doc(id), { idField: 'id' });
-
-  if (loading) return <Loading layout={true} />;
-  if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <Layout title={car.label} back={`/cars/${car.id}`}>
+    <Layout title={car.label} back={`/cars/${car.id}`} gutter>
       <NewRefuelForm car={car} user={user} />
     </Layout>
   );
