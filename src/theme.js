@@ -15,8 +15,18 @@ function ThemeWrapper({ children }) {
 
 const useStyles = makeStyles(({ palette }) => ({
   '@global': {
+    html: {
+      height: '100%',
+      minHeight: '100%',
+    },
     body: {
       background: palette.background.default,
+      height: '100%',
+      minHeight: '100%',
+    },
+    '#root': {
+      height: '100%',
+      minHeight: '100%',
     },
   },
 }));
