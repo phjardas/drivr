@@ -12,7 +12,6 @@ export function AuthProvider({ children }) {
   const [fbUser, fbLoading, fbError] = useAuthState(auth);
   const [{ user, loading, error }, setState] = useState({ loading: true });
   ga.set({ userId: fbUser ? fbUser.uid : undefined });
-  console.log({ fbUser, fbLoading, fbError, user, loading, error });
 
   useEffect(() => {
     if (fbUser) {

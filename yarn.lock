@@ -6245,6 +6245,14 @@ __metadata:
   languageName: node
   linkType: hard
 
+"drivr-admin@workspace:admin":
+  version: 0.0.0-use.local
+  resolution: "drivr-admin@workspace:admin"
+  dependencies:
+    firebase-admin: ^8.9.2
+  languageName: unknown
+  linkType: soft
+
 "drivr-functions@workspace:functions":
   version: 0.0.0-use.local
   resolution: "drivr-functions@workspace:functions"

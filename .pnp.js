@@ -23,6 +23,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:."
       },
       {
+        "name": "drivr-admin",
+        "reference": "workspace:admin"
+      },
+      {
         "name": "drivr-functions",
         "reference": "workspace:functions"
       }
@@ -31,6 +35,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
     "ignorePatternData": "(^(?:\\.vscode\\/pnpify(?:\\/(?!\\.)(?:(?:(?!(?:^|\\/)\\.).)*?)|$))$)",
     "fallbackExclusionList": [
       ["drivr", ["workspace:."]],
+      ["drivr-admin", ["workspace:admin"]],
       ["drivr-functions", ["workspace:functions"]]
     ],
     "locationBlacklistData": [
@@ -159,6 +164,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       60,
       58,
       12,
+      8,
       2
     ],
     "packageRegistryData": [
@@ -8159,6 +8165,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-router-dom", "virtual:ee480a43e5d65728e836cb2349dec20daee39750bc2e66a829612ad522f2cb3009de798d3dc50d67f3fa0781517b87fabb1b9e9dd3c952285670f68cd5bb64a4#npm:6.0.0-alpha.1"],
             ["react-scripts", "virtual:ee480a43e5d65728e836cb2349dec20daee39750bc2e66a829612ad522f2cb3009de798d3dc50d67f3fa0781517b87fabb1b9e9dd3c952285670f68cd5bb64a4#npm:3.3.1"],
             ["yup", "npm:0.28.1"]
+          ],
+          "linkType": "SOFT"
+        }]
+      ]],
+      ["drivr-admin", [
+        ["workspace:admin", {
+          "packageLocation": "./admin/",
+          "packageDependencies": [
+            ["drivr-admin", "workspace:admin"],
+            ["firebase-admin", "npm:8.9.2"]
           ],
           "linkType": "SOFT"
         }]

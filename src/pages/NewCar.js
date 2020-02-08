@@ -98,7 +98,7 @@ function NewCarForm({ cars, user }) {
                     color="primary"
                     variant="contained"
                     disabled={!dirty || !isValid || isSubmitting}
-                    startIcon={isSubmitting && <CircularProgress />}
+                    startIcon={isSubmitting && <CircularProgress size={'1em'} />}
                   >
                     Create car
                   </Button>

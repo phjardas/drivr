@@ -46,7 +46,7 @@ function NewRefuelForm({ car, user }) {
   }, []);
 
   const onSubmit = useCallback(
-    async (refuel, { setSubmitting, setState }) => {
+    async (refuel, { setSubmitting, setStatus }) => {
       const { date, time, incomplete } = refuel;
       const mileage = parseInt(refuel.mileage, 10);
       const totalPrice = parseFloat(refuel.totalPrice, 10);
@@ -54,7 +54,6 @@ function NewRefuelForm({ car, user }) {
 
       const payload = {
         date: new Date(`${date}T${time}`),
-        carId: car.id,
         userId: user.id,
         createdAt: Firebase.firestore.FieldValue.serverTimestamp(),
         mileage,
@@ -65,17 +64,16 @@ function NewRefuelForm({ car, user }) {
       };
 
       try {
-        const ref = await firestore.collection('refuels').add(payload);
-        const result = await ref.get();
-        const lastRefuel = { ...result.data(), id: result.id };
+        console.log('new refuel:', payload);
         await firestore
           .collection('cars')
           .doc(car.id)
-          .update({ lastRefuel });
+          .collection('refuels')
+          .add(payload);
         navigate(`/cars/${car.id}`);
       } catch (error) {
         console.error(error);
-        setState(error);
+        setStatus({ error });
         setSubmitting(false);
       }
     },
@@ -118,7 +116,7 @@ function NewRefuelForm({ car, user }) {
 }
 
 function NewRefuelFormContent({ car, schema, classes }) {
-  const { values, dirty, isValid, isSubmitting } = useFormikContext();
+  const { values, dirty, isValid, isSubmitting, status } = useFormikContext();
   const parsed = useMemo(() => parseValues(values, schema), [values, schema]);
   const derived = useMemo(() => deriveValues(parsed, car), [parsed, car]);
 
@@ -178,13 +176,20 @@ function NewRefuelFormContent({ car, schema, classes }) {
             )}
           </Field>
         </Grid>
+        {status && status.error && (
+          <Grid item xs={12}>
+            <Typography color="error" gutterBottom>
+              {status.error.message}
+            </Typography>
+          </Grid>
+        )}
         <Grid item xs={12}>
           <Button
             type="submit"
             color="primary"
             variant="contained"
             disabled={!dirty || !isValid || isSubmitting}
-            startIcon={isSubmitting && <CircularProgress />}
+            startIcon={isSubmitting && <CircularProgress size={'1em'} />}
           >
             Save new refuel
           </Button>
