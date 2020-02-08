@@ -6267,9 +6267,11 @@ __metadata:
     firebase: ^7.8.0
     firebase-tools: ^7.12.1
     formik: ^2.1.3
+    prop-types: ^15.7.2
     react: ^16.12.0
     react-dom: ^16.12.0
     react-firebase-hooks: ^2.1.1
+    react-ga: ^2.7.0
     react-helmet-async: ^1.0.4
     react-router: next
     react-router-dom: next
@@ -14293,6 +14295,16 @@ fsevents@^1.2.7:
   peerDependencies:
     react: ^16.8.0
   checksum: 242731d79fa4426a4e27914c471673e9f2eaa4b62dd00403b63b6ab393d0987a168c6fa0107bf38c15018c0e393fa8edac29417f690bfe77f1cc581321f5eaf5
+  languageName: node
+  linkType: hard
+
+"react-ga@npm:^2.7.0":
+  version: 2.7.0
+  resolution: "react-ga@npm:2.7.0"
+  peerDependencies:
+    prop-types: ^15.6.0
+    react: ^15.6.2 || ^16.0
+  checksum: 78550de129f79361d8d9ef764b2af40aaebad53467355013f989d21abab956fdb39ff38558331453f23c1c423466aaf843838042ed4848c43376ff7d0675019f
   languageName: node
   linkType: hard
 

@@ -1,20 +1,11 @@
 import React from 'react';
-import { HelmetProvider } from 'react-helmet-async';
-import { AuthProvider } from './auth';
-import { CacheProvider } from './cache';
 import Pages from './pages';
-import { ThemeProvider } from './theme';
+import Providers from './Providers';
 
 export default function App() {
   return (
-    <CacheProvider>
-      <ThemeProvider>
-        <HelmetProvider>
-          <AuthProvider>
-            <Pages />
-          </AuthProvider>
-        </HelmetProvider>
-      </ThemeProvider>
-    </CacheProvider>
+    <Providers>
+      <Pages />
+    </Providers>
   );
 }

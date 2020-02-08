@@ -172,9 +172,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["firebase", "npm:7.8.0"],
             ["firebase-tools", "npm:7.12.1"],
             ["formik", "virtual:ee480a43e5d65728e836cb2349dec20daee39750bc2e66a829612ad522f2cb3009de798d3dc50d67f3fa0781517b87fabb1b9e9dd3c952285670f68cd5bb64a4#npm:2.1.3"],
+            ["prop-types", "npm:15.7.2"],
             ["react", "npm:16.12.0"],
             ["react-dom", "virtual:ee480a43e5d65728e836cb2349dec20daee39750bc2e66a829612ad522f2cb3009de798d3dc50d67f3fa0781517b87fabb1b9e9dd3c952285670f68cd5bb64a4#npm:16.12.0"],
             ["react-firebase-hooks", "virtual:ee480a43e5d65728e836cb2349dec20daee39750bc2e66a829612ad522f2cb3009de798d3dc50d67f3fa0781517b87fabb1b9e9dd3c952285670f68cd5bb64a4#npm:2.1.1"],
+            ["react-ga", "virtual:ee480a43e5d65728e836cb2349dec20daee39750bc2e66a829612ad522f2cb3009de798d3dc50d67f3fa0781517b87fabb1b9e9dd3c952285670f68cd5bb64a4#npm:2.7.0"],
             ["react-helmet-async", "virtual:ee480a43e5d65728e836cb2349dec20daee39750bc2e66a829612ad522f2cb3009de798d3dc50d67f3fa0781517b87fabb1b9e9dd3c952285670f68cd5bb64a4#npm:1.0.4"],
             ["react-router", "virtual:ee480a43e5d65728e836cb2349dec20daee39750bc2e66a829612ad522f2cb3009de798d3dc50d67f3fa0781517b87fabb1b9e9dd3c952285670f68cd5bb64a4#npm:6.0.0-alpha.1"],
             ["react-router-dom", "virtual:ee480a43e5d65728e836cb2349dec20daee39750bc2e66a829612ad522f2cb3009de798d3dc50d67f3fa0781517b87fabb1b9e9dd3c952285670f68cd5bb64a4#npm:6.0.0-alpha.1"],
@@ -8147,9 +8149,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["firebase", "npm:7.8.0"],
             ["firebase-tools", "npm:7.12.1"],
             ["formik", "virtual:ee480a43e5d65728e836cb2349dec20daee39750bc2e66a829612ad522f2cb3009de798d3dc50d67f3fa0781517b87fabb1b9e9dd3c952285670f68cd5bb64a4#npm:2.1.3"],
+            ["prop-types", "npm:15.7.2"],
             ["react", "npm:16.12.0"],
             ["react-dom", "virtual:ee480a43e5d65728e836cb2349dec20daee39750bc2e66a829612ad522f2cb3009de798d3dc50d67f3fa0781517b87fabb1b9e9dd3c952285670f68cd5bb64a4#npm:16.12.0"],
             ["react-firebase-hooks", "virtual:ee480a43e5d65728e836cb2349dec20daee39750bc2e66a829612ad522f2cb3009de798d3dc50d67f3fa0781517b87fabb1b9e9dd3c952285670f68cd5bb64a4#npm:2.1.1"],
+            ["react-ga", "virtual:ee480a43e5d65728e836cb2349dec20daee39750bc2e66a829612ad522f2cb3009de798d3dc50d67f3fa0781517b87fabb1b9e9dd3c952285670f68cd5bb64a4#npm:2.7.0"],
             ["react-helmet-async", "virtual:ee480a43e5d65728e836cb2349dec20daee39750bc2e66a829612ad522f2cb3009de798d3dc50d67f3fa0781517b87fabb1b9e9dd3c952285670f68cd5bb64a4#npm:1.0.4"],
             ["react-router", "virtual:ee480a43e5d65728e836cb2349dec20daee39750bc2e66a829612ad522f2cb3009de798d3dc50d67f3fa0781517b87fabb1b9e9dd3c952285670f68cd5bb64a4#npm:6.0.0-alpha.1"],
             ["react-router-dom", "virtual:ee480a43e5d65728e836cb2349dec20daee39750bc2e66a829612ad522f2cb3009de798d3dc50d67f3fa0781517b87fabb1b9e9dd3c952285670f68cd5bb64a4#npm:6.0.0-alpha.1"],
@@ -17006,6 +17010,21 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react", "npm:16.12.0"]
           ],
           "packagePeers": [
+            "react"
+          ],
+          "linkType": "HARD"
+        }]
+      ]],
+      ["react-ga", [
+        ["virtual:ee480a43e5d65728e836cb2349dec20daee39750bc2e66a829612ad522f2cb3009de798d3dc50d67f3fa0781517b87fabb1b9e9dd3c952285670f68cd5bb64a4#npm:2.7.0", {
+          "packageLocation": "./.yarn/$$virtual/react-ga-virtual-3c10337a34/0/cache/react-ga-npm-2.7.0-87bdce9bdf-1.zip/node_modules/react-ga/",
+          "packageDependencies": [
+            ["react-ga", "virtual:ee480a43e5d65728e836cb2349dec20daee39750bc2e66a829612ad522f2cb3009de798d3dc50d67f3fa0781517b87fabb1b9e9dd3c952285670f68cd5bb64a4#npm:2.7.0"],
+            ["prop-types", "npm:15.7.2"],
+            ["react", "npm:16.12.0"]
+          ],
+          "packagePeers": [
+            "prop-types",
             "react"
           ],
           "linkType": "HARD"
