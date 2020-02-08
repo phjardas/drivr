@@ -1,12 +1,35 @@
-import { Card, CardContent, Container, Grid, List, ListItem, ListItemText, Typography } from '@material-ui/core';
-import { LocalGasStation as RefuelIcon } from '@material-ui/icons';
-import React from 'react';
+import {
+  Card,
+  CardContent,
+  CircularProgress,
+  Container,
+  ExpansionPanel,
+  ExpansionPanelDetails,
+  ExpansionPanelSummary,
+  Grid,
+  List,
+  ListItem,
+  ListItemText,
+  makeStyles,
+  Typography,
+} from '@material-ui/core';
+import { ExpandMore as ExpandMoreIcon, LocalGasStation as RefuelIcon } from '@material-ui/icons';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import CacheWarning from '../CacheWarning';
+import { useRefuels } from '../data';
 import Fab from '../Fab';
 import Layout from '../Layout';
 
+const useStyles = makeStyles({
+  card: {
+    height: '100%',
+  },
+});
+
 export default function CarDetails({ car }) {
+  const classes = useStyles();
+
   return (
     <Layout title={car.label} back="/cars" gutter>
       <Container>
@@ -23,21 +46,19 @@ export default function CarDetails({ car }) {
           )}
           {car.lastRefuel && (
             <Grid item xs={12} sm={6}>
-              <Card>
-                <>
-                  <CardContent>
-                    <Typography variant="h5" component="h2">
-                      Last Refuel
-                    </Typography>
-                  </CardContent>
-                  <Refuel refuel={car.lastRefuel} />
-                </>
+              <Card className={classes.card}>
+                <CardContent>
+                  <Typography variant="h5" component="h2">
+                    Last Refuel
+                  </Typography>
+                </CardContent>
+                <Refuel refuel={car.lastRefuel} />
               </Card>
             </Grid>
           )}
           {car.stats && (
             <Grid item xs={12} sm={6}>
-              <Card>
+              <Card className={classes.card}>
                 <CardContent>
                   <Typography variant="h5" component="h2">
                     Statistics
@@ -47,6 +68,9 @@ export default function CarDetails({ car }) {
               </Card>
             </Grid>
           )}
+          <Grid item xs={12}>
+            <Refuels car={car} />
+          </Grid>
         </Grid>
         <Fab component={Link} to={`/cars/${car.id}/refuels/_new`}>
           <RefuelIcon />
@@ -113,6 +137,40 @@ function Statistics({ stats }) {
           />
         </ListItem>
       )}
+    </List>
+  );
+}
+
+function Refuels({ car }) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <ExpansionPanel expanded={expanded} onChange={() => setExpanded((e) => !e)}>
+      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+        <Typography variant="h5" component="h2">
+          Refuels
+        </Typography>
+      </ExpansionPanelSummary>
+      <ExpansionPanelDetails>{expanded && <RefuelsList car={car} />}</ExpansionPanelDetails>
+    </ExpansionPanel>
+  );
+}
+
+function RefuelsList({ car }) {
+  const [refuels, loading, error] = useRefuels(car.id);
+  if (loading) return <CircularProgress />;
+  if (error) return <Typography color="error">Error: {error.message}</Typography>;
+
+  return (
+    <List dense disablePadding>
+      {refuels.map((refuel) => (
+        <ListItem key={refuel.id} disableGutters>
+          <ListItemText
+            primary={`${new Date(refuel.date.seconds * 1000).toLocaleString()} at ${refuel.mileage.toLocaleString()} km`}
+            secondary={`${refuel.fuelAmount.toLocaleString()} liters for ${refuel.totalPrice.toLocaleString()} €`}
+          />
+        </ListItem>
+      ))}
     </List>
   );
 }

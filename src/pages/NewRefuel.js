@@ -64,7 +64,6 @@ function NewRefuelForm({ car, user }) {
       };
 
       try {
-        console.log('new refuel:', payload);
         await firestore
           .collection('cars')
           .doc(car.id)

@@ -27,6 +27,21 @@ export function useCar(id) {
   return [car, false];
 }
 
+export function useRefuels(carId) {
+  const [docs, loading, error] = useCollection(
+    firestore
+      .collection('cars')
+      .doc(carId)
+      .collection('refuels')
+      .orderBy('date', 'desc'),
+    {
+      snapshotListenOptions: { includeMetadataChanges: true },
+    }
+  );
+  const refuels = docs && docs.docs.map(materialize);
+  return [refuels, loading, error];
+}
+
 function materialize(doc) {
   return doc && { ...doc.data(), id: doc.id, _cached: doc.metadata.fromCache };
 }
