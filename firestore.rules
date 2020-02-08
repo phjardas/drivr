@@ -1,0 +1,18 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /cars/{carId} {
+        allow read: if request.auth != null && resource != null && request.auth.uid in resource.data.users
+        allow create: if request.auth != null && request.resource.data.ownerId == request.auth.uid
+        allow update, delete: if request.auth != null && resource.data.ownerId == request.auth.uid
+    }
+
+    match /refuels/{refuelId} {
+    	allow create: if request.auth != null && request.auth.uid in get(/databases/$(database)/documents/cars/$(request.resource.data.carId)).data.users
+    }
+
+    match /users/{userId} {
+      allow read: if request.auth != null
+      allow create, update: if request.auth != null && request.auth.uid == userId
+    }
+  }
+}
