@@ -84,7 +84,7 @@ function flattenValues(obj, path) {
     return [{ path, value: deleteField() }];
   }
 
-  if (type instanceof Firebase.firestore.Timestamp) {
+  if (obj instanceof Firebase.firestore.Timestamp || obj instanceof Date) {
     return obj;
   }
 
