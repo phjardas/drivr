@@ -111,17 +111,17 @@ function Refuel({ refuel }) {
 function Statistics({ stats }) {
   return (
     <List dense>
-      {stats.totalDistance && (
+      {stats.totalDistance > 0 && (
         <ListItem>
           <ListItemText primary={`Total distance: ${stats.totalDistance.toLocaleString()} km`} />
         </ListItem>
       )}
-      {stats.totalFuel && (
+      {stats.totalFuel > 0 && (
         <ListItem>
           <ListItemText primary={`Total fuel: ${stats.totalFuel.toLocaleString()} l`} secondary={`${stats.refuelCount} refuels`} />
         </ListItem>
       )}
-      {stats.averageConsumption && (
+      {stats.averageConsumption > 0 && (
         <ListItem>
           <ListItemText
             primary={`Consumption: ${(stats.averageConsumption * 100).toLocaleString()} cl/km`}
@@ -129,7 +129,7 @@ function Statistics({ stats }) {
           />
         </ListItem>
       )}
-      {stats.totalPrice && (
+      {stats.totalPrice > 0 && (
         <ListItem>
           <ListItemText
             primary={`Total spendings: ${stats.totalPrice.toLocaleString()} €`}

@@ -60,7 +60,6 @@ function NewRefuelForm({ car, user }) {
         totalPrice,
         fuelAmount,
         incomplete,
-        pricePerLiter: totalPrice / fuelAmount,
       };
 
       try {

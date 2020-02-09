@@ -84,6 +84,10 @@ function flattenValues(obj, path) {
     return [{ path, value: deleteField() }];
   }
 
+  if (type instanceof Firebase.firestore.Timestamp) {
+    return obj;
+  }
+
   if (type === 'object') {
     return Object.keys(obj).flatMap((key) => flattenValues(obj[key], path ? `${path}.${key}` : key));
   }
