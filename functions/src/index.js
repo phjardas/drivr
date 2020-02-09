@@ -1,3 +1,4 @@
+import 'core-js';
 import functions from 'firebase-functions';
 import admin from './firebase';
 import { updateCarStatistics } from './stats';

@@ -5502,7 +5502,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:^3.5.0":
+"core-js@npm:^3.5.0, core-js@npm:^3.6.4":
   version: 3.6.4
   resolution: "core-js@npm:3.6.4"
   checksum: c24a306a8427ee9febf89b789d054e29ffb0163d6a9e941d464799a7f7fcece80754fdc358c190f1caf79f1f7074895e73b08855ec5fc089356934d602b4a357
@@ -6597,6 +6597,7 @@ __metadata:
     "@babel/preset-env": ^7.8.4
     "@rollup/plugin-commonjs": ^11.0.2
     "@rollup/plugin-node-resolve": ^7.1.1
+    core-js: ^3.6.4
     firebase-admin: ^8.9.2
     firebase-functions: latest
     jest: ^25.1.0

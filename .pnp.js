@@ -9217,6 +9217,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@babel/preset-env", "virtual:adb791034c3bafd7b8aef25aaab9d1e4bc2c8e9c8af1ef4b2d7c557773df74c61d92ed5ed1737c3b14a33072f2f0217bf4619e99e83a5f358b1a88b5081c3fcd#npm:7.8.4"],
             ["@rollup/plugin-commonjs", "virtual:adb791034c3bafd7b8aef25aaab9d1e4bc2c8e9c8af1ef4b2d7c557773df74c61d92ed5ed1737c3b14a33072f2f0217bf4619e99e83a5f358b1a88b5081c3fcd#npm:11.0.2"],
             ["@rollup/plugin-node-resolve", "virtual:adb791034c3bafd7b8aef25aaab9d1e4bc2c8e9c8af1ef4b2d7c557773df74c61d92ed5ed1737c3b14a33072f2f0217bf4619e99e83a5f358b1a88b5081c3fcd#npm:7.1.1"],
+            ["core-js", "npm:3.6.4"],
             ["firebase-admin", "npm:8.9.2"],
             ["firebase-functions", "virtual:adb791034c3bafd7b8aef25aaab9d1e4bc2c8e9c8af1ef4b2d7c557773df74c61d92ed5ed1737c3b14a33072f2f0217bf4619e99e83a5f358b1a88b5081c3fcd#npm:3.3.0"],
             ["jest", "npm:25.1.0"],
