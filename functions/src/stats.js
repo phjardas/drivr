@@ -1,19 +1,6 @@
 import Firebase from 'firebase-admin';
 
 export function updateCarStatistics(refuels, carId) {
-  if (!refuels.length) {
-    return [
-      {
-        path: `cars/${carId}`,
-        operation: 'update',
-        value: {
-          stats: { refuelCount: 0 },
-          lastRefuel: deleteField(),
-        },
-      },
-    ];
-  }
-
   const updates = [];
   let refuelCount = 0;
   let totalDistance = 0;
@@ -24,8 +11,8 @@ export function updateCarStatistics(refuels, carId) {
   for (const refuel of refuels) {
     const refuelData = {
       pricePerLiter: refuel.totalPrice / refuel.fuelAmount,
-      consumption: deleteField(),
-      distance: deleteField(),
+      consumption: undefined,
+      distance: undefined,
     };
 
     if (previousRefuel) {
@@ -43,37 +30,40 @@ export function updateCarStatistics(refuels, carId) {
     updates.push({
       path: `cars/${carId}/refuels/${refuel.id}`,
       operation: 'update',
-      value: refuelData,
+      value: flatten(refuelData),
     });
   }
 
-  const firstRefuel = refuels[0];
   const stats = {
     refuelCount,
     totalDistance,
     totalFuel,
     totalPrice,
-    averageConsumption: deleteField(),
-    averagePricePerDistance: deleteField(),
-    averagePricePerVolume: deleteField(),
+    averageConsumption: undefined,
+    averagePricePerDistance: undefined,
+    averagePricePerVolume: undefined,
   };
 
-  if (stats.totalDistance && refuelCount > 1) {
-    stats.averageConsumption = (stats.totalFuel - firstRefuel.fuelAmount) / stats.totalDistance;
-    stats.averagePricePerDistance = (stats.totalPrice - firstRefuel.totalPrice) / stats.totalDistance;
-  }
+  if (refuels.length) {
+    const firstRefuel = refuels[0];
 
-  if (stats.totalFuel) {
-    stats.averagePricePerVolume = stats.totalPrice / stats.totalFuel;
+    if (stats.totalDistance && refuelCount > 1) {
+      stats.averageConsumption = (stats.totalFuel - firstRefuel.fuelAmount) / stats.totalDistance;
+      stats.averagePricePerDistance = (stats.totalPrice - firstRefuel.totalPrice) / stats.totalDistance;
+    }
+
+    if (stats.totalFuel) {
+      stats.averagePricePerVolume = stats.totalPrice / stats.totalFuel;
+    }
   }
 
   updates.push({
     path: `cars/${carId}`,
     operation: 'update',
-    value: {
+    value: flatten({
       stats,
       lastRefuel: previousRefuel,
-    },
+    }),
   });
 
   return updates;
@@ -81,4 +71,22 @@ export function updateCarStatistics(refuels, carId) {
 
 export function deleteField() {
   return Firebase.firestore.FieldValue.delete();
+}
+
+function flatten(obj) {
+  return flattenValues(obj).reduce((a, b) => ({ ...a, [b.path]: b.value }), {});
+}
+
+function flattenValues(obj, path) {
+  const type = typeof obj;
+
+  if (obj === null || type === 'undefined') {
+    return [{ path, value: deleteField() }];
+  }
+
+  if (type === 'object') {
+    return Object.keys(obj).flatMap((key) => flattenValues(obj[key], path ? `${path}.${key}` : key));
+  }
+
+  return { path, value: obj };
 }

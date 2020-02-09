@@ -29,13 +29,40 @@ const useStyles = makeStyles({
 
 export default function CarDetails({ car }) {
   const classes = useStyles();
+  const hasStats = car.stats && car.stats.refuelCount > 0;
 
   return (
     <Layout title={car.label} back="/cars" gutter>
       <Container>
         {car._cached && <CacheWarning />}
         <Grid container spacing={2}>
-          {!car.stats && (
+          {hasStats ? (
+            <>
+              <Grid item xs={12} sm={6}>
+                <Card className={classes.card}>
+                  <CardContent>
+                    <Typography variant="h5" component="h2">
+                      Last Refuel
+                    </Typography>
+                  </CardContent>
+                  <Refuel refuel={car.lastRefuel} />
+                </Card>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Card className={classes.card}>
+                  <CardContent>
+                    <Typography variant="h5" component="h2">
+                      Statistics
+                    </Typography>
+                  </CardContent>
+                  <Statistics stats={car.stats} />
+                </Card>
+              </Grid>
+              <Grid item xs={12}>
+                <Refuels car={car} />
+              </Grid>
+            </>
+          ) : (
             <Grid item xs={12}>
               <Card>
                 <CardContent>
@@ -44,33 +71,6 @@ export default function CarDetails({ car }) {
               </Card>
             </Grid>
           )}
-          {car.lastRefuel && (
-            <Grid item xs={12} sm={6}>
-              <Card className={classes.card}>
-                <CardContent>
-                  <Typography variant="h5" component="h2">
-                    Last Refuel
-                  </Typography>
-                </CardContent>
-                <Refuel refuel={car.lastRefuel} />
-              </Card>
-            </Grid>
-          )}
-          {car.stats && (
-            <Grid item xs={12} sm={6}>
-              <Card className={classes.card}>
-                <CardContent>
-                  <Typography variant="h5" component="h2">
-                    Statistics
-                  </Typography>
-                </CardContent>
-                <Statistics stats={car.stats} />
-              </Card>
-            </Grid>
-          )}
-          <Grid item xs={12}>
-            <Refuels car={car} />
-          </Grid>
         </Grid>
         <Fab component={Link} to={`/cars/${car.id}/refuels/_new`}>
           <RefuelIcon />

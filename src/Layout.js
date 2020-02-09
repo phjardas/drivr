@@ -5,7 +5,6 @@ import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import CacheNotification from './CacheNotification';
 import DarkModeButton from './DarkModeButton';
-import Footer from './Footer';
 import UpdateNotification from './UpdateNotification';
 import UserProfileButton from './UserProfileButton';
 
@@ -43,7 +42,6 @@ export default function Layout({ title, back, gutter, children }) {
       <main className={gutter && classes.gutter}>{children}</main>
       <CacheNotification />
       <UpdateNotification />
-      <Footer />
     </>
   );
 }

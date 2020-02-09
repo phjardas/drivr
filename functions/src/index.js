@@ -26,6 +26,5 @@ async function recreateCarStatistics(carId) {
 }
 
 function executeActions(actions, tx) {
-  console.log('executing actions:', actions);
   return Promise.all(actions.map(({ path, operation, value }) => tx[operation](firestore.doc(path), value)));
 }
