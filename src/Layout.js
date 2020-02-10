@@ -10,7 +10,7 @@ import UserProfileButton from './UserProfileButton';
 
 const useStyles = makeStyles(({ spacing }) => ({
   gutter: {
-    margin: `${spacing(2)}px 0`,
+    marginTop: spacing(2),
   },
   actions: {
     marginLeft: 'auto',

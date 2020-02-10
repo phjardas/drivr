@@ -10,13 +10,11 @@ export function CacheProvider({ children }) {
     registerServiceWorker({
       onSuccess: () => setState((s) => ({ ...s, cached: true })),
       onUpdate: (registration) => {
-        console.log('content was updated');
         const waitingServiceWorker = registration.waiting;
 
         if (waitingServiceWorker) {
           waitingServiceWorker.addEventListener('statechange', (event) => {
             if (event.target.state === 'activated') {
-              console.log('new service worker was activated, ready to reload');
               setState((s) => ({ ...s, updated: true }));
             }
           });

@@ -1,12 +1,13 @@
 import React, { lazy, Suspense, useEffect } from 'react';
-import { BrowserRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { useAnalytics } from '../analytics';
 import { CarsProvider } from '../data/cars';
 import Loading from '../Loading';
+import Redirect from '../Redirect';
 
-const Car = lazy(() => import('./Car'));
-const Cars = lazy(() => import('./Cars'));
-const NewCar = lazy(() => import('./NewCar'));
+const Car = lazy(() => import('./cars/_id/Car'));
+const Cars = lazy(() => import('./cars/Cars'));
+const NewCar = lazy(() => import('./cars/NewCar'));
 
 export default function Pages() {
   return (
@@ -17,7 +18,7 @@ export default function Pages() {
             <Route path="/cars" element={<Cars />} />
             <Route path="/cars/_new" element={<NewCar />} />
             <Route path="/cars/:id/*" element={<Car />} />
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Redirect to="/cars" />} />
           </Routes>
           <Routes>
             <Route path="*" element={<AnalyticsRoute />} />
@@ -34,11 +35,5 @@ function AnalyticsRoute() {
   useEffect(() => {
     ga.pageview(location.pathname);
   }, [ga, location]);
-  return null;
-}
-
-function Home() {
-  const navigate = useNavigate();
-  useEffect(() => navigate('/cars'), [navigate]);
   return null;
 }

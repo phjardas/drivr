@@ -3,9 +3,9 @@ import { Field, Form, Formik, useFormikContext } from 'formik';
 import React, { useCallback, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { boolean, number, object, string } from 'yup';
-import { useAuth } from '../auth';
-import { Firebase, firestore } from '../firebase';
-import Layout from '../Layout';
+import { useAuth } from '../../../auth';
+import { Firebase, firestore } from '../../../firebase';
+import Layout from '../../../Layout';
 
 export default function NewRefuel({ car }) {
   const { user } = useAuth();

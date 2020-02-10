@@ -3,11 +3,11 @@ import { Field, Form, Formik } from 'formik';
 import React, { useCallback, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { object, string } from 'yup';
-import { useAuth } from '../auth';
-import { useCars } from '../data';
-import { firestore } from '../firebase';
-import Layout from '../Layout';
-import Loading from '../Loading';
+import { useAuth } from '../../auth';
+import { useCars } from '../../data';
+import { firestore } from '../../firebase';
+import Layout from '../../Layout';
+import Loading from '../../Loading';
 
 export default function NewCar() {
   const { user } = useAuth();

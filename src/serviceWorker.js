@@ -52,10 +52,8 @@ function registerValidSW(swUrl, config) {
         installingWorker.onstatechange = () => {
           if (installingWorker.state === 'installed') {
             if (navigator.serviceWorker.controller) {
-              console.log('[server-worker] content was updated');
               if (config && config.onUpdate) config.onUpdate(registration);
             } else {
-              console.log('[server-worker] content was cached');
               if (config && config.onSuccess) config.onSuccess(registration);
             }
           }
