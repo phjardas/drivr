@@ -5,9 +5,7 @@ export function deleteField() {
 }
 
 export function flatten(obj) {
-  const ret = flattenValues(obj).reduce((a, b) => ({ ...a, [b.path]: b.value }), {});
-  console.log('Flattened %s to %s', JSON.stringify(obj), JSON.stringify(ret));
-  return ret;
+  return flattenValues(obj).reduce((a, b) => ({ ...a, [b.path]: b.value }), {});
 }
 
 function flattenValues(obj, path) {

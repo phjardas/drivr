@@ -1,4 +1,4 @@
-import { flatten } from './utils';
+import { deleteField } from './utils';
 
 export function updateCarStatistics(refuels, carId) {
   const updates = [];
@@ -11,8 +11,8 @@ export function updateCarStatistics(refuels, carId) {
   for (const refuel of refuels) {
     const refuelData = {
       pricePerLiter: refuel.totalPrice / refuel.fuelAmount,
-      consumption: undefined,
-      distance: undefined,
+      consumption: deleteField(),
+      distance: deleteField(),
     };
 
     if (previousRefuel) {
@@ -30,41 +30,45 @@ export function updateCarStatistics(refuels, carId) {
     updates.push({
       path: `cars/${carId}/refuels/${refuel.id}`,
       operation: 'update',
-      value: flatten(refuelData),
+      value: refuelData,
     });
   }
 
   const stats = {
-    refuelCount,
-    totalDistance,
-    totalFuel,
-    totalPrice,
-    averageConsumption: undefined,
-    averagePricePerDistance: undefined,
-    averagePricePerVolume: undefined,
+    'stats.refuelCount': refuelCount,
+    'stats.totalDistance': totalDistance || deleteField(),
+    'stats.totalFuel': totalFuel || deleteField(),
+    'stats.totalPrice': totalPrice || deleteField(),
+    'stats.averageConsumption': deleteField(),
+    'stats.averagePricePerDistance': deleteField(),
+    'stats.averagePricePerVolume': deleteField(),
   };
 
   if (refuels.length) {
     const firstRefuel = refuels[0];
 
-    if (stats.totalDistance && refuelCount > 1) {
-      stats.averageConsumption = (stats.totalFuel - firstRefuel.fuelAmount) / stats.totalDistance;
-      stats.averagePricePerDistance = (stats.totalPrice - firstRefuel.totalPrice) / stats.totalDistance;
+    if (totalDistance && refuelCount > 1) {
+      stats['stats.averageConsumption'] = (totalFuel - firstRefuel.fuelAmount) / totalDistance;
+      stats['stats.averagePricePerDistance'] = (totalPrice - firstRefuel.totalPrice) / totalDistance;
     }
 
-    if (stats.totalFuel) {
-      stats.averagePricePerVolume = stats.totalPrice / stats.totalFuel;
+    if (totalFuel) {
+      stats['stats.averagePricePerVolume'] = totalPrice / totalFuel;
     }
   }
 
   updates.push({
     path: `cars/${carId}`,
     operation: 'update',
-    value: flatten({
-      stats,
-      lastRefuel: previousRefuel,
-    }),
+    value: {
+      ...stats,
+      ...(previousRefuel ? prefixKeys(previousRefuel, 'lastRefuel') : { lastRefuel: deleteField() }),
+    },
   });
 
   return updates;
+}
+
+function prefixKeys(obj, prefix) {
+  return Object.keys(obj).reduce((ret, key) => ({ ...ret, [`${prefix}.${key}`]: obj[key] }), {});
 }

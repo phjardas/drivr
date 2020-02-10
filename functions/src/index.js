@@ -1,9 +1,7 @@
 import 'core-js';
 import functions from 'firebase-functions';
-import admin from './firebase';
+import { executeActions, firestore } from './firebase';
 import { updateCarStatistics } from './stats';
-
-const firestore = admin.firestore();
 
 const refuelDoc = functions.firestore.document('cars/{carId}/refuels/{refuelId}');
 
@@ -24,8 +22,4 @@ async function recreateCarStatistics(carId) {
     const actions = updateCarStatistics(refuels, carId);
     await executeActions(actions, tx);
   });
-}
-
-function executeActions(actions, tx) {
-  return Promise.all(actions.map(({ path, operation, value }) => tx[operation](firestore.doc(path), value)));
 }
