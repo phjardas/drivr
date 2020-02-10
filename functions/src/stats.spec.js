@@ -1,4 +1,5 @@
-import { deleteField, updateCarStatistics } from './stats';
+import { updateCarStatistics } from './stats';
+import { deleteField } from './utils';
 
 describe('stats', () => {
   it('should reset car statistics if no refuels', () => {
