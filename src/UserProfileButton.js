@@ -1,4 +1,4 @@
-import { Button, IconButton, makeStyles, Popover, Typography } from '@material-ui/core';
+import { Avatar, Button, IconButton, makeStyles, Popover, Typography } from '@material-ui/core';
 import { Person as PersonIcon } from '@material-ui/icons';
 import React, { useCallback, useState } from 'react';
 import { useAuth } from './auth';
@@ -12,7 +12,7 @@ export default function UserProfileButton() {
   return (
     <>
       <IconButton color="inherit" onClick={handleClick}>
-        <PersonIcon />
+        {user.photoURL ? <Avatar src={user.photoURL} alt={user.displayName || user.email} /> : <PersonIcon />}
       </IconButton>
       <Popover
         open={Boolean(anchor)}

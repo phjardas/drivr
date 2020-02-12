@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useSta
 import { LineSeries, XAxis, XYPlot, YAxis } from 'react-vis';
 import 'react-vis/dist/style.css';
 import { useRefuels } from '../../../data';
+import Delay from '../../../Delay';
 
 function Charts({ refuels }) {
   return (
@@ -135,7 +136,12 @@ function ChartCard({ title, children }) {
 
 export default function CarCharts({ car }) {
   const [refuels, loading, error] = useRefuels(car.id, ['date', 'asc']);
-  if (loading) return <CircularProgress />;
+  if (loading)
+    return (
+      <Delay wait={300}>
+        <CircularProgress />
+      </Delay>
+    );
   if (error) return <Typography color="error">Error: {error.message}</Typography>;
   return <Charts refuels={refuels} />;
 }

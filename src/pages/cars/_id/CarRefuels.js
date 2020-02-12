@@ -2,6 +2,7 @@ import { CircularProgress, ExpansionPanel, ExpansionPanelDetails, ExpansionPanel
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
 import React from 'react';
 import { useRefuels } from '../../../data';
+import Delay from '../../../Delay';
 
 const useStyles = makeStyles(({ palette }) => ({
   heading: {
@@ -42,7 +43,12 @@ function Refuels({ refuels }) {
 
 export default function RefuelsList({ car }) {
   const [refuels, loading, error] = useRefuels(car.id, ['date', 'desc']);
-  if (loading) return <CircularProgress />;
+  if (loading)
+    return (
+      <Delay wait={300}>
+        <CircularProgress />
+      </Delay>
+    );
   if (error) return <Typography color="error">Error: {error.message}</Typography>;
   return <Refuels refuels={refuels} />;
 }

@@ -1,4 +1,4 @@
-import { List } from '@material-ui/core';
+import { Card, CardContent, Container, List, Typography } from '@material-ui/core';
 import { Add as AddIcon } from '@material-ui/icons';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
@@ -14,17 +14,26 @@ export default function Cars() {
   if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <Layout>
-      <List>
-        {cars.map((car) => (
-          <ListItemLink
-            key={car.id}
-            to={`/cars/${car.id}`}
-            primary={car.label}
-            secondary={car.lastRefuel && <>Last refuel: {car.lastRefuel.mileage.toLocaleString()} km</>}
-          />
-        ))}
-      </List>
+    <Layout gutter>
+      <Container>
+        <Card>
+          <CardContent>
+            <Typography variant="h5" component="h2">
+              Cars
+            </Typography>
+          </CardContent>
+          <List>
+            {cars.map((car) => (
+              <ListItemLink
+                key={car.id}
+                to={`/cars/${car.id}`}
+                primary={car.label}
+                secondary={car.lastRefuel && <>Last refuel: {car.lastRefuel.mileage.toLocaleString()} km</>}
+              />
+            ))}
+          </List>
+        </Card>
+      </Container>
       <Fab component={RouterLink} to="/cars/_new">
         <AddIcon />
       </Fab>

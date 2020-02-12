@@ -45,7 +45,7 @@ export default function CarDetails({ car }) {
           <Route path="*" element={<Redirect to="overview" />} />
         </Routes>
       </Container>
-      <CarNav key="nav" className={classes.nav} />
+      {car.stats && car.stats.refuelCount > 0 && <CarNav key="nav" className={classes.nav} />}
       <Fab key="fab" component={Link} to="refuels/_new" className={classes.fab}>
         <RefuelIcon />
       </Fab>
