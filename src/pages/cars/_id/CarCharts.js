@@ -1,5 +1,5 @@
 import { Card, CardContent, CircularProgress, Grid, Typography, useTheme } from '@material-ui/core';
-import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { LineSeries, XAxis, XYPlot, YAxis } from 'react-vis';
 import 'react-vis/dist/style.css';
 import { useRefuels } from '../../../data';
@@ -102,14 +102,24 @@ function DistanceOverTimeChart({ refuels }) {
 function ChartCard({ title, children }) {
   const [width, setWidth] = useState();
   const cardRef = useRef();
-  useLayoutEffect(() => {
+
+  const updateSize = useCallback(() => {
     if (cardRef.current) {
       const style = getComputedStyle(cardRef.current, null);
       const paddingLeft = parseInt(style.paddingLeft.replace(/px$/, ''), 10);
       const paddingRight = parseInt(style.paddingRight.replace(/px$/, ''), 10);
       setWidth(cardRef.current.clientWidth - paddingLeft - paddingRight);
+    } else {
+      setWidth(null);
     }
   }, [setWidth]);
+
+  useLayoutEffect(updateSize, [updateSize]);
+  useEffect(() => {
+    const listener = debounce(updateSize, 300);
+    window.addEventListener('resize', listener, false);
+    return () => window.removeEventListener('resize', listener);
+  }, [updateSize]);
 
   return (
     <Card>
@@ -128,4 +138,15 @@ export default function CarCharts({ car }) {
   if (loading) return <CircularProgress />;
   if (error) return <Typography color="error">Error: {error.message}</Typography>;
   return <Charts refuels={refuels} />;
+}
+
+function debounce(fn, ms) {
+  let timer;
+  return (_) => {
+    clearTimeout(timer);
+    timer = setTimeout((_) => {
+      timer = null;
+      fn.apply(this, arguments);
+    }, ms);
+  };
 }
