@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useMemo } from 'react';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { useAuth } from '../auth';
 import { firestore } from '../firebase';
@@ -27,17 +27,17 @@ export function useCar(id) {
   return [car, false];
 }
 
-export function useRefuels(carId) {
-  const [docs, loading, error] = useCollection(
-    firestore
+export function useRefuels(carId, order) {
+  const collection = useMemo(() => {
+    let coll = firestore
       .collection('cars')
       .doc(carId)
-      .collection('refuels')
-      .orderBy('date', 'desc'),
-    {
-      snapshotListenOptions: { includeMetadataChanges: true },
-    }
-  );
+      .collection('refuels');
+    if (order) coll = coll.orderBy(...order);
+    return coll;
+  }, [carId, order]);
+
+  const [docs, loading, error] = useCollection(collection, { snapshotListenOptions: { includeMetadataChanges: true } });
   const refuels = docs && docs.docs.map(materialize);
   return [refuels, loading, error];
 }

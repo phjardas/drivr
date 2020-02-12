@@ -41,7 +41,7 @@ function Refuels({ refuels }) {
 }
 
 export default function RefuelsList({ car }) {
-  const [refuels, loading, error] = useRefuels(car.id);
+  const [refuels, loading, error] = useRefuels(car.id, ['date', 'desc']);
   if (loading) return <CircularProgress />;
   if (error) return <Typography color="error">Error: {error.message}</Typography>;
   return <Refuels refuels={refuels} />;

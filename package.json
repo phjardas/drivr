@@ -17,6 +17,7 @@
     "react-helmet-async": "^1.0.4",
     "react-router": "next",
     "react-router-dom": "next",
+    "react-vis": "^1.11.7",
     "yup": "^0.28.1"
   },
   "devDependencies": {

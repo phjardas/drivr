@@ -1,14 +1,16 @@
 import { Container, makeStyles } from '@material-ui/core';
 import { LocalGasStation as RefuelIcon } from '@material-ui/icons';
-import React from 'react';
+import React, { lazy } from 'react';
 import { Link, Route, Routes } from 'react-router-dom';
 import CacheWarning from '../../../CacheWarning';
 import Fab from '../../../Fab';
 import Layout from '../../../Layout';
 import Redirect from '../../../Redirect';
 import CarNav from './CarNav';
-import CarOverview from './CarOverview';
-import CarRefuels from './CarRefuels';
+
+const CarCharts = lazy(() => import('./CarCharts'));
+const CarOverview = lazy(() => import('./CarOverview'));
+const CarRefuels = lazy(() => import('./CarRefuels'));
 
 const useStyles = makeStyles(({ spacing }) => ({
   content: {
@@ -21,7 +23,7 @@ const useStyles = makeStyles(({ spacing }) => ({
     right: 0,
   },
   fab: {
-    bottom: 28,
+    bottom: 56 + spacing(2),
   },
 }));
 
@@ -39,6 +41,7 @@ export default function CarDetails({ car }) {
         <Routes>
           <Route path="overview" element={<CarOverview car={car} />} />
           <Route path="refuels" element={<CarRefuels car={car} />} />
+          <Route path="charts" element={<CarCharts car={car} />} />
           <Route path="*" element={<Redirect to="overview" />} />
         </Routes>
       </Container>
