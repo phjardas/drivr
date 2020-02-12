@@ -31,7 +31,7 @@ function MileageOverTimeChart({ refuels }) {
   return (
     <ChartCard title="Mileage over time">
       {(props) => (
-        <XYPlot {...props}>
+        <XYPlot {...props} xType="time">
           <XAxis />
           <YAxis />
           <LineSeries data={data} stroke={palette.primary.main} curve="basis" />
@@ -47,13 +47,15 @@ function ConsumptionOverTimeChart({ refuels }) {
     () => refuels.filter((refuel) => refuel.consumption).map((refuel) => ({ x: new Date(refuel.date.seconds * 1000), y: refuel.consumption * 100 })),
     [refuels]
   );
+  const dataAttenuated = useAttenuated(data, 0.1);
 
   return (
     <ChartCard title="Consumption over time">
       {(props) => (
-        <XYPlot {...props}>
+        <XYPlot {...props} xType="time">
           <XAxis />
           <YAxis />
+          <LineSeries data={dataAttenuated} stroke={palette.primary.light} curve="basis" />
           <LineSeries data={data} stroke={palette.primary.main} curve="basis" />
         </XYPlot>
       )}
@@ -67,13 +69,15 @@ function FuelPriceOverTimeChart({ refuels }) {
     () => refuels.filter((refuel) => refuel.pricePerLiter).map((refuel) => ({ x: new Date(refuel.date.seconds * 1000), y: refuel.pricePerLiter })),
     [refuels]
   );
+  const dataAttenuated = useAttenuated(data, 0.1);
 
   return (
     <ChartCard title="Fuel price over time">
       {(props) => (
-        <XYPlot {...props}>
+        <XYPlot {...props} xType="time">
           <XAxis />
           <YAxis />
+          <LineSeries data={dataAttenuated} stroke={palette.primary.light} curve="basis" />
           <LineSeries data={data} stroke={palette.primary.main} curve="basis" />
         </XYPlot>
       )}
@@ -86,13 +90,15 @@ function DistanceOverTimeChart({ refuels }) {
   const data = useMemo(() => refuels.filter((refuel) => refuel.distance).map((refuel) => ({ x: new Date(refuel.date.seconds * 1000), y: refuel.distance })), [
     refuels,
   ]);
+  const dataAttenuated = useAttenuated(data, 0.1);
 
   return (
     <ChartCard title="Distance over time">
       {(props) => (
-        <XYPlot {...props}>
+        <XYPlot {...props} xType="time">
           <XAxis />
           <YAxis />
+          <LineSeries data={dataAttenuated} stroke={palette.primary.light} curve="basis" />
           <LineSeries data={data} stroke={palette.primary.main} curve="basis" />
         </XYPlot>
       )}
@@ -155,4 +161,11 @@ function debounce(fn, ms) {
       fn.apply(this, arguments);
     }, ms);
   };
+}
+
+function useAttenuated(data, factor) {
+  return useMemo(() => data.reduce((agg, d) => [...agg, { x: d.x, y: agg.length ? agg[agg.length - 1].y * (1 - factor) + d.y * factor : d.y }], []), [
+    data,
+    factor,
+  ]);
 }
