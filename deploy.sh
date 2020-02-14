@@ -1,17 +1,25 @@
 #!/bin/bash -e
 
-echo "Deleting old publication"
+echo
+echo "=== Deleting old publication"
 rm -rf hosting
 mkdir hosting
 git worktree prune
 rm -rf .git/worktrees/hosting/
 
-echo "Checking out hosting branch"
+echo
+echo "=== Checking out hosting branch"
 git worktree add -B hosting hosting origin/hosting
 
-echo "Updating files"
+echo
+echo "=== Updating files"
 cp -r public/* hosting
 cd hosting
 git add --all
 git commit -m "publish"
-#git push -u origin hosting
+
+echo
+echo "=== Publishing"
+git push -u origin hosting
+yarn --immutable --immutable-cache --inline-builds
+yarn firebase deploy --token=${FIREBASE_API_TOKEN}
