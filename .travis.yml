@@ -6,20 +6,5 @@ install:
 script:
   - yarn test
   - yarn build
-before_deploy:
-  - yarn firebase deploy --token=${FIREBASE_API_TOKEN} --only functions
-deploy:
-  provider: s3
-  access_key_id:
-    secure: KpGWbEqCXGnooc7qeMDy6u9boMH+EtxVK7pfYIpA3CcaTtLqGCkTH5qv4FKFjr920EYNcXCtJQZetQY4LR5ROB4jwQtF61lIZVmNjXzwcUDR2JkPkyWI0nCRsVrJU8Abnlg/YxBLyLaPdrmfyRU5j9vDgQ12ZYlBAh/1zCjO7KTWHXP5tFyBC2tW2NB6kPPGxA2b/9RU9yPFlUGjDTR3GNSfeDwdRNpailSAM1IXM1ji5vBC9SfDQUPtSNEp320SrfiwLcV68ESTsnVctmiPNaTbA+jce1WCKUiCvFBG8DGHpSv+6VBd+ps0G5OXoLvA+45jrnnb18ozR6nceDrHWiAjRy2dO/erwuwtsR2782tHyah6I+UBqNQzCN2ESgPdPCgCEg4JnZRlzrtX5ImFRg66KDnSI2zP1cASyKR9tU41CdEFZ1MZ4IvYrNbcx4ESXHdt1NmMFvo0Z6yLUGHUp1RRCddu1mochV9lw2b+kpnl71O2IdEFeR1y9bARbJ1hSCUCMY2WIVWNG1imgVWAtvIRxh9N3wtDHKxWKC/HiMXlfKdOlidBzOPFcs/X7WtCbb97OMZTYUNqfcoCZXCDf5s5ZwVWodY9kx/nfBCT9Knc5XgfnN1jHLZBTuJbaG55FKtZsOBk5LmQWhiDmEc6iQ8l/WHmrJ0eNFiIBnbqevk=
-  secret_access_key:
-    secure: aFdogNJYg/DtVEsEVZr1NJmraTMn8gheOJxKNiYDFY4SppFJTWQ1Fttd/suM0dx1Bwnb1PSeO5rip25KhY/4etbum/DH97rcTii1kjpNplOxFq5pUZb8AaA7cQWl2swrsYcgxOSBCaTiyoILE+B3j75Vlq4lY1xy36DYcMnBrYZ5fprXolq2eziHZ98mCqC/qUJTmC4Njl+Vhsh4xmihx1bzge8CL3vuGJOa4SDm96FpTzSuq0KL28nvX0v5AhD/FTJ5Mct/emj9/W/f/SwlHIp1R1uxKdlyRteVoH7fBq6mrOmRHdqqPvnBc0KIx1TFJCSX1qXwZvhMFPrrAJroXJvuPBH/1EkpdvU8mmItSOW8dsb25grLS0bSJIQ2721ev35JdyIg+3FfutaG8WxPlSDlWWSMWsG+BTkHhPRa9DZZZGoQeCULOTRdL6JRjaG/fgveWEuijF8iemITBqnnjpw23go89xj2GAqRgrtubXqXNqUuovZWkEwSs9yKjhyYjS/Bhxr7+ymcdBclxDABXKZXW4awt0gMorVNENMFNaVr4X1yD1bJPgI74UuTWLbx7axBhG71M8FmdZXBrQtx4mUMd1fg5KDR9b49wQ64tZTQfJ6Kd0l29rkVbsSf4Uzfxa4NMorPrFlOWlQ8wOM1kKjIYQTKoKzcy+15aGYXQXM=
-  bucket: s3://drivr.jardas.de/
-  local_dir: build
-  skip_cleanup: true
-  acl: public_read
-  region: eu-central-1
-  cache_control: max-age=31536000
-  expires: '2100-12-31 00:00:00 +0000'
-  on:
-    branch: master
+after_success:
+  - ./travis-deploy.sh
