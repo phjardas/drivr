@@ -42,6 +42,15 @@ export function useRefuels(carId, order) {
   return [refuels, loading, error];
 }
 
+export function useDeleteRefuel(carId) {
+  const coll = firestore
+    .collection('cars')
+    .doc(carId)
+    .collection('refuels');
+
+  return (refuelId) => coll.doc(refuelId).delete();
+}
+
 function materialize(doc) {
   return doc && { ...doc.data(), id: doc.id, _cached: doc.metadata.fromCache };
 }
