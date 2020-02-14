@@ -1,8 +1,8 @@
-import { CircularProgress, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, makeStyles, Typography } from '@material-ui/core';
+import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, makeStyles, Typography } from '@material-ui/core';
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
 import React from 'react';
 import { useRefuels } from '../../../data';
-import Delay from '../../../Delay';
+import DataSuspense from '../../../DataSuspense';
 
 const useStyles = makeStyles(({ palette }) => ({
   heading: {
@@ -42,13 +42,10 @@ function Refuels({ refuels }) {
 }
 
 export default function RefuelsList({ car }) {
-  const [refuels, loading, error] = useRefuels(car.id, ['date', 'desc']);
-  if (loading)
-    return (
-      <Delay wait={300}>
-        <CircularProgress />
-      </Delay>
-    );
-  if (error) return <Typography color="error">Error: {error.message}</Typography>;
-  return <Refuels refuels={refuels} />;
+  const [data, loading, error] = useRefuels(car.id, ['date', 'desc']);
+  return (
+    <DataSuspense loading={loading} error={error} data={data}>
+      {(refuels) => <Refuels refuels={refuels} />}
+    </DataSuspense>
+  );
 }

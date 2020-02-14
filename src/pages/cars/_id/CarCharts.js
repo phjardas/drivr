@@ -1,9 +1,9 @@
-import { Card, CardContent, CircularProgress, Grid, Typography, useTheme } from '@material-ui/core';
+import { Card, CardContent, Grid, Typography, useTheme } from '@material-ui/core';
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { LineSeries, XAxis, XYPlot, YAxis } from 'react-vis';
 import 'react-vis/dist/style.css';
 import { useRefuels } from '../../../data';
-import Delay from '../../../Delay';
+import DelayedProgress from '../../../DelayedProgress';
 
 function Charts({ refuels }) {
   return (
@@ -142,12 +142,7 @@ function ChartCard({ title, children }) {
 
 export default function CarCharts({ car }) {
   const [refuels, loading, error] = useRefuels(car.id, ['date', 'asc']);
-  if (loading)
-    return (
-      <Delay wait={300}>
-        <CircularProgress />
-      </Delay>
-    );
+  if (loading) return <DelayedProgress />;
   if (error) return <Typography color="error">Error: {error.message}</Typography>;
   return <Charts refuels={refuels} />;
 }
