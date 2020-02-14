@@ -79,7 +79,7 @@ function NewRefuelForm({ car, user }) {
   );
 
   const schema = useMemo(() => {
-    return object({
+    let s = object({
       date: string().required(),
       time: string().required(),
       mileage: number()
@@ -93,6 +93,23 @@ function NewRefuelForm({ car, user }) {
         .min(0),
       incomplete: boolean().required(),
     });
+
+    if (car.lastRefuel) {
+      s = s.test({
+        name: 'date-after-last-refuel',
+        test({ date, time }) {
+          if (date && time && new Date(`${date}T${time}`).getTime() / 1000 <= car.lastRefuel.date.seconds) {
+            return this.createError({
+              path: 'date',
+              message: `The date must be after ${new Date(car.lastRefuel.date.seconds * 1000).toLocaleString()}`,
+            });
+          }
+          return true;
+        },
+      });
+    }
+
+    return s;
   }, [car]);
 
   return (
