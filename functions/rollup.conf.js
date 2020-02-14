@@ -7,6 +7,6 @@ export default {
     file: 'index.js',
     format: 'cjs',
   },
-  external: ['firebase-admin', 'firebase-functions'],
+  external: ['core-js', 'firebase-admin', 'firebase-functions'],
   plugins: [resolve(), commonjs()],
 };
