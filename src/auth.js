@@ -4,6 +4,7 @@ import { useAnalytics } from './analytics';
 import { auth, firestore, Firebase } from './firebase';
 import Loading from './Loading';
 import SignIn from './SignIn';
+import { version } from './config';
 
 const AuthContext = createContext({});
 
@@ -34,15 +35,17 @@ async function handleUser(fbUser) {
   const ref = await firestore.collection('users').doc(fbUser.uid);
 
   if ((await ref.get()).exists) {
-    await ref.update({ lastLogin: Firebase.firestore.FieldValue.serverTimestamp() });
+    await ref.update({
+      lastLogin: Firebase.firestore.FieldValue.serverTimestamp(),
+      appVersion: version,
+    });
   } else {
     await ref.set({
-      displayName: fbUser.displayName,
-      email: fbUser.email,
-      label: fbUser.displayName || fbUser.email,
+      label: fbUser.displayName,
       photoURL: fbUser.photoURL,
       createdAt: Firebase.firestore.FieldValue.serverTimestamp(),
       lastLogin: Firebase.firestore.FieldValue.serverTimestamp(),
+      appVersion: version,
     });
   }
 
