@@ -13,7 +13,7 @@ describeFirebaseRules('users', ({ authedApp, adminApp, assertSucceeds, assertFai
 
   it('should allow access to any user profile if authenticated', async () => {
     const admin = adminApp();
-    admin
+    await admin
       .collection('users')
       .doc('test')
       .set({ id: 'test' });
@@ -49,7 +49,7 @@ describeFirebaseRules('users', ({ authedApp, adminApp, assertSucceeds, assertFai
 
   it('should allow updates to own user profile', async () => {
     const admin = adminApp();
-    admin
+    await admin
       .collection('users')
       .doc('test')
       .set({ id: 'test' });
@@ -65,7 +65,7 @@ describeFirebaseRules('users', ({ authedApp, adminApp, assertSucceeds, assertFai
 
   it('should deny updates to other user profiles', async () => {
     const admin = adminApp();
-    admin
+    await admin
       .collection('users')
       .doc('test')
       .set({ id: 'test' });
