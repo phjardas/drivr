@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useMemo } from 'react';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { useAuth } from '../auth';
-import { firestore } from '../firebase';
+import { Firebase, firestore } from '../firebase';
+import { materialize } from './utils';
 
 const Context = createContext();
 
@@ -51,6 +52,18 @@ export function useDeleteRefuel(carId) {
   return (refuelId) => coll.doc(refuelId).delete();
 }
 
-function materialize(doc) {
-  return doc && { ...doc.data(), id: doc.id, _cached: doc.metadata.fromCache };
+export async function createCarInvite(car) {
+  const ref = await firestore
+    .collection('cars')
+    .doc(car.id)
+    .collection('invites')
+    .add({ createdAt: Firebase.firestore.FieldValue.serverTimestamp() });
+  return { id: ref.id };
+}
+
+export async function unshareCar(carId, userId) {
+  await firestore
+    .collection('cars')
+    .doc(carId)
+    .update({ [`users.${userId}`]: Firebase.firestore.FieldValue.delete() });
 }

@@ -1,5 +1,9 @@
 import { Card, CardContent, Grid, List, ListItem, ListItemText, makeStyles, Typography } from '@material-ui/core';
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useAuth } from '../../../auth';
+import { unshareCar } from '../../../data';
+import UserChip from '../../../UserChip';
+import Invite from './Invite';
 
 const useStyles = makeStyles({
   card: {
@@ -8,11 +12,46 @@ const useStyles = makeStyles({
 });
 
 export default function CarOverview({ car }) {
+  const { user } = useAuth();
+  const owned = car.ownerId === user.id;
   const classes = useStyles();
   const hasStats = car.stats && car.stats.refuelCount > 0;
+  const unshare = useCallback(
+    (userId) => {
+      if (window.confirm(`Do you really want to unshare this car?`)) {
+        unshareCar(car.id, userId);
+      }
+    },
+    [car.id]
+  );
 
   return (
     <Grid container spacing={2}>
+      <Grid item xs={12}>
+        <Card className={classes.card}>
+          <CardContent>
+            <div>
+              Owned by {owned ? 'you' : <UserChip id={car.ownerId} />}.
+              {owned && (
+                <>
+                  {Object.keys(car.users).length > 1 && (
+                    <>
+                      {' '}
+                      Shared with{' '}
+                      {Object.keys(car.users)
+                        .filter((u) => u !== car.ownerId)
+                        .map((uid) => (
+                          <UserChip key={uid} id={uid} style={{ marginRight: '0.5rem' }} onDelete={() => unshare(uid)} />
+                        ))}
+                    </>
+                  )}
+                  <Invite car={car} />
+                </>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </Grid>
       {hasStats ? (
         <>
           <Grid item xs={12} sm={6}>
