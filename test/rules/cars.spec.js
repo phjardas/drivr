@@ -2,9 +2,11 @@ const describeFirebaseRules = require('./harness');
 
 describeFirebaseRules('cars', ({ authedApp, adminApp, assertSucceeds, assertFails }) => {
   it('should allow read of car if user is in `users`', async () => {
-    const { id } = await adminApp()
+    const id = 'car';
+    await adminApp()
       .collection('cars')
-      .add({ users: { test: true } });
+      .doc(id)
+      .set({ users: { test: true } });
 
     const db = authedApp({ uid: 'test' });
     await assertSucceeds(

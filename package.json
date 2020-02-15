@@ -31,8 +31,9 @@
     "start": "REACT_APP_GIT_SHA=$(git rev-parse --short HEAD) react-scripts start",
     "build": "REACT_APP_GIT_SHA=$(git rev-parse --short HEAD) react-scripts build",
     "test": "firebase emulators:exec --only firestore jest",
+    "test:ci": "firebase emulators:exec --only firestore 'jest --ci'",
     "test:watch": "firebase emulators:exec --only firestore 'jest --watch'",
-    "test:all": "yarn workspaces foreach run test"
+    "test:all": "yarn test:ci && yarn workspace drivr-functions run test --ci"
   },
   "eslintConfig": {
     "extends": "react-app"
