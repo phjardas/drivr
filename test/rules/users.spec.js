@@ -16,7 +16,7 @@ describeFirebaseRules('users', ({ authedApp, adminApp, assertSucceeds, assertFai
     await admin
       .collection('users')
       .doc('test')
-      .set({ id: 'test' });
+      .set({});
 
     const db = authedApp({ uid: 'another' });
     await assertSucceeds(
@@ -33,7 +33,7 @@ describeFirebaseRules('users', ({ authedApp, adminApp, assertSucceeds, assertFai
       db
         .collection('users')
         .doc('test')
-        .set({ id: 'test' })
+        .set({})
     );
   });
 
@@ -52,7 +52,7 @@ describeFirebaseRules('users', ({ authedApp, adminApp, assertSucceeds, assertFai
     await admin
       .collection('users')
       .doc('test')
-      .set({ id: 'test' });
+      .set({});
 
     const db = authedApp({ uid: 'test' });
     await assertSucceeds(
@@ -68,7 +68,7 @@ describeFirebaseRules('users', ({ authedApp, adminApp, assertSucceeds, assertFai
     await admin
       .collection('users')
       .doc('test')
-      .set({ id: 'test' });
+      .set({});
 
     const db = authedApp({ uid: 'another' });
     await assertFails(
