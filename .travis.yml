@@ -4,7 +4,7 @@ node_js:
 install:
   - yarn --immutable --immutable-cache --inline-builds
 script:
-  - yarn test
+  - yarn test:all
   - yarn build
 after_success:
   - ./travis-deploy.sh
