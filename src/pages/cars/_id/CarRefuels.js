@@ -3,8 +3,9 @@ import { Delete as DeleteIcon, ExpandMore as ExpandMoreIcon } from '@material-ui
 import React, { useCallback, useState } from 'react';
 import { useDeleteRefuel, useRefuels } from '../../../data';
 import DataSuspense from '../../../DataSuspense';
+import UserChip from '../../../UserChip';
 
-const useStyles = makeStyles(({ palette }) => ({
+const useStyles = makeStyles(({ palette, spacing }) => ({
   heading: {
     flexBasis: '33.33%',
     flexShrink: 0,
@@ -14,25 +15,31 @@ const useStyles = makeStyles(({ palette }) => ({
     flexBasis: '33.33%',
     flexShrink: 0,
   },
-  details: {
+  info: {
+    display: 'flex',
+    flexGrow: 1,
+  },
+  infoColumn: {
     flexBasis: '33.33%',
     flexShrink: 0,
   },
   actions: {
     marginLeft: 'auto',
+    marginRight: -spacing(1),
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-end',
+    width: 48,
   },
 }));
 
-function Refuels({ carId, refuels }) {
-  const deleteRefuel = useDeleteRefuel(carId);
+function Refuels({ car, refuels }) {
+  const deleteRefuel = useDeleteRefuel(car.id);
 
-  return refuels.map((refuel, index) => <Refuel key={refuel.id} refuel={refuel} onDelete={index === 0 && (() => deleteRefuel(refuel.id))} />);
+  return refuels.map((refuel, index) => <Refuel key={refuel.id} car={car} refuel={refuel} onDelete={index === 0 && (() => deleteRefuel(refuel.id))} />);
 }
 
-function Refuel({ refuel, onDelete }) {
+function Refuel({ car, refuel, onDelete }) {
   const classes = useStyles();
 
   const [deleting, setDeleting] = useState(false);
@@ -54,19 +61,28 @@ function Refuel({ refuel, onDelete }) {
         <Typography className={classes.secondaryHeading}>{refuel.mileage.toLocaleString()} km</Typography>
         {refuel.consumption && <Typography className={classes.secondaryHeading}>{(refuel.consumption * 100).toLocaleString()} cl/km</Typography>}
       </ExpansionPanelSummary>
-      <ExpansionPanelDetails className={classes.details}>
-        <div>
-          <Typography>
-            {refuel.fuelAmount.toLocaleString()} liters for {refuel.totalPrice.toLocaleString()} €
-          </Typography>
-          <Typography>{refuel.pricePerLiter.toLocaleString()} €/liter</Typography>
-          <Typography>Mileage: {refuel.mileage.toLocaleString()} km</Typography>
-          {refuel.distance && <Typography>Distance: {refuel.distance.toLocaleString()} km</Typography>}
-          {refuel.consumption && <Typography>Consumption: {(refuel.consumption * 100).toLocaleString()} cl/km</Typography>}
+      <ExpansionPanelDetails>
+        <div className={classes.info}>
+          <div className={classes.infoColumn}>
+            <Typography>
+              {refuel.fuelAmount.toLocaleString()} liters for {refuel.totalPrice.toLocaleString()} €
+            </Typography>
+            <Typography>{refuel.pricePerLiter.toLocaleString()} €/liter</Typography>
+            <Typography>Mileage: {refuel.mileage.toLocaleString()} km</Typography>
+          </div>
+          <div className={classes.infoColumn}>
+            {refuel.distance && <Typography>Distance: {refuel.distance.toLocaleString()} km</Typography>}
+            {refuel.consumption && <Typography>Consumption: {(refuel.consumption * 100).toLocaleString()} cl/km</Typography>}
+            {refuel.userId !== car.ownerId && (
+              <Typography>
+                Recorded by <UserChip id={refuel.userId} />
+              </Typography>
+            )}
+          </div>
         </div>
-        {onDelete && (
-          <div className={classes.actions}>
-            {deleting ? (
+        <div className={classes.actions}>
+          {onDelete &&
+            (deleting ? (
               <IconButton disabled>
                 <CircularProgress size="1em" color="inherit" />
               </IconButton>
@@ -74,9 +90,8 @@ function Refuel({ refuel, onDelete }) {
               <IconButton onClick={handleDelete}>
                 <DeleteIcon />
               </IconButton>
-            )}
-          </div>
-        )}
+            ))}
+        </div>
       </ExpansionPanelDetails>
     </ExpansionPanel>
   );
@@ -86,7 +101,7 @@ export default function RefuelsList({ car }) {
   const [data, loading, error] = useRefuels(car.id, ['date', 'desc']);
   return (
     <DataSuspense loading={loading} error={error} data={data}>
-      {(refuels) => <Refuels carId={car.id} refuels={refuels} />}
+      {(refuels) => <Refuels car={car} refuels={refuels} />}
     </DataSuspense>
   );
 }
