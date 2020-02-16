@@ -3,7 +3,8 @@ const describeFirebaseRules = require('./harness');
 describeFirebaseRules('cars', ({ authedApp, adminApp, assertSucceeds, assertFails }) => {
   it('should allow read of car if user is in `users`', async () => {
     const id = 'car';
-    await adminApp()
+    const admin = adminApp();
+    await admin
       .collection('cars')
       .doc(id)
       .set({ users: { test: true } });
@@ -18,9 +19,12 @@ describeFirebaseRules('cars', ({ authedApp, adminApp, assertSucceeds, assertFail
   });
 
   it('should deny read of car if user is not in `users`', async () => {
-    const { id } = await adminApp()
+    const id = 'car';
+    const admin = adminApp();
+    await admin
       .collection('cars')
-      .add({ users: { test: true } });
+      .doc(id)
+      .set({ users: { test: true } });
 
     const db = authedApp({ uid: 'another' });
     await assertFails(
@@ -38,12 +42,7 @@ describeFirebaseRules('cars', ({ authedApp, adminApp, assertSucceeds, assertFail
 
   it('should deny creation of new car if user is not owner', async () => {
     const db = authedApp({ uid: 'test' });
-    await assertFails(db.collection('cars').add({ label: 'Test', ownerId: 'another', users: { test: true, another: true } }));
-  });
-
-  it('should deny creation of new car if user is missing from `users`', async () => {
-    const db = authedApp({ uid: 'test' });
-    await assertFails(db.collection('cars').add({ label: 'Test', ownerId: 'test' }));
+    await assertFails(db.collection('cars').add({ label: 'Test', ownerId: 'another', users: { another: true, test: true } }));
   });
 
   it('should deny creation of new car if label is missing', async () => {
@@ -95,7 +94,7 @@ describeFirebaseRules('cars', ({ authedApp, adminApp, assertSucceeds, assertFail
   it('should deny delete of car if user is not owner', async () => {
     const { id } = await adminApp()
       .collection('cars')
-      .add({ label: 'Test', ownerId: 'test', users: { test: true } });
+      .add({ label: 'Test', ownerId: 'test', users: { another: true, test: true } });
 
     const db = authedApp({ uid: 'another' });
     await assertFails(

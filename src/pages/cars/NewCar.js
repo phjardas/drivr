@@ -4,8 +4,7 @@ import React, { useCallback, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { object, string } from 'yup';
 import { useAuth } from '../../auth';
-import { useCars } from '../../data';
-import { firestore } from '../../firebase';
+import { createCar, useCars } from '../../data';
 import Layout from '../../Layout';
 import Loading from '../../Loading';
 
@@ -55,9 +54,8 @@ function NewCarForm({ cars, user }) {
   const onSubmit = useCallback(
     async (data, { setSubmitting, setState }) => {
       try {
-        const ref = await firestore.collection('cars').add({ ...data, ownerId: user.id, users: { [user.id]: true } });
-        const result = await ref.get();
-        navigate(`/cars/${result.id}`);
+        const { id } = await createCar(data, user.id);
+        navigate(`/cars/${id}`);
       } catch (error) {
         console.error(error);
         setState(error);

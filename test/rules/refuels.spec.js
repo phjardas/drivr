@@ -3,7 +3,8 @@ const describeFirebaseRules = require('./harness');
 describeFirebaseRules('refuels', ({ authedApp, adminApp, assertSucceeds, assertFails }) => {
   it('should allow read of refuels if user is in `users`', async () => {
     const id = 'car';
-    await adminApp()
+    const admin = adminApp();
+    await admin
       .collection('cars')
       .doc(id)
       .set({ users: { test: true } });
@@ -37,7 +38,8 @@ describeFirebaseRules('refuels', ({ authedApp, adminApp, assertSucceeds, assertF
 
   it('should allow creation of complete refuel if user is in `users`', async () => {
     const id = 'car';
-    await adminApp()
+    const admin = adminApp();
+    await admin
       .collection('cars')
       .doc(id)
       .set({ users: { test: true } });
@@ -60,7 +62,8 @@ describeFirebaseRules('refuels', ({ authedApp, adminApp, assertSucceeds, assertF
 
   it('should deny creation of incomplete refuel if `date` is missing', async () => {
     const id = 'car';
-    await adminApp()
+    const admin = adminApp();
+    await admin
       .collection('cars')
       .doc(id)
       .set({ users: { test: true } });
@@ -82,7 +85,8 @@ describeFirebaseRules('refuels', ({ authedApp, adminApp, assertSucceeds, assertF
 
   it('should deny creation of incomplete refuel if `mileage` is missing', async () => {
     const id = 'car';
-    await adminApp()
+    const admin = adminApp();
+    await admin
       .collection('cars')
       .doc(id)
       .set({ users: { test: true } });
@@ -104,7 +108,8 @@ describeFirebaseRules('refuels', ({ authedApp, adminApp, assertSucceeds, assertF
 
   it('should deny creation of incomplete refuel if `fuelAmount` is missing', async () => {
     const id = 'car';
-    await adminApp()
+    const admin = adminApp();
+    await admin
       .collection('cars')
       .doc(id)
       .set({ users: { test: true } });
@@ -126,7 +131,8 @@ describeFirebaseRules('refuels', ({ authedApp, adminApp, assertSucceeds, assertF
 
   it('should deny creation of incomplete refuel if `totalPrice` is missing', async () => {
     const id = 'car';
-    await adminApp()
+    const admin = adminApp();
+    await admin
       .collection('cars')
       .doc(id)
       .set({ users: { test: true } });
@@ -148,7 +154,8 @@ describeFirebaseRules('refuels', ({ authedApp, adminApp, assertSucceeds, assertF
 
   it('should deny creation of incomplete refuel if `userId` is missing', async () => {
     const id = 'car';
-    await adminApp()
+    const admin = adminApp();
+    await admin
       .collection('cars')
       .doc(id)
       .set({ users: { test: true } });
@@ -170,7 +177,8 @@ describeFirebaseRules('refuels', ({ authedApp, adminApp, assertSucceeds, assertF
 
   it('should deny creation of incomplete refuel if `userId` is incorrect', async () => {
     const id = 'car';
-    await adminApp()
+    const admin = adminApp();
+    await admin
       .collection('cars')
       .doc(id)
       .set({ users: { test: true } });

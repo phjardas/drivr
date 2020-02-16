@@ -181,6 +181,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["formik", "virtual:ee480a43e5d65728e836cb2349dec20daee39750bc2e66a829612ad522f2cb3009de798d3dc50d67f3fa0781517b87fabb1b9e9dd3c952285670f68cd5bb64a4#npm:2.1.3"],
             ["jest", "npm:25.1.0"],
             ["prop-types", "npm:15.7.2"],
+            ["query-string", "npm:6.11.0"],
             ["react", "npm:16.12.0"],
             ["react-dom", "virtual:ee480a43e5d65728e836cb2349dec20daee39750bc2e66a829612ad522f2cb3009de798d3dc50d67f3fa0781517b87fabb1b9e9dd3c952285670f68cd5bb64a4#npm:16.12.0"],
             ["react-firebase-hooks", "virtual:ee480a43e5d65728e836cb2349dec20daee39750bc2e66a829612ad522f2cb3009de798d3dc50d67f3fa0781517b87fabb1b9e9dd3c952285670f68cd5bb64a4#npm:2.1.1"],
@@ -9736,6 +9737,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["formik", "virtual:ee480a43e5d65728e836cb2349dec20daee39750bc2e66a829612ad522f2cb3009de798d3dc50d67f3fa0781517b87fabb1b9e9dd3c952285670f68cd5bb64a4#npm:2.1.3"],
             ["jest", "npm:25.1.0"],
             ["prop-types", "npm:15.7.2"],
+            ["query-string", "npm:6.11.0"],
             ["react", "npm:16.12.0"],
             ["react-dom", "virtual:ee480a43e5d65728e836cb2349dec20daee39750bc2e66a829612ad522f2cb3009de798d3dc50d67f3fa0781517b87fabb1b9e9dd3c952285670f68cd5bb64a4#npm:16.12.0"],
             ["react-firebase-hooks", "virtual:ee480a43e5d65728e836cb2349dec20daee39750bc2e66a829612ad522f2cb3009de798d3dc50d67f3fa0781517b87fabb1b9e9dd3c952285670f68cd5bb64a4#npm:2.1.1"],
@@ -9770,6 +9772,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@rollup/plugin-commonjs", "virtual:adb791034c3bafd7b8aef25aaab9d1e4bc2c8e9c8af1ef4b2d7c557773df74c61d92ed5ed1737c3b14a33072f2f0217bf4619e99e83a5f358b1a88b5081c3fcd#npm:11.0.2"],
             ["@rollup/plugin-node-resolve", "virtual:adb791034c3bafd7b8aef25aaab9d1e4bc2c8e9c8af1ef4b2d7c557773df74c61d92ed5ed1737c3b14a33072f2f0217bf4619e99e83a5f358b1a88b5081c3fcd#npm:7.1.1"],
             ["core-js", "npm:3.6.4"],
+            ["cors", "npm:2.8.5"],
+            ["express", "npm:4.17.1"],
             ["firebase-admin", "npm:8.9.2"],
             ["firebase-functions", "virtual:adb791034c3bafd7b8aef25aaab9d1e4bc2c8e9c8af1ef4b2d7c557773df74c61d92ed5ed1737c3b14a33072f2f0217bf4619e99e83a5f358b1a88b5081c3fcd#npm:3.3.0"],
             ["jest", "npm:25.1.0"],
@@ -19069,6 +19073,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["strict-uri-encode", "npm:1.1.0"]
           ],
           "linkType": "HARD"
+        }],
+        ["npm:6.11.0", {
+          "packageLocation": "./.yarn/cache/query-string-npm-6.11.0-f65b8c7390-1.zip/node_modules/query-string/",
+          "packageDependencies": [
+            ["query-string", "npm:6.11.0"],
+            ["decode-uri-component", "npm:0.2.0"],
+            ["split-on-first", "npm:1.1.0"],
+            ["strict-uri-encode", "npm:2.0.0"]
+          ],
+          "linkType": "HARD"
         }]
       ]],
       ["querystring", [
@@ -20936,6 +20950,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"
         }]
       ]],
+      ["split-on-first", [
+        ["npm:1.1.0", {
+          "packageLocation": "./.yarn/cache/split-on-first-npm-1.1.0-e2f3ab5e4e-1.zip/node_modules/split-on-first/",
+          "packageDependencies": [
+            ["split-on-first", "npm:1.1.0"]
+          ],
+          "linkType": "HARD"
+        }]
+      ]],
       ["split-string", [
         ["npm:3.1.0", {
           "packageLocation": "./.yarn/cache/split-string-npm-3.1.0-df5d83450e-1.zip/node_modules/split-string/",
@@ -21117,6 +21140,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/strict-uri-encode-npm-1.1.0-a79c6f7f24-1.zip/node_modules/strict-uri-encode/",
           "packageDependencies": [
             ["strict-uri-encode", "npm:1.1.0"]
+          ],
+          "linkType": "HARD"
+        }],
+        ["npm:2.0.0", {
+          "packageLocation": "./.yarn/cache/strict-uri-encode-npm-2.0.0-1ec3189376-1.zip/node_modules/strict-uri-encode/",
+          "packageDependencies": [
+            ["strict-uri-encode", "npm:2.0.0"]
           ],
           "linkType": "HARD"
         }]

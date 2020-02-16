@@ -10,6 +10,7 @@
     "clsx": "^1.0.4",
     "firebase": "^7.8.0",
     "formik": "^2.1.3",
+    "query-string": "^6.11.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-firebase-hooks": "^2.1.1",
@@ -30,9 +31,9 @@
   "scripts": {
     "start": "REACT_APP_GIT_SHA=$(git rev-parse --short HEAD) react-scripts start",
     "build": "REACT_APP_GIT_SHA=$(git rev-parse --short HEAD) react-scripts build",
-    "test": "firebase emulators:exec --only firestore jest",
-    "test:ci": "firebase emulators:exec --only firestore 'jest --ci'",
-    "test:watch": "firebase emulators:exec --only firestore 'jest --watch'",
+    "test": "firebase emulators:exec --only firestore 'jest --runInBand'",
+    "test:ci": "firebase emulators:exec --only firestore 'jest --runInBand --ci'",
+    "test:watch": "firebase emulators:exec --only firestore 'jest --runInBand --watch'",
     "test:all": "yarn test:ci && yarn workspace drivr-functions run test --ci"
   },
   "eslintConfig": {

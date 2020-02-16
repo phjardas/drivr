@@ -7080,6 +7080,8 @@ __metadata:
     "@rollup/plugin-commonjs": ^11.0.2
     "@rollup/plugin-node-resolve": ^7.1.1
     core-js: ^3.6.4
+    cors: ^2.8.5
+    express: ^4.17.1
     firebase-admin: ^8.9.2
     firebase-functions: latest
     jest: ^25.1.0
@@ -7100,6 +7102,7 @@ __metadata:
     formik: ^2.1.3
     jest: ^25.1.0
     prop-types: ^15.7.2
+    query-string: ^6.11.0
     react: ^16.12.0
     react-dom: ^16.12.0
     react-firebase-hooks: ^2.1.1
@@ -15654,6 +15657,17 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"query-string@npm:^6.11.0":
+  version: 6.11.0
+  resolution: "query-string@npm:6.11.0"
+  dependencies:
+    decode-uri-component: ^0.2.0
+    split-on-first: ^1.0.0
+    strict-uri-encode: ^2.0.0
+  checksum: dea46f47986c7f209272c34979b3b6108f4084ef97452d256c5778adc075dc6939e91595cce1a9f8a3f8eac356bc7b14cb21ee798645fab7c2d85cd9d5268b2a
+  languageName: node
+  linkType: hard
+
 "querystring-es3@npm:^0.2.0":
   version: 0.2.1
   resolution: "querystring-es3@npm:0.2.1"
@@ -17341,6 +17355,13 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
+"split-on-first@npm:^1.0.0":
+  version: 1.1.0
+  resolution: "split-on-first@npm:1.1.0"
+  checksum: 7712c1553ef303b3ae66a361c2817da29dc56338edc02c47927df8880756683ee378b5f64e5028edef367c47ed2290e47a4a583a3ebd1415fe096ed74180cfde
+  languageName: node
+  linkType: hard
+
 "split-string@npm:^3.0.1, split-string@npm:^3.0.2":
   version: 3.1.0
   resolution: "split-string@npm:3.1.0"
@@ -17502,6 +17523,13 @@ resolve@1.1.7:
   version: 1.1.0
   resolution: "strict-uri-encode@npm:1.1.0"
   checksum: 07402f43cdfc5f64fa8e6515da3d7383502739547d906e7426ee272f6db0a6b2ef87994e0ba81991b5c021e9040fe1ab6f7626f1bbf8f534907f461e52bd5bd9
+  languageName: node
+  linkType: hard
+
+"strict-uri-encode@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "strict-uri-encode@npm:2.0.0"
+  checksum: 77a40129a8cbae92f1c069b68bea0b53037e9d37f830435d1d6291b49315474d8185fe5cb4ec410bb44e97466432a3970ac9e0efdb33cf36de2499f6ebabdba7
   languageName: node
   linkType: hard
 

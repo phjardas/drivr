@@ -9,6 +9,8 @@ export default function UserProfileButton() {
   const handleClick = useCallback((e) => setAnchor(e.currentTarget), [setAnchor]);
   const handleClose = useCallback(() => setAnchor(null), [setAnchor]);
 
+  if (!user) return null;
+
   return (
     <>
       <IconButton color="inherit" onClick={handleClick}>
@@ -53,14 +55,9 @@ function UserPopover({ user, signOut }) {
 
   return (
     <div className={classes.wrapper}>
-      {user.photoURL && <img src={user.photoURL} width={128} height={128} className={classes.image} alt={user.displayName || user.email} />}
+      {user.photoURL && <img src={user.photoURL} width={128} height={128} className={classes.image} alt={user.label} />}
       <div className={classes.info}>
-        {user.displayName && <Typography gutterBottom>{user.displayName}</Typography>}
-        {user.email && (
-          <Typography variant="body2" gutterBottom>
-            {user.email}
-          </Typography>
-        )}
+        {user.label && <Typography gutterBottom>{user.label}</Typography>}
         <Button onClick={signOut} fullWidth className={classes.signout}>
           Sign out
         </Button>

@@ -25,12 +25,13 @@ service cloud.firestore {
           && request.resource.data.totalPrice > 0
         allow delete: if request.auth != null
           && (
-            request.auth.uid == get(/databases/$(database)/documents/cars/$(carId)).data.ownerId
+            get(/databases/$(database)/documents/cars/$(carId)).data.ownerId == request.auth.uid
             || request.auth.uid == resource.data.userId
           )
       }
 
       match /invites/{inviteId} {
+        allow get: if true
         allow create: if request.auth != null
           && request.auth.uid == get(/databases/$(database)/documents/cars/$(carId)).data.ownerId
       }

@@ -21,7 +21,7 @@ const useStyles = makeStyles(({ spacing }) => ({
   },
 }));
 
-export default function Invite({ car, ...props }) {
+export default function Invite({ car, owner, ...props }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [inviteLink, setInviteLink] = useState();
   const [pending, setPending] = useState(false);
@@ -34,14 +34,14 @@ export default function Invite({ car, ...props }) {
     setError(null);
     setPending(true);
     try {
-      const { id: inviteId } = await createCarInvite(car);
+      const { id: inviteId } = await createCarInvite(car, owner);
       setInviteLink(`https://drivr.jardas.de/invites/${car.id}/${inviteId}`);
       setPending(false);
     } catch (error) {
       setError(error);
       setPending(false);
     }
-  }, [car, setPending, setInviteLink]);
+  }, [car, owner, setPending, setInviteLink]);
 
   const shareInviteLink = useCallback(() => {
     if (inviteLink && typeof navigator.share === 'function') {

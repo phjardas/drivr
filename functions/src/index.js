@@ -1,6 +1,7 @@
 import 'core-js';
 import functions from 'firebase-functions';
 import { executeActions, firestore } from './firebase';
+import http from './http';
 import { updateCarStatistics } from './stats';
 
 const refuelDoc = functions.firestore.document('cars/{carId}/refuels/{refuelId}');
@@ -23,3 +24,5 @@ async function recreateCarStatistics(carId) {
     await executeActions(actions, tx);
   });
 }
+
+export const api = functions.https.onRequest(http);

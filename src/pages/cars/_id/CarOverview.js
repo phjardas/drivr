@@ -45,7 +45,7 @@ export default function CarOverview({ car }) {
                         ))}
                     </>
                   )}
-                  <Invite car={car} />
+                  <Invite car={car} owner={user} />
                 </>
               )}
             </div>

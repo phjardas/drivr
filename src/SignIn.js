@@ -1,8 +1,6 @@
-import { Button, Grid, Typography } from '@material-ui/core';
+import { Button, CircularProgress, Grid, Typography } from '@material-ui/core';
 import React, { useCallback, useState } from 'react';
 import { auth, Firebase } from './firebase';
-import Loading from './Loading';
-import MiniLayout from './MiniLayout';
 
 const providers = [
   {
@@ -17,7 +15,7 @@ const providers = [
   },
 ];
 
-export default function SignIn() {
+export default function SignIn({ onSuccess }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -27,19 +25,20 @@ export default function SignIn() {
         setLoading(true);
         setError(null);
         await auth.signInWithPopup(provider);
+        onSuccess && onSuccess();
       } catch (error) {
         setError(error);
       } finally {
         setLoading(false);
       }
     },
-    [setLoading, setError]
+    [setLoading, setError, onSuccess]
   );
 
-  if (loading) return <Loading wait={0} />;
+  if (loading) return <CircularProgress color="primary" />;
 
   return (
-    <MiniLayout>
+    <>
       {error && (
         <Typography color="error" gutterBottom>
           {error.message}
@@ -54,6 +53,6 @@ export default function SignIn() {
           </Grid>
         ))}
       </Grid>
-    </MiniLayout>
+    </>
   );
 }
