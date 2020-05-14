@@ -3,7 +3,6 @@ import { ArrowBack as ArrowBackIcon } from '@material-ui/icons';
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
-import CacheNotification from './CacheNotification';
 import DarkModeButton from './DarkModeButton';
 import UpdateNotification from './UpdateNotification';
 import UserProfileButton from './UserProfileButton';
@@ -40,7 +39,6 @@ export default function Layout({ title, back, gutter, children }) {
         </Toolbar>
       </AppBar>
       <main className={gutter && classes.gutter}>{children}</main>
-      <CacheNotification />
       <UpdateNotification />
     </>
   );

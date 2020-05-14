@@ -67,7 +67,7 @@ function Refuel({ car, refuel, onDelete }) {
             <Typography>
               {refuel.fuelAmount.toLocaleString()} liters for {refuel.totalPrice.toLocaleString()} €
             </Typography>
-            <Typography>{refuel.pricePerLiter.toLocaleString()} €/liter</Typography>
+            {refuel.pricePerLiter && <Typography>{refuel.pricePerLiter.toLocaleString()} €/liter</Typography>}
             <Typography>Mileage: {refuel.mileage.toLocaleString()} km</Typography>
           </div>
           <div className={classes.infoColumn}>
