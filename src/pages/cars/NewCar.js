@@ -48,13 +48,13 @@ function NewCarForm({ cars, user }) {
           .required()
           .test('label-unique', 'The car label must be unique', (label) => !cars.some((car) => car.label === label)),
       }),
-    [cars]
+    [cars],
   );
 
   const onSubmit = useCallback(
     async (data, { setSubmitting, setState }) => {
       try {
-        const { id } = await createCar(data, user.id);
+        const id = await createCar(data, user.id);
         navigate(`/cars/${id}`);
       } catch (error) {
         console.error(error);
@@ -62,7 +62,7 @@ function NewCarForm({ cars, user }) {
         setSubmitting(false);
       }
     },
-    [user, navigate]
+    [user, navigate],
   );
 
   return (

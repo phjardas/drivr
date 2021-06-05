@@ -16,8 +16,8 @@
     "react-firebase-hooks": "^2.1.1",
     "react-ga": "^2.7.0",
     "react-helmet-async": "^1.0.4",
-    "react-router": "next",
-    "react-router-dom": "next",
+    "react-router": "6.0.0-alpha.1",
+    "react-router-dom": "6.0.0-alpha.1",
     "react-vis": "^1.11.7",
     "yup": "^0.28.1"
   },

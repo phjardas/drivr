@@ -6,10 +6,11 @@ import { Firebase, firestore } from '../firebase';
 import { materialize } from './utils';
 
 const Context = createContext();
+const carsColl = firestore.collection('cars');
 
 export function CarsProvider({ children }) {
   const { user } = useAuth();
-  const [docs, loading, error] = useCollection(firestore.collection('cars').where(`users.${user.id}`, '==', true), {
+  const [docs, loading, error] = useCollection(carsColl.where(`users.${user.id}`, '==', true), {
     snapshotListenOptions: { includeMetadataChanges: true },
   });
 
@@ -30,26 +31,13 @@ export function useCar(id) {
 }
 
 export async function createCar(data, userId) {
-  return firestore.runTransaction(async (tx) => {
-    const { id } = await tx.add(firestore.collection('cars'), { ...data, ownerId: userId });
-    await tx.set(
-      firestore
-        .collection('cars')
-        .doc(id)
-        .collection('users')
-        .doc(userId),
-      { role: 'owner' }
-    );
-    return id;
-  });
+  const { id } = await carsColl.add({ ...data, ownerId: userId, users: { [userId]: true } });
+  return id;
 }
 
 export function useRefuels(carId, order) {
   const collection = useMemo(() => {
-    let coll = firestore
-      .collection('cars')
-      .doc(carId)
-      .collection('refuels');
+    let coll = firestore.collection('cars').doc(carId).collection('refuels');
     if (order) coll = coll.orderBy(...order);
     return coll;
   }, [carId, order]);
@@ -60,36 +48,23 @@ export function useRefuels(carId, order) {
 }
 
 export function useDeleteRefuel(carId) {
-  const coll = firestore
-    .collection('cars')
-    .doc(carId)
-    .collection('refuels');
+  const coll = firestore.collection('cars').doc(carId).collection('refuels');
 
   return (refuelId) => coll.doc(refuelId).delete();
 }
 
 export async function createCarInvite(car, owner) {
-  const ref = await firestore
-    .collection('cars')
-    .doc(car.id)
-    .collection('invites')
-    .add({
-      carLabel: car.label,
-      ownerId: owner.id,
-      ownerLabel: owner.label,
-      createdAt: Firebase.firestore.FieldValue.serverTimestamp(),
-    });
+  const ref = await firestore.collection('cars').doc(car.id).collection('invites').add({
+    carLabel: car.label,
+    ownerId: owner.id,
+    ownerLabel: owner.label,
+    createdAt: Firebase.firestore.FieldValue.serverTimestamp(),
+  });
   return { id: ref.id };
 }
 
 export function useCarInvite(carId, inviteId) {
-  const [data, loading, error] = useDocument(
-    firestore
-      .collection('cars')
-      .doc(carId)
-      .collection('invites')
-      .doc(inviteId)
-  );
+  const [data, loading, error] = useDocument(firestore.collection('cars').doc(carId).collection('invites').doc(inviteId));
 
   if (loading || error) return [null, loading, error];
   return [materialize(data), false];
